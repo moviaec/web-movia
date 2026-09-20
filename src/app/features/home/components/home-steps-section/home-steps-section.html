@@ -1,28 +1,35 @@
-<section class="bg-surface" aria-labelledby="home-steps-title">
-	<div class="max-w-content lg:py-section mx-auto flex flex-col gap-12 px-6 py-20 lg:flex-row lg:items-start lg:gap-13 lg:px-8">
-		<img
-			class="mx-auto h-auto w-full max-w-md lg:order-last lg:max-w-lg"
-			ngSrc="/imgs/home/app-movia.png"
-			width="714"
-			height="1216"
-			alt="La aplicación de Movía mostrando el plan activo, los estudios cercanos y el mapa"
-		/>
+<section class="bg-surface relative" aria-labelledby="home-steps-title">
+	<img
+		class="mx-auto mb-4 h-auto w-full max-w-md lg:absolute lg:top-[5rem] lg:right-0 lg:mt-0 lg:w-[34vw] lg:max-w-none"
+		ngSrc="/imgs/home/app-movia.png"
+		width="714"
+		height="1216"
+		alt="La aplicación de Movía mostrando el plan activo, los estudios cercanos y el mapa"
+	/>
 
-		<div class="lg:flex-1">
-			<h2 id="home-steps-title" class="font-display text-ink lg:text-headline text-3xl font-bold">
+	<div class="max-w-content lg:py-section mx-auto px-6 py-16 lg:px-8">
+		<!--
+			El bloque de texto no ocupa todo el contenedor: en el diseño mide 870 px de los
+			1414 del contenido, y la composición de móviles vive a su derecha, pegada al borde
+			de la ventana (por eso va absoluta y no dentro del contenedor).
+		-->
+		<div class="lg:max-w-[45rem]">
+			<h2 id="home-steps-title" class="font-display lg:text-headline text-ink text-3xl font-bold">
 				Así Es Como Movia Transforma La Manera En Que Te Mueves
 			</h2>
 
-			<ol class="mt-10 grid gap-10 sm:grid-cols-2 lg:mt-13 lg:grid-cols-4 lg:gap-6.5">
+			<ol class="mt-10 grid gap-10 sm:grid-cols-2 lg:mt-13 lg:max-w-[45.2rem] lg:grid-cols-4 lg:gap-[5.3rem]">
 				@for (step of steps; track step.number) {
 					<li>
-						<span class="bg-primary text-primary-contrast flex size-9 items-center justify-center rounded-full font-semibold">
+						<span
+							class="bg-primary text-primary-contrast flex size-7 items-center justify-center rounded-full text-sm font-semibold lg:size-9"
+						>
 							{{ step.number }}
 						</span>
 
-						<h3 class="font-display text-ink text-title mt-6 font-semibold">{{ step.title }}</h3>
+						<h3 class="font-display lg:text-title text-ink mt-6 text-xl font-semibold lg:mt-10">{{ step.title }}</h3>
 
-						<p class="text-ink mt-4">{{ step.description }}</p>
+						<p class="text-ink mt-4 lg:mt-8 lg:text-sm">{{ step.description }}</p>
 					</li>
 				}
 			</ol>

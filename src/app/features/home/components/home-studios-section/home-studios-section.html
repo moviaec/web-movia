@@ -1,5 +1,9 @@
 <section class="bg-surface" aria-labelledby="home-studios-title">
-	<div class="max-w-content lg:py-section mx-auto grid gap-10 px-6 py-20 lg:grid-cols-3 lg:items-center lg:gap-9.5 lg:px-8">
+	<!--
+		Tres columnas con las proporciones del diseño: foto 31 %, texto 25 % y el resto para
+		las cuatro tarjetas lima (medido sobre el frame de 1920: 443 / 345 / 449 px).
+	-->
+	<div class="max-w-content lg:py-section mx-auto grid gap-8 px-6 py-16 lg:grid-cols-[31%_25%_1fr] lg:items-center lg:gap-x-[6%] lg:px-8">
 		<img
 			class="rounded-card h-80 w-full object-cover lg:h-auto"
 			ngSrc="/imgs/home/estudios.jpg"
@@ -9,27 +13,27 @@
 		/>
 
 		<div>
-			<h2 id="home-studios-title" class="font-display text-ink lg:text-headline text-3xl font-bold">Movia para Estudios</h2>
+			<h2 id="home-studios-title" class="font-display lg:text-headline text-ink text-3xl font-bold">Movia para Estudios</h2>
 
-			<p class="text-ink lg:text-body-lg mt-6 text-lg">
+			<p class="text-ink lg:text-body-lg mt-6 text-lg lg:mt-8">
 				Te conectamos con miles de usuarios activos que buscan tu tipo de clase, y solo pagas cuando alguien asiste.
 			</p>
 
 			<a
-				class="bg-secondary text-secondary-contrast hover:bg-secondary-shade mt-10 flex w-full items-center justify-between gap-6 rounded-full px-6 py-4 font-medium transition-colors sm:w-auto sm:justify-start"
+				class="bg-secondary text-secondary-contrast hover:bg-secondary-shade mt-8 flex w-full items-center justify-between gap-6 rounded-full px-6 py-4 font-medium transition-colors sm:w-fit sm:justify-start lg:mt-10"
 				routerLink="/estudios"
 			>
 				Saber más
-				<span class="icon-mask icon-flecha-arriba bg-secondary-contrast size-6 rotate-90"></span>
+				<span class="icon-mask icon-flecha-arriba bg-secondary-contrast size-5 rotate-90"></span>
 			</a>
 		</div>
 
-		<ul class="grid grid-cols-2 gap-4 lg:gap-5">
+		<ul class="grid grid-cols-2 gap-4 lg:gap-x-[12%] lg:gap-y-[1.9rem]">
 			@for (perk of perks; track perk) {
-				<li class="bg-primary text-primary-contrast rounded-card p-5 lg:p-5">
-					<span class="icon-mask icon-check bg-primary-contrast size-7"></span>
+				<li class="bg-primary text-primary-contrast rounded-card p-5 lg:px-5 lg:pt-5 lg:pb-10">
+					<span class="icon-mask icon-check bg-primary-contrast size-6 lg:size-5"></span>
 
-					<p class="lg:text-body-lg mt-6 font-medium lg:mt-8">{{ perk }}</p>
+					<p class="mt-6 font-medium lg:mt-5 lg:text-sm">{{ perk }}</p>
 				</li>
 			}
 		</ul>
