@@ -145,8 +145,13 @@
  * acceso) no se distinguen de la página que hay detrás — que es justo lo que las hace tarjetas.
  */
 @layer base {
+	/*
+	 * El lienzo de la landing es BLANCO. El gris `mist` venía del portal de partners y aquí
+	 * solo aparece dentro de tarjetas y de alguna banda. Además hace falta que sea blanco
+	 * para que las tarjetas del hero, que se salen de la sección oscura, caigan sobre blanco.
+	 */
 	body {
-		@apply bg-surface-muted text-ink;
+		@apply bg-surface text-ink;
 	}
 }
 

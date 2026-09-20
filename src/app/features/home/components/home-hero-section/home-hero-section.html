@@ -33,7 +33,12 @@
 	</div>
 </section>
 
-<div class="bg-surface relative z-10">
+<!--
+	Sin fondo propio: las tarjetas flotan sobre el borde del hero y por los huecos que quedan
+	entre ellas TIENE que verse la foto, como en el diseño. Si este contenedor pinta blanco,
+	tapa el hero y los huecos salen en blanco.
+-->
+<div class="relative z-10">
 	<div class="max-w-content mx-auto px-6 lg:px-8">
 		<ul class="-mt-20 grid gap-4 lg:-mt-17 lg:grid-cols-3 lg:gap-20">
 			@for (card of cards; track card.path) {
