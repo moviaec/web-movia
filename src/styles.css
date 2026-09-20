@@ -106,11 +106,15 @@
 	--text-body-lg--line-height: 1.6;
 
 	/*
-	 * Anchos de contenedor, medidos sobre el mismo frame: el contenido va centrado a ~1416 px
-	 * y el header/footer respiran algo más (~1580 px).
+	 * Anchos de contenedor, medidos sobre el mismo frame: el contenido va centrado a 1416 px
+	 * y el header/footer respiran algo más (1580 px).
+	 *
+	 * Los valores INCLUYEN los 40 px de gutter de cada lado, porque el contenedor usa
+	 * `box-sizing: border-box` y el padding se come el ancho: 1416 + 80 y 1580 + 80. Si se
+	 * escribe el ancho pelado, el contenido se queda 80 px más estrecho que el diseño.
 	 */
-	--container-content: 88.5rem; /* 1416px */
-	--container-wide: 98.75rem; /* 1580px */
+	--container-content: 93.5rem; /* 1416px de contenido + 2 × 40px */
+	--container-wide: 103.75rem; /* 1580px de contenido + 2 × 40px */
 
 	/*
 	 * Ritmo vertical de sección. `section` es lo medido en desktop (borde de sección a
@@ -122,6 +126,9 @@
 
 	/* Radio de las cards del diseño (~8px medidos en la card del hero y en las lima). */
 	--radius-card: 0.5rem;
+
+	/* El bloque del hero se corta abajo con una curva de ~40px. */
+	--radius-hero: 2.5rem;
 }
 
 /*

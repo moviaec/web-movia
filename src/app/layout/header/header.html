@@ -1,7 +1,12 @@
-<header class="bg-secondary text-secondary-contrast">
-	<div class="max-w-wide mx-auto flex items-center justify-between gap-6 px-6 py-5 lg:px-10">
+<!--
+	El header va SOBRE el hero, sin banda propia: en el diseño la foto llega hasta el
+	borde superior de la página. El posicionamiento lo pone `app.html`; aquí solo el
+	contenido, que es blanco porque siempre cae sobre una sección oscura.
+-->
+<div class="text-secondary-contrast max-w-wide mx-auto flex items-center justify-between gap-6 px-6 py-6 lg:px-10 lg:pt-22 lg:pb-8">
+	<div class="flex items-center gap-10 xl:gap-16">
 		<a routerLink="/" aria-label="Movía, ir al inicio" (click)="closeMenu()">
-			<img class="h-9 w-auto lg:h-11" src="/imgs/layout/logo-movia.png" alt="Movía · belong everywhere" width="4106" height="554" />
+			<img class="h-9 w-auto lg:h-13" src="/imgs/layout/logo-movia.png" alt="Movía · belong everywhere" width="4106" height="554" />
 		</a>
 
 		<nav class="hidden lg:block" aria-label="Navegación principal">
@@ -19,62 +24,63 @@
 				}
 			</ul>
 		</nav>
-
-		<div class="hidden items-center gap-4 lg:flex">
-			<a class="bg-surface flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en el App Store">
-				<span class="icon-mask icon-apple bg-ink size-5"></span>
-			</a>
-			<a class="bg-surface flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en Google Play">
-				<span class="icon-mask icon-android bg-ink size-5"></span>
-			</a>
-			<a class="bg-primary text-primary-contrast text-body-lg rounded-full px-7 py-3 font-medium transition-opacity hover:opacity-90" href="#">
-				Suscribirme
-			</a>
-		</div>
-
-		<button
-			class="focus-visible:ring-primary rounded-lg p-2 focus-visible:ring-2 focus-visible:outline-none lg:hidden"
-			type="button"
-			[attr.aria-expanded]="menuOpen()"
-			aria-controls="header-mobile-menu"
-			[attr.aria-label]="menuOpen() ? 'Cerrar el menú' : 'Abrir el menú'"
-			(click)="toggleMenu()"
-		>
-			<span class="icon-mask bg-secondary-contrast size-7" [class]="menuOpen() ? 'icon-menu-close' : 'icon-menu'"></span>
-		</button>
 	</div>
 
-	@if (menuOpen()) {
-		<div class="border-secondary-tint border-t px-6 pb-8 lg:hidden" id="header-mobile-menu">
-			<nav aria-label="Navegación principal">
-				<ul class="flex flex-col gap-1 py-4">
-					@for (link of navLinks; track link.path) {
-						<li>
-							<a
-								class="text-title block py-3"
-								[routerLink]="link.path"
-								routerLinkActive="text-primary"
-								[routerLinkActiveOptions]="{ exact: true }"
-								(click)="closeMenu()"
-								>{{ link.label }}</a
-							>
-						</li>
-					}
-				</ul>
-			</nav>
+	<div class="hidden items-center gap-4 lg:flex">
+		<a class="bg-surface flex size-14 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en el App Store">
+			<span class="icon-mask icon-apple bg-ink size-6"></span>
+		</a>
+		<a class="bg-surface flex size-14 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en Google Play">
+			<span class="icon-mask icon-android bg-ink size-6"></span>
+		</a>
+		<a
+			class="bg-primary text-primary-contrast text-body-lg ml-2 rounded-full px-14 py-3.5 font-medium transition-opacity hover:opacity-90"
+			href="#"
+		>
+			Suscribirme
+		</a>
+	</div>
 
-			<div class="flex items-center gap-4">
-				<a class="bg-surface flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en el App Store">
-					<span class="icon-mask icon-apple bg-ink size-5"></span>
-				</a>
-				<a class="bg-surface flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en Google Play">
-					<span class="icon-mask icon-android bg-ink size-5"></span>
-				</a>
-			</div>
+	<button
+		class="focus-visible:ring-primary rounded-lg p-2 focus-visible:ring-2 focus-visible:outline-none lg:hidden"
+		type="button"
+		[attr.aria-expanded]="menuOpen()"
+		aria-controls="header-mobile-menu"
+		[attr.aria-label]="menuOpen() ? 'Cerrar el menú' : 'Abrir el menú'"
+		(click)="toggleMenu()"
+	>
+		<span class="icon-mask bg-secondary-contrast size-7" [class]="menuOpen() ? 'icon-menu-close' : 'icon-menu'"></span>
+	</button>
+</div>
 
-			<a class="bg-primary text-primary-contrast text-body-lg mt-6 block rounded-full px-7 py-3 text-center font-medium" href="#">
-				Suscribirme
+@if (menuOpen()) {
+	<div class="bg-secondary text-secondary-contrast border-secondary-tint border-t px-6 pb-8 lg:hidden" id="header-mobile-menu">
+		<nav aria-label="Navegación principal">
+			<ul class="flex flex-col gap-1 py-4">
+				@for (link of navLinks; track link.path) {
+					<li>
+						<a
+							class="text-title block py-3"
+							[routerLink]="link.path"
+							routerLinkActive="text-primary"
+							[routerLinkActiveOptions]="{ exact: true }"
+							(click)="closeMenu()"
+							>{{ link.label }}</a
+						>
+					</li>
+				}
+			</ul>
+		</nav>
+
+		<div class="flex items-center gap-4">
+			<a class="bg-surface flex size-12 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en el App Store">
+				<span class="icon-mask icon-apple bg-ink size-5"></span>
+			</a>
+			<a class="bg-surface flex size-12 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en Google Play">
+				<span class="icon-mask icon-android bg-ink size-5"></span>
 			</a>
 		</div>
-	}
-</header>
+
+		<a class="bg-primary text-primary-contrast text-body-lg mt-6 block rounded-full px-7 py-3 text-center font-medium" href="#"> Suscribirme </a>
+	</div>
+}

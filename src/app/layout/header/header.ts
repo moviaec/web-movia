@@ -5,10 +5,12 @@ import { HEADER_NAV } from '@core/constants/navigation.constants';
 
 /**
  * Site header: brand, main navigation, store links and the subscribe call to action.
- * It is the same on the four pages.
+ * It is the same on the four pages and always sits ON TOP of a dark first section,
+ * so it has no background of its own.
  */
 @Component({
 	selector: 'app-header',
+	host: { class: 'absolute inset-x-0 top-0 z-30 block' },
 	imports: [RouterLink, RouterLinkActive],
 	templateUrl: './header.html'
 })

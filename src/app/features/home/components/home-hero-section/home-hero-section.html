@@ -1,4 +1,4 @@
-<section class="bg-secondary relative isolate overflow-hidden" aria-labelledby="home-hero-title">
+<section class="bg-secondary rounded-b-hero relative isolate overflow-hidden" aria-labelledby="home-hero-title">
 	<!--
 		Art direction: el recorte de móvil no es el de escritorio, así que van dos archivos
 		y un <picture>. Por eso no se usa NgOptimizedImage aquí (no soporta <picture>); el
@@ -17,13 +17,13 @@
 	</picture>
 
 	<!--
-		Velo oscuro sobre la foto: sin él, el subtítulo cae sobre la zona clara del corredor
-		y el contraste se queda por debajo de 4,5:1. El diseño trae la foto ya tratada, pero
-		el archivo entregado es más luminoso.
+		Velo de carbón al 65 %. No es un apaño de contraste: es lo que mide el diseño. Sobre
+		la foto entregada, el color del mockup sale con `0,7 × carbón + 0,3 × foto`, y sin el
+		velo el hero se ve mucho más claro que la maqueta (y el subtítulo pierde contraste).
 	-->
-	<div class="bg-secondary/45 absolute inset-0 -z-10"></div>
+	<div class="bg-secondary/65 absolute inset-0 -z-10"></div>
 
-	<div class="max-w-content mx-auto px-6 pt-24 pb-28 text-center lg:px-10 lg:pt-48 lg:pb-56">
+	<div class="max-w-content mx-auto px-6 pt-36 pb-28 text-center lg:px-10 lg:pt-92 lg:pb-53">
 		<h1 id="home-hero-title" class="font-display text-secondary-contrast lg:text-display text-4xl font-extrabold sm:text-6xl">
 			Move Freely.<br />
 			<span class="text-primary">Belong Everywhere.</span>
@@ -35,7 +35,7 @@
 
 <div class="bg-surface relative z-10">
 	<div class="max-w-content mx-auto px-6 lg:px-10">
-		<ul class="-mt-20 grid gap-4 lg:-mt-32 lg:grid-cols-3 lg:gap-6">
+		<ul class="-mt-20 grid gap-4 lg:-mt-21 lg:grid-cols-3 lg:gap-25">
 			@for (card of cards; track card.path) {
 				<li>
 					<a class="bg-surface-muted rounded-card hover:bg-primary/20 block h-full p-6 transition-colors lg:p-8" [routerLink]="card.path">
