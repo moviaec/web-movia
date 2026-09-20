@@ -1,0 +1,40 @@
+<section class="bg-secondary relative isolate overflow-hidden" aria-labelledby="home-hero-title">
+	<img
+		class="absolute inset-0 -z-10 object-cover opacity-50"
+		ngSrc="/imgs/home/hero.jpg"
+		fill
+		priority
+		alt="Tres personas entrenando: carrera, tenis y atletismo"
+	/>
+
+	<div class="max-w-content mx-auto px-6 pt-24 pb-28 text-center lg:px-10 lg:pt-48 lg:pb-56">
+		<h1 id="home-hero-title" class="font-display text-secondary-contrast lg:text-display text-4xl font-extrabold sm:text-6xl">
+			Move Freely.<br />
+			<span class="text-primary">Belong Everywhere.</span>
+		</h1>
+
+		<p class="text-secondary-contrast lg:text-lead mt-6 text-xl">Deporte y bienestar a tu medida en una sola app</p>
+	</div>
+</section>
+
+<div class="bg-surface relative z-10">
+	<div class="max-w-content mx-auto px-6 lg:px-10">
+		<ul class="-mt-20 grid gap-4 lg:-mt-32 lg:grid-cols-3 lg:gap-6">
+			@for (card of cards; track card.path) {
+				<li>
+					<a class="bg-surface-muted rounded-card hover:bg-primary/20 block h-full p-6 transition-colors lg:p-8" [routerLink]="card.path">
+						<span class="flex items-start justify-between gap-4">
+							<span class="font-display text-ink text-title font-semibold">{{ card.title }}</span>
+							<ng-icon class="text-ink text-2xl" name="heroArrowUpRight" aria-hidden="true" />
+						</span>
+
+						<span class="text-ink mt-6 block lg:mt-10">
+							<strong class="font-semibold">{{ card.lead }}</strong>
+							{{ card.rest }}
+						</span>
+					</a>
+				</li>
+			}
+		</ul>
+	</div>
+</div>

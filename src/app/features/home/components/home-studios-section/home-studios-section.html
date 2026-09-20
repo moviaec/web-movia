@@ -1,0 +1,37 @@
+<section class="bg-surface" aria-labelledby="home-studios-title">
+	<div class="max-w-content lg:py-section mx-auto grid gap-10 px-6 py-20 lg:grid-cols-3 lg:items-center lg:gap-12 lg:px-10">
+		<img
+			class="rounded-card h-80 w-full object-cover lg:h-auto"
+			ngSrc="/imgs/home/estudios.jpg"
+			width="460"
+			height="520"
+			alt="Entrenador de un estudio aliado con una tablilla en la mano"
+		/>
+
+		<div>
+			<h2 id="home-studios-title" class="font-display text-ink lg:text-headline text-3xl font-bold">Movia para Estudios</h2>
+
+			<p class="text-ink lg:text-body-lg mt-6 text-lg">
+				Te conectamos con miles de usuarios activos que buscan tu tipo de clase, y solo pagas cuando alguien asiste.
+			</p>
+
+			<a
+				class="bg-secondary text-secondary-contrast hover:bg-secondary-shade mt-10 flex w-full items-center justify-between gap-6 rounded-full px-8 py-5 font-medium transition-colors sm:w-auto sm:justify-start"
+				routerLink="/estudios"
+			>
+				Saber más
+				<ng-icon class="text-xl" name="heroArrowRight" aria-hidden="true" />
+			</a>
+		</div>
+
+		<ul class="grid grid-cols-2 gap-4 lg:gap-6">
+			@for (perk of perks; track perk) {
+				<li class="bg-primary text-primary-contrast rounded-card p-5 lg:p-6">
+					<ng-icon class="text-2xl" name="heroCheckCircle" aria-hidden="true" />
+
+					<p class="lg:text-body-lg mt-6 font-medium lg:mt-10">{{ perk }}</p>
+				</li>
+			}
+		</ul>
+	</div>
+</section>
