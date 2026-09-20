@@ -23,8 +23,8 @@
 	-->
 	<div class="bg-secondary/65 absolute inset-0 -z-10"></div>
 
-	<div class="max-w-content mx-auto px-6 pt-36 pb-28 text-center lg:px-10 lg:pt-92 lg:pb-53">
-		<h1 id="home-hero-title" class="font-display text-secondary-contrast lg:text-display text-4xl font-extrabold sm:text-6xl">
+	<div class="max-w-content mx-auto px-6 pt-36 pb-28 text-center lg:px-8 lg:pt-73.5 lg:pb-37">
+		<h1 id="home-hero-title" class="font-display text-secondary-contrast lg:text-display text-4xl font-extrabold sm:text-5xl">
 			Move Freely.<br />
 			<span class="text-primary">Belong Everywhere.</span>
 		</h1>
@@ -34,17 +34,17 @@
 </section>
 
 <div class="bg-surface relative z-10">
-	<div class="max-w-content mx-auto px-6 lg:px-10">
-		<ul class="-mt-20 grid gap-4 lg:-mt-21 lg:grid-cols-3 lg:gap-25">
+	<div class="max-w-content mx-auto px-6 lg:px-8">
+		<ul class="-mt-20 grid gap-4 lg:-mt-17 lg:grid-cols-3 lg:gap-20">
 			@for (card of cards; track card.path) {
 				<li>
-					<a class="bg-surface-muted rounded-card hover:bg-primary/20 block h-full p-6 transition-colors lg:p-8" [routerLink]="card.path">
+					<a class="bg-surface-muted rounded-card hover:bg-primary/20 block h-full p-6 transition-colors lg:p-6.5" [routerLink]="card.path">
 						<span class="flex items-start justify-between gap-4">
 							<span class="font-display text-ink text-title font-semibold">{{ card.title }}</span>
 							<span class="icon-mask icon-flecha-diagonal bg-ink size-6"></span>
 						</span>
 
-						<span class="text-ink mt-6 block lg:mt-10">
+						<span class="text-ink mt-6 block lg:mt-8">
 							<strong class="font-semibold">{{ card.lead }}</strong>
 							{{ card.rest }}
 						</span>

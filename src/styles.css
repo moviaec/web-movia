@@ -90,19 +90,27 @@
 
 	/*
 	 * Escala tipográfica, MEDIDA sobre las capturas del Home (frame de 1920 px) por altura
-	 * de mayúscula dividida entre 0,72. Son valores de DESKTOP y son estimaciones: el detalle
-	 * y el nivel de confianza de cada uno está en `docs/decisiones/2026-09-20-design-system.md`.
-	 * Los tamaños de móvil NO están aquí porque no se pudieron medir con fiabilidad.
+	 * de mayúscula dividida entre 0,72, y después multiplicada por 0,8.
+	 *
+	 * Ese 0,8 no es un capricho: el prototipo de Figma se mira con `scale-down-width`, así
+	 * que el frame de 1920 se ve reducido a la ventana real (~1500 px). Lo que hay en la
+	 * captura NO son 72 px de H1, son 72 × 0,78. Todo el sistema —tipografía, contenedores,
+	 * espaciado y radios— va escalado por el mismo factor para que la web se vea igual que
+	 * la captura en una pantalla normal.
+	 *
+	 * El detalle de cada medida y su nivel de confianza está en
+	 * `docs/decisiones/2026-09-20-design-system.md`. Los tamaños de móvil NO están aquí
+	 * porque no se pudieron medir con fiabilidad.
 	 */
-	--text-display: 4.5rem; /* 72px · H1 del hero */
+	--text-display: 3.6rem; /* 57.6px · H1 del hero (72 del diseño × 0,8) */
 	--text-display--line-height: 1.05;
-	--text-headline: 3rem; /* 48px · titular de sección */
+	--text-headline: 2.4rem; /* 38.4px · titular de sección (48 × 0,8) */
 	--text-headline--line-height: 1.15;
-	--text-lead: 2rem; /* 32px · entradilla bajo el H1 */
+	--text-lead: 1.6rem; /* 25.6px · entradilla bajo el H1 (32 × 0,8) */
 	--text-lead--line-height: 1.4;
-	--text-title: 1.875rem; /* 30px · título de card y de paso */
+	--text-title: 1.5rem; /* 24px · título de card y de paso (30 × 0,8) */
 	--text-title--line-height: 1.3;
-	--text-body-lg: 1.125rem; /* 18px · cuerpo destacado, nav y footer */
+	--text-body-lg: 0.9rem; /* 14.4px · cuerpo destacado, nav y footer (18 × 0,8) */
 	--text-body-lg--line-height: 1.6;
 
 	/*
@@ -113,22 +121,22 @@
 	 * `box-sizing: border-box` y el padding se come el ancho: 1416 + 80 y 1580 + 80. Si se
 	 * escribe el ancho pelado, el contenido se queda 80 px más estrecho que el diseño.
 	 */
-	--container-content: 93.5rem; /* 1416px de contenido + 2 × 40px */
-	--container-wide: 103.75rem; /* 1580px de contenido + 2 × 40px */
+	--container-content: 74.8rem; /* (1416 + 2 × 40) × 0,8 */
+	--container-wide: 83rem; /* (1580 + 2 × 40) × 0,8 */
 
 	/*
 	 * Ritmo vertical de sección. `section` es lo medido en desktop (borde de sección a
 	 * titular, 160 px en la FAQ y 130 px en el footer); `section-sm` es una ESTIMACIÓN para
 	 * móvil, sin medir, a confirmar cuando haya capturas por secciones.
 	 */
-	--spacing-section: 10rem; /* 160px */
-	--spacing-section-sm: 4rem; /* 64px, estimado */
+	--spacing-section: 8rem; /* 128px (160 × 0,8) */
+	--spacing-section-sm: 3.2rem; /* 51px, estimado (64 × 0,8) */
 
 	/* Radio de las cards del diseño (~8px medidos en la card del hero y en las lima). */
-	--radius-card: 0.5rem;
+	--radius-card: 0.4rem;
 
 	/* El bloque del hero se corta abajo con una curva de ~40px. */
-	--radius-hero: 2.5rem;
+	--radius-hero: 2rem;
 }
 
 /*

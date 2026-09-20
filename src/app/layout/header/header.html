@@ -3,10 +3,10 @@
 	borde superior de la página. El posicionamiento lo pone `app.html`; aquí solo el
 	contenido, que es blanco porque siempre cae sobre una sección oscura.
 -->
-<div class="text-secondary-contrast max-w-wide mx-auto flex items-center justify-between gap-6 px-6 py-6 lg:px-10 lg:pt-22 lg:pb-8">
-	<div class="flex items-center gap-10 xl:gap-16">
+<div class="text-secondary-contrast max-w-wide mx-auto flex items-center justify-between gap-6 px-6 py-6 lg:px-8 lg:pt-17.5 lg:pb-6.5">
+	<div class="flex items-center gap-10 xl:gap-13">
 		<a routerLink="/" aria-label="Movía, ir al inicio" (click)="closeMenu()">
-			<img class="h-9 w-auto lg:h-13" src="/imgs/layout/logo-movia.png" alt="Movía · belong everywhere" width="4106" height="554" />
+			<img class="h-9 w-auto lg:h-10.5" src="/imgs/layout/logo-movia.png" alt="Movía · belong everywhere" width="4106" height="554" />
 		</a>
 
 		<nav class="hidden lg:block" aria-label="Navegación principal">
@@ -27,14 +27,14 @@
 	</div>
 
 	<div class="hidden items-center gap-4 lg:flex">
-		<a class="bg-surface flex size-14 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en el App Store">
-			<span class="icon-mask icon-apple bg-ink size-6"></span>
+		<a class="bg-secondary-tint flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en el App Store">
+			<span class="icon-mask icon-apple bg-secondary-contrast size-5"></span>
 		</a>
-		<a class="bg-surface flex size-14 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en Google Play">
-			<span class="icon-mask icon-android bg-ink size-6"></span>
+		<a class="bg-secondary-tint flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en Google Play">
+			<span class="icon-mask icon-android bg-secondary-contrast size-5"></span>
 		</a>
 		<a
-			class="bg-primary text-primary-contrast text-body-lg ml-2 rounded-full px-14 py-3.5 font-medium transition-opacity hover:opacity-90"
+			class="bg-primary text-primary-contrast text-body-lg ml-2 rounded-full px-11 py-2.5 font-medium transition-opacity hover:opacity-90"
 			href="#"
 		>
 			Suscribirme
@@ -73,14 +73,16 @@
 		</nav>
 
 		<div class="flex items-center gap-4">
-			<a class="bg-surface flex size-12 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en el App Store">
-				<span class="icon-mask icon-apple bg-ink size-5"></span>
+			<a class="bg-secondary-tint flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en el App Store">
+				<span class="icon-mask icon-apple bg-secondary-contrast size-5"></span>
 			</a>
-			<a class="bg-surface flex size-12 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en Google Play">
-				<span class="icon-mask icon-android bg-ink size-5"></span>
+			<a class="bg-secondary-tint flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en Google Play">
+				<span class="icon-mask icon-android bg-secondary-contrast size-5"></span>
 			</a>
 		</div>
 
-		<a class="bg-primary text-primary-contrast text-body-lg mt-6 block rounded-full px-7 py-3 text-center font-medium" href="#"> Suscribirme </a>
+		<a class="bg-primary text-primary-contrast text-body-lg mt-6 block rounded-full px-6 py-2.5 text-center font-medium" href="#">
+			Suscribirme
+		</a>
 	</div>
 }

@@ -1,5 +1,5 @@
 <section class="bg-surface" aria-labelledby="home-categories-title">
-	<div class="max-w-content lg:pt-section mx-auto px-6 pt-20 lg:px-10">
+	<div class="max-w-content lg:pt-section mx-auto px-6 pt-20 lg:px-8">
 		<h2 id="home-categories-title" class="font-display text-ink lg:text-headline text-3xl font-bold">Categorías de actividades</h2>
 
 		<p class="text-ink lg:text-lead mt-6 max-w-2xl text-lg">
@@ -7,14 +7,14 @@
 		</p>
 	</div>
 
-	<div class="relative mt-12 lg:mt-20">
+	<div class="relative mt-12 lg:mt-16">
 		<div class="bg-secondary absolute inset-x-0 top-1/2 bottom-0"></div>
 
 		<ul
-			class="max-w-content relative mx-auto flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 lg:grid lg:grid-cols-5 lg:items-center lg:gap-6 lg:overflow-visible lg:px-10 lg:pb-0"
+			class="max-w-content relative mx-auto flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 lg:grid lg:grid-cols-5 lg:items-center lg:gap-5 lg:overflow-visible lg:px-8 lg:pb-0.5"
 		>
 			@for (category of categories; track category.image; let index = $index) {
-				<li class="w-56 shrink-0 snap-center lg:w-auto" [class]="index === 2 ? 'lg:py-0' : 'lg:py-10'">
+				<li class="w-56 shrink-0 snap-center lg:w-auto" [class]="index === 2 ? 'lg:py-0.5' : 'lg:py-8'">
 					<img
 						class="rounded-card h-72 w-full object-cover lg:h-auto"
 						ngSrc="{{ category.image }}"
@@ -29,7 +29,7 @@
 
 	<div class="bg-secondary lg:pb-section px-6 pb-20 text-center">
 		<a
-			class="border-secondary-contrast text-secondary-contrast hover:bg-secondary-contrast hover:text-secondary inline-flex w-full items-center justify-center rounded-full border px-8 py-4 transition-colors sm:w-auto"
+			class="border-secondary-contrast text-secondary-contrast hover:bg-secondary-contrast hover:text-secondary inline-flex w-full items-center justify-center rounded-full border px-6 py-3 transition-colors sm:w-auto"
 			routerLink="/planes"
 			>Ver todas</a
 		>

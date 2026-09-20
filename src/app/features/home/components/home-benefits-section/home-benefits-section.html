@@ -1,13 +1,13 @@
 <section class="bg-secondary" aria-labelledby="home-benefits-title">
-	<div class="max-w-content lg:pb-section mx-auto px-6 pb-20 lg:px-10">
+	<div class="max-w-content lg:pb-section mx-auto px-6 pb-20 lg:px-8">
 		<h2 id="home-benefits-title" class="font-display text-primary lg:text-headline text-center text-3xl font-bold">Variedad sin límites</h2>
 
-		<ul class="mt-12 grid gap-12 lg:mt-20 lg:grid-cols-3 lg:gap-16">
+		<ul class="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-3 lg:gap-13">
 			@for (benefit of benefits; track benefit.title) {
 				<li class="text-center">
 					<span class="icon-mask bg-primary mx-auto size-12" [class]="benefit.icon"></span>
 
-					<h3 class="font-display text-secondary-contrast text-title mt-8 font-semibold lg:mt-12">{{ benefit.title }}</h3>
+					<h3 class="font-display text-secondary-contrast text-title mt-8 font-semibold lg:mt-9.5">{{ benefit.title }}</h3>
 
 					<p class="text-muted mx-auto mt-6 max-w-sm">{{ benefit.description }}</p>
 				</li>

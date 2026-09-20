@@ -1,15 +1,15 @@
 <section class="bg-surface" aria-labelledby="home-faq-title">
-	<div class="max-w-content lg:py-section mx-auto px-6 py-20 lg:px-10">
+	<div class="max-w-content lg:py-section mx-auto px-6 py-20 lg:px-8">
 		<h2 id="home-faq-title" class="font-display text-ink lg:text-headline text-3xl font-bold lg:text-center">¿Tienes preguntas?</h2>
 
 		<p class="text-ink lg:text-body-lg mt-6 text-lg lg:text-center">Aquí encontrarás todo lo que necesitas saber antes de empezar con Movia.</p>
 
-		<ul class="mt-12 grid gap-x-16 lg:mt-20 lg:grid-flow-col lg:grid-cols-2 lg:grid-rows-3">
+		<ul class="mt-12 grid gap-x-16 lg:mt-16 lg:grid-flow-col lg:grid-cols-2 lg:grid-rows-3">
 			@for (item of items; track item.id) {
 				<li class="border-border border-b">
 					<h3>
 						<button
-							class="focus-visible:ring-secondary flex w-full items-center justify-between gap-6 py-6 text-left focus-visible:ring-2 focus-visible:outline-none"
+							class="focus-visible:ring-secondary flex w-full items-center justify-between gap-5 py-5 text-left focus-visible:ring-2 focus-visible:outline-none"
 							type="button"
 							[attr.aria-expanded]="openId() === item.id"
 							[attr.aria-controls]="'faq-panel-' + item.id"
@@ -31,7 +31,7 @@
 			}
 		</ul>
 
-		<p class="text-ink mt-12 text-center lg:mt-16">
+		<p class="text-ink mt-12 text-center lg:mt-13">
 			¿Tienes más preguntas? Visita nuestro
 			<a class="hover:text-primary underline transition-colors" href="#">Centro de ayuda</a>
 		</p>

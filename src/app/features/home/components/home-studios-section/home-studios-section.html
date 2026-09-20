@@ -1,5 +1,5 @@
 <section class="bg-surface" aria-labelledby="home-studios-title">
-	<div class="max-w-content lg:py-section mx-auto grid gap-10 px-6 py-20 lg:grid-cols-3 lg:items-center lg:gap-12 lg:px-10">
+	<div class="max-w-content lg:py-section mx-auto grid gap-10 px-6 py-20 lg:grid-cols-3 lg:items-center lg:gap-9.5 lg:px-8">
 		<img
 			class="rounded-card h-80 w-full object-cover lg:h-auto"
 			ngSrc="/imgs/home/estudios.jpg"
@@ -16,7 +16,7 @@
 			</p>
 
 			<a
-				class="bg-secondary text-secondary-contrast hover:bg-secondary-shade mt-10 flex w-full items-center justify-between gap-6 rounded-full px-8 py-5 font-medium transition-colors sm:w-auto sm:justify-start"
+				class="bg-secondary text-secondary-contrast hover:bg-secondary-shade mt-10 flex w-full items-center justify-between gap-6 rounded-full px-6 py-4 font-medium transition-colors sm:w-auto sm:justify-start"
 				routerLink="/estudios"
 			>
 				Saber más
@@ -24,12 +24,12 @@
 			</a>
 		</div>
 
-		<ul class="grid grid-cols-2 gap-4 lg:gap-6">
+		<ul class="grid grid-cols-2 gap-4 lg:gap-5">
 			@for (perk of perks; track perk) {
-				<li class="bg-primary text-primary-contrast rounded-card p-5 lg:p-6">
+				<li class="bg-primary text-primary-contrast rounded-card p-5 lg:p-5">
 					<span class="icon-mask icon-check bg-primary-contrast size-7"></span>
 
-					<p class="lg:text-body-lg mt-6 font-medium lg:mt-10">{{ perk }}</p>
+					<p class="lg:text-body-lg mt-6 font-medium lg:mt-8">{{ perk }}</p>
 				</li>
 			}
 		</ul>
