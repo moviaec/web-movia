@@ -81,13 +81,47 @@
 	--color-info-surface: color-mix(in srgb, var(--brand-blue) 10%, white);
 
 	/*
-	 * PENDIENTE: la marca es Gilroy, pero el archivo `Gilroy-Medium.woff2` tampoco existe en
-	 * app-movia (es de pago y va auto-hospedada), así que aquí no se puede declarar su
-	 * `@font-face` sin apuntar a un 404. Inter se queda como la que se sirve de verdad; en
-	 * cuanto el woff2 esté en `public/fonts/`, se antepone Gilroy aquí y en ningún sitio más.
+	 * Gilroy queda DESCARTADA: la tipografía del proyecto es Inter para el cuerpo y Plus
+	 * Jakarta Sans para los titulares, y ninguna otra. El diseño de Figma viene con otra
+	 * familia geométrica; se mapea a estas dos y no se añade una tercera.
 	 */
 	--font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 	--font-display: 'Plus Jakarta Sans', var(--font-sans);
+
+	/*
+	 * Escala tipográfica, MEDIDA sobre las capturas del Home (frame de 1920 px) por altura
+	 * de mayúscula dividida entre 0,72. Son valores de DESKTOP y son estimaciones: el detalle
+	 * y el nivel de confianza de cada uno está en `docs/decisiones/2026-09-20-design-system.md`.
+	 * Los tamaños de móvil NO están aquí porque no se pudieron medir con fiabilidad.
+	 */
+	--text-display: 4.5rem; /* 72px · H1 del hero */
+	--text-display--line-height: 1.05;
+	--text-headline: 3rem; /* 48px · titular de sección */
+	--text-headline--line-height: 1.15;
+	--text-lead: 2rem; /* 32px · entradilla bajo el H1 */
+	--text-lead--line-height: 1.4;
+	--text-title: 1.875rem; /* 30px · título de card y de paso */
+	--text-title--line-height: 1.3;
+	--text-body-lg: 1.125rem; /* 18px · cuerpo destacado, nav y footer */
+	--text-body-lg--line-height: 1.6;
+
+	/*
+	 * Anchos de contenedor, medidos sobre el mismo frame: el contenido va centrado a ~1416 px
+	 * y el header/footer respiran algo más (~1580 px).
+	 */
+	--container-content: 88.5rem; /* 1416px */
+	--container-wide: 98.75rem; /* 1580px */
+
+	/*
+	 * Ritmo vertical de sección. `section` es lo medido en desktop (borde de sección a
+	 * titular, 160 px en la FAQ y 130 px en el footer); `section-sm` es una ESTIMACIÓN para
+	 * móvil, sin medir, a confirmar cuando haya capturas por secciones.
+	 */
+	--spacing-section: 10rem; /* 160px */
+	--spacing-section-sm: 4rem; /* 64px, estimado */
+
+	/* Radio de las cards del diseño (~8px medidos en la card del hero y en las lima). */
+	--radius-card: 0.5rem;
 }
 
 /*
