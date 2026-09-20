@@ -1,0 +1,17 @@
+{
+	"name": "Movía",
+	"short_name": "Movía",
+	"description": "Movía: una sola suscripción para entrenar donde quieras.",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#1C242C",
+	"lang": "es",
+	"icons": [
+		{
+			"src": "favicon.png",
+			"sizes": "64x64",
+			"type": "image/png"
+		}
+	]
+}

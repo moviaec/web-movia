@@ -1,59 +1,39 @@
-# WebPartnerMovia
+# web-movia
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.3.
+Landing pública de Movía: SPA estática en Angular 22 + Tailwind CSS 4, sin backend.
 
-## Development server
+Las convenciones de código y las reglas del agente viven en `.claude/CLAUDE.md` y `.claude/RULES.md`; el setup del proyecto, en `.claude/SETUP.md`.
 
-To start a local development server, run:
+## Requisitos
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Node `>=22.12.0` (fijado en `.nvmrc`).
 
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Servidor de desarrollo
 
 ```bash
-ng generate --help
+npm start
 ```
 
-## Building
+Abre `http://localhost:4200/`. La aplicación recarga sola al guardar cualquier archivo fuente.
 
-To build the project run:
+## Comandos
+
+| Comando              | Qué hace                                     |
+| -------------------- | -------------------------------------------- |
+| `npm start`          | Servidor de desarrollo (`ng serve`)          |
+| `npm run build:prod` | Build de producción en `dist/`               |
+| `npm run lint`       | ESLint sobre `src/**/*.ts` y `src/**/*.html` |
+| `npm run test`       | Tests unitarios con Vitest                   |
+| `npm run format`     | Prettier sobre `src/`                        |
+
+## Generar componentes
 
 ```bash
-ng build
+ng generate component features/<domain>/<page>
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Nunca con `--inline-template` ni `--inline-style`: cada componente son archivos hermanos `.ts` + `.html` (`.claude/RULES.md`, regla 19).

@@ -1,12 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+/** Application root: nothing but the routed tree. */
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+	selector: 'app-root',
+	imports: [RouterOutlet],
+	templateUrl: './app.html'
 })
-export class App {
-  protected readonly title = signal('web-partner-movia');
-}
+export class App {}

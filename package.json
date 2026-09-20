@@ -1,35 +1,65 @@
 {
-  "name": "web-partner-movia",
-  "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
-  },
-  "private": true,
-  "packageManager": "npm@10.9.8",
-  "dependencies": {
-    "@angular/common": "^22.0.0",
-    "@angular/compiler": "^22.0.0",
-    "@angular/core": "^22.0.0",
-    "@angular/forms": "^22.0.0",
-    "@angular/platform-browser": "^22.0.0",
-    "@angular/router": "^22.0.0",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
-  },
-  "devDependencies": {
-    "@angular/build": "^22.0.3",
-    "@angular/cli": "^22.0.3",
-    "@angular/compiler-cli": "^22.0.0",
-    "@tailwindcss/postcss": "^4.1.12",
-    "jsdom": "^28.0.0",
-    "postcss": "^8.5.3",
-    "prettier": "^3.8.1",
-    "tailwindcss": "^4.1.12",
-    "typescript": "~6.0.2",
-    "vitest": "^4.0.8"
-  }
+	"name": "web-movia",
+	"version": "0.0.0",
+	"scripts": {
+		"ng": "ng",
+		"start": "ng serve",
+		"build": "ng build",
+		"build:dev": "ng build --configuration development",
+		"build:prod": "ng build --configuration production",
+		"watch": "ng build --watch --configuration development",
+		"test": "ng test",
+		"lint": "ng lint",
+		"format": "prettier --write \"src/**/*.{ts,html,css,json}\"",
+		"prepare": "husky"
+	},
+	"private": true,
+	"packageManager": "npm@10.9.8",
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"lint-staged": {
+		"*.{ts,html}": [
+			"eslint --fix",
+			"prettier --write"
+		],
+		"*.{json,css,md}": [
+			"prettier --write"
+		]
+	},
+	"dependencies": {
+		"@angular/aria": "^22.0.4",
+		"@angular/common": "^22.0.0",
+		"@angular/compiler": "^22.0.0",
+		"@angular/core": "^22.0.0",
+		"@angular/forms": "^22.0.0",
+		"@angular/platform-browser": "^22.0.0",
+		"@angular/router": "^22.0.0",
+		"@ng-icons/core": "^34.0.0",
+		"@ng-icons/heroicons": "^34.0.0",
+		"rxjs": "~7.8.0",
+		"tslib": "^2.3.0"
+	},
+	"devDependencies": {
+		"@angular/build": "^22.0.3",
+		"@angular/cli": "^22.0.3",
+		"@angular/compiler-cli": "^22.0.0",
+		"@commitlint/cli": "^21.2.1",
+		"@commitlint/config-conventional": "^21.2.0",
+		"@eslint/js": "^10.0.1",
+		"@tailwindcss/postcss": "^4.1.12",
+		"angular-eslint": "22.1.0",
+		"eslint": "^10.6.0",
+		"eslint-config-prettier": "^10.1.8",
+		"husky": "^9.1.7",
+		"jsdom": "^28.0.0",
+		"lint-staged": "^17.0.8",
+		"postcss": "^8.5.3",
+		"prettier": "^3.8.1",
+		"prettier-plugin-tailwindcss": "^0.8.1",
+		"tailwindcss": "^4.1.12",
+		"typescript": "~6.0.2",
+		"typescript-eslint": "8.62.1",
+		"vitest": "^4.0.8"
+	}
 }

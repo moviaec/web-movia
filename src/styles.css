@@ -1,3 +1,158 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+/*
+ * Fuente única de verdad del color, portada de app-movia para que las dos caras del
+ * producto se vean la misma marca. Aquí se escriben los valores crudos y NADA más los
+ * escribe: el `@theme` de abajo los mapea a tokens de Tailwind y las plantillas solo
+ * usan esos tokens («Prohibido» de CLAUDE.md: nada de hex suelto en un template).
+ *
+ * En app-movia estos valores son tripletes RGB separados por coma porque Ionic los mete
+ * crudos dentro de `rgba(R, G, B, A)`. Aquí NO hay Ionic ni ningún consumidor de tripletes,
+ * así que van en hex: el mismo color, sin la indirección que allí sí paga.
+ */
+:root {
+	/* Marca. El lima es el acento; el carbón es la tinta y el color de acción. */
+	--brand-lime: #d3f442;
+	--brand-carbon: #1c242c;
+	--brand-white: #ffffff;
+
+	/* Neutros. `mist` es el fondo de la aplicación y de las filas; `gray` es el texto secundario. */
+	--brand-mist: #f4f5f8;
+	--brand-gray: #92949c;
+
+	/*
+	 * Funcionales. Verde, ámbar y rojo se leen por convención, no son de marca, y los tonos
+	 * son los de app-movia. Ahí viven dentro de rellenos de Ionic con texto oscuro encima;
+	 * aquí se usan sobre todo como TEXTO sobre blanco, así que el `@theme` los oscurece con
+	 * `color-mix` en vez de mantener un segundo color a mano. El rojo ya se lee tal cual.
+	 */
+	--brand-green: #2dd55b;
+	--brand-amber: #ffc409;
+	--brand-red: #c5000f;
+
+	/*
+	 * El azul informativo no sale de la identidad: no hay un cuarto color de marca y hace
+	 * falta distinguir «esto es un aviso neutro» de «esto va bien» y «esto falla».
+	 * PENDIENTE: si la identidad define un terciario, se cambia aquí y se mueve todo.
+	 */
+	--brand-blue: #1d4ed8;
+}
+
+@theme {
+	/*
+	 * `primary` es el LIMA y `secondary` el CARBÓN, exactamente como en app-movia. Cada uno
+	 * lleva su `-contrast`, que es el color que se pone ENCIMA: lima con texto carbón (12,5:1)
+	 * y carbón con texto blanco. Escribir el contraste a ojo en cada plantilla es cómo se
+	 * acaba con texto blanco sobre lima, que no se lee.
+	 */
+	--color-primary: var(--brand-lime);
+	--color-primary-contrast: var(--brand-carbon);
+	--color-secondary: var(--brand-carbon);
+	--color-secondary-contrast: var(--brand-white);
+	--color-secondary-shade: color-mix(in srgb, var(--brand-carbon) 88%, black);
+	--color-secondary-tint: color-mix(in srgb, var(--brand-carbon) 90%, white);
+
+	/*
+	 * Lienzo y tinta. `ink` es el carbón de marca y es el color del TEXTO normal: el lima
+	 * sobre blanco da 1,3:1 y no se puede leer, así que `text-primary` no es el texto de
+	 * nada — es el acento.
+	 */
+	--color-surface: var(--brand-white);
+	--color-surface-muted: var(--brand-mist);
+	--color-ink: var(--brand-carbon);
+	--color-muted: var(--brand-gray);
+	--color-border: color-mix(in srgb, var(--brand-carbon) 14%, white);
+
+	/* Estados: distinguen aprobado/pendiente/bloqueado sin ambigüedad. */
+	--color-success: color-mix(in srgb, var(--brand-green) 62%, black);
+	--color-success-surface: color-mix(in srgb, var(--brand-green) 16%, white);
+	--color-warning: color-mix(in srgb, var(--brand-amber) 62%, black);
+	--color-warning-surface: color-mix(in srgb, var(--brand-amber) 22%, white);
+	--color-danger: var(--brand-red);
+	--color-danger-surface: color-mix(in srgb, var(--brand-red) 10%, white);
+	/*
+	 * El rojo de marca sobre el carbón da 2,3:1 y no se puede leer: es un rojo pensado para
+	 * fondo claro. Este es el mismo rojo aclarado lo justo para llegar a 4,6:1 sobre
+	 * `secondary`, y NO se usa sobre blanco (ahí se queda en 3,3:1). Mismo criterio que
+	 * `secondary-tint`: la variante existe porque el fondo cambia, no porque cambie el color.
+	 */
+	--color-danger-tint: color-mix(in srgb, var(--brand-red) 60%, white);
+	--color-info: var(--brand-blue);
+	--color-info-surface: color-mix(in srgb, var(--brand-blue) 10%, white);
+
+	/*
+	 * PENDIENTE: la marca es Gilroy, pero el archivo `Gilroy-Medium.woff2` tampoco existe en
+	 * app-movia (es de pago y va auto-hospedada), así que aquí no se puede declarar su
+	 * `@font-face` sin apuntar a un 404. Inter se queda como la que se sirve de verdad; en
+	 * cuanto el woff2 esté en `public/fonts/`, se antepone Gilroy aquí y en ningún sitio más.
+	 */
+	--font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+	--font-display: 'Plus Jakarta Sans', var(--font-sans);
+}
+
+/*
+ * El lienzo de la aplicación es el gris de `mist`, no blanco, y hay que declararlo: sin esto
+ * nadie pinta el fondo, lo decide el navegador, y las tarjetas blancas (`.card`, el panel del
+ * acceso) no se distinguen de la página que hay detrás — que es justo lo que las hace tarjetas.
+ */
+@layer base {
+	body {
+		@apply bg-surface-muted text-ink;
+	}
+}
+
+/* Utilidades propias (solo si Tailwind no las trae) */
+/* @utility ... {} */
+
+/* Componentes CSS propios (solo patrones muy repetidos) */
+@layer components {
+	/*
+	 * Patrones que se repiten en toda la interfaz (campos de formulario, botones, tarjetas).
+	 * Se centralizan para que un cambio de la identidad se aplique aquí sin tocar ni un
+	 * template. Si alguno deja de usarse, se borra: no se guardan clases «por si acaso».
+	 */
+	.field-label {
+		@apply text-ink mb-1 block text-sm font-medium;
+	}
+
+	.field-input {
+		@apply border-border bg-surface text-ink w-full rounded-lg border px-3 py-2;
+		@apply focus:border-secondary focus:ring-secondary/20 focus:ring-2 focus:outline-none;
+		@apply disabled:bg-surface-muted disabled:text-muted disabled:cursor-not-allowed;
+	}
+
+	/*
+	 * Tailwind no permite @apply de una clase declarada en esta misma capa, así
+	 * que la base se repite en cada variante en vez de componerse.
+	 */
+	.btn-primary,
+	.btn-secondary,
+	.btn-danger {
+		@apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-medium;
+		@apply focus-visible:ring-secondary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none;
+		@apply disabled:cursor-not-allowed disabled:opacity-50;
+	}
+
+	/*
+	 * La acción principal es CARBÓN, no lima, y va contra lo que haría suponer el nombre del
+	 * token. En la app el lima manda porque el fondo es carbón; aquí el lienzo es claro y un
+	 * relleno lima con cualquier texto encima se queda en 1,3:1 (blanco) o pierde el peso de
+	 * acción principal (carbón sobre lima se lee, pero no destaca sobre un fondo claro). El
+	 * lima se reserva para acentos sobre oscuro.
+	 */
+	.btn-primary {
+		@apply bg-secondary text-secondary-contrast hover:bg-secondary-shade;
+	}
+
+	.btn-secondary {
+		@apply border-border bg-surface text-ink hover:bg-surface-muted border;
+	}
+
+	.btn-danger {
+		@apply bg-danger text-surface hover:opacity-90;
+	}
+
+	.card {
+		@apply border-border bg-surface rounded-xl border p-4;
+	}
+}

@@ -1,12 +1,9 @@
 {
-  "printWidth": 100,
-  "singleQuote": true,
-  "overrides": [
-    {
-      "files": "*.html",
-      "options": {
-        "parser": "angular"
-      }
-    }
-  ]
+	"useTabs": true,
+	"tabWidth": 4,
+	"printWidth": 150,
+	"singleQuote": true,
+	"trailingComma": "none",
+	"plugins": ["prettier-plugin-tailwindcss"],
+	"overrides": [{ "files": "*.html", "options": { "parser": "angular" } }]
 }
