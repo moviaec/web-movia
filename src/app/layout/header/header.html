@@ -1,0 +1,82 @@
+<header class="bg-secondary text-secondary-contrast">
+	<div class="max-w-wide mx-auto flex items-center justify-between gap-6 px-6 py-5 lg:px-10">
+		<a routerLink="/" aria-label="Movía, ir al inicio" (click)="closeMenu()">
+			<img src="/imgs/logos/logo-movia.svg" alt="Movía · belong everywhere" width="220" height="40" class="h-8 w-auto lg:h-10" />
+		</a>
+
+		<nav class="hidden lg:block" aria-label="Navegación principal">
+			<ul class="flex items-center gap-10">
+				@for (link of navLinks; track link.path) {
+					<li>
+						<a
+							class="text-body-lg hover:text-primary transition-colors"
+							[routerLink]="link.path"
+							routerLinkActive="text-primary"
+							[routerLinkActiveOptions]="{ exact: true }"
+							>{{ link.label }}</a
+						>
+					</li>
+				}
+			</ul>
+		</nav>
+
+		<div class="hidden items-center gap-4 lg:flex">
+			<a href="#" aria-label="Descargar Movía en el App Store">
+				<img src="/imgs/icons/apple.svg" alt="" width="40" height="40" class="h-10 w-10" />
+			</a>
+			<a href="#" aria-label="Descargar Movía en Google Play">
+				<img src="/imgs/icons/google-play.svg" alt="" width="40" height="40" class="h-10 w-10" />
+			</a>
+			<a class="bg-primary text-primary-contrast text-body-lg rounded-full px-7 py-3 font-medium transition-opacity hover:opacity-90" href="#">
+				Suscribirme
+			</a>
+		</div>
+
+		<button
+			class="focus-visible:ring-primary rounded-lg p-2 focus-visible:ring-2 focus-visible:outline-none lg:hidden"
+			type="button"
+			[attr.aria-expanded]="menuOpen()"
+			aria-controls="header-mobile-menu"
+			aria-label="Abrir el menú"
+			(click)="toggleMenu()"
+		>
+			<span class="bg-secondary-contrast block h-0.5 w-7"></span>
+			<span class="bg-secondary-contrast mt-1.5 block h-0.5 w-7"></span>
+			<span class="bg-secondary-contrast mt-1.5 block h-0.5 w-7"></span>
+		</button>
+	</div>
+
+	@if (menuOpen()) {
+		<div class="border-secondary-tint border-t px-6 pb-8 lg:hidden" id="header-mobile-menu">
+			<nav aria-label="Navegación principal">
+				<ul class="flex flex-col gap-1 py-4">
+					@for (link of navLinks; track link.path) {
+						<li>
+							<a
+								class="text-title block py-3"
+								[routerLink]="link.path"
+								routerLinkActive="text-primary"
+								[routerLinkActiveOptions]="{ exact: true }"
+								(click)="closeMenu()"
+								>{{ link.label }}</a
+							>
+						</li>
+					}
+				</ul>
+			</nav>
+
+			<div class="flex items-center gap-4">
+				<a href="#" aria-label="Descargar Movía en el App Store">
+					<img src="/imgs/icons/apple.svg" alt="" width="40" height="40" class="h-10 w-10" />
+				</a>
+				<a href="#" aria-label="Descargar Movía en Google Play">
+					<img src="/imgs/icons/google-play.svg" alt="" width="40" height="40" class="h-10 w-10" />
+				</a>
+			</div>
+
+			<a class="bg-primary text-primary-contrast text-body-lg mt-6 block rounded-full px-7 py-3 text-center font-medium" href="#">
+				Suscribirme
+			</a>
+		</div>
+	}
+</header>
