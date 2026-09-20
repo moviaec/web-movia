@@ -1,5 +1,10 @@
 # ESTADO-PROYECTO.md
 
+> **DOCUMENTO SUPERADO.** Refleja el estado previo a la migración SSG.
+> Sus secciones §3 y §4 ya no son ciertas: hoy el proyecto tiene
+> `outputMode: "static"` y archivos de servidor. Se conserva como
+> registro del punto de partida.
+
 Diagnóstico de solo lectura de `web-movia` (Angular 22 + Tailwind CSS 4).
 Generado sin instalar, generar ni modificar nada: solo lectura de archivos y comandos informativos (`node -v`, `npm -v`, `ng version`, `git status`).
 
