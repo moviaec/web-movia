@@ -1,14 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroArrowDown } from '@ng-icons/heroicons/outline';
 
 import { FAQ_ITEMS } from '@core/constants/home.constants';
 
 /** Frequently asked questions, as an accordion. */
 @Component({
 	selector: 'app-home-faq-section',
-	imports: [NgIcon],
-	viewProviders: [provideIcons({ heroArrowDown })],
 	templateUrl: './home-faq-section.html'
 })
 export class HomeFaqSection {

@@ -1,7 +1,7 @@
 <header class="bg-secondary text-secondary-contrast">
 	<div class="max-w-wide mx-auto flex items-center justify-between gap-6 px-6 py-5 lg:px-10">
 		<a routerLink="/" aria-label="Movía, ir al inicio" (click)="closeMenu()">
-			<img src="/imgs/logos/logo-movia.svg" alt="Movía · belong everywhere" width="220" height="40" class="h-8 w-auto lg:h-10" />
+			<img class="h-9 w-auto lg:h-11" src="/imgs/layout/logo-movia.png" alt="Movía · belong everywhere" width="4106" height="554" />
 		</a>
 
 		<nav class="hidden lg:block" aria-label="Navegación principal">
@@ -21,11 +21,11 @@
 		</nav>
 
 		<div class="hidden items-center gap-4 lg:flex">
-			<a href="#" aria-label="Descargar Movía en el App Store">
-				<img src="/imgs/icons/apple.svg" alt="" width="40" height="40" class="h-10 w-10" />
+			<a class="bg-surface flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en el App Store">
+				<span class="icon-mask icon-apple bg-ink size-5"></span>
 			</a>
-			<a href="#" aria-label="Descargar Movía en Google Play">
-				<img src="/imgs/icons/google-play.svg" alt="" width="40" height="40" class="h-10 w-10" />
+			<a class="bg-surface flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en Google Play">
+				<span class="icon-mask icon-android bg-ink size-5"></span>
 			</a>
 			<a class="bg-primary text-primary-contrast text-body-lg rounded-full px-7 py-3 font-medium transition-opacity hover:opacity-90" href="#">
 				Suscribirme
@@ -37,12 +37,10 @@
 			type="button"
 			[attr.aria-expanded]="menuOpen()"
 			aria-controls="header-mobile-menu"
-			aria-label="Abrir el menú"
+			[attr.aria-label]="menuOpen() ? 'Cerrar el menú' : 'Abrir el menú'"
 			(click)="toggleMenu()"
 		>
-			<span class="bg-secondary-contrast block h-0.5 w-7"></span>
-			<span class="bg-secondary-contrast mt-1.5 block h-0.5 w-7"></span>
-			<span class="bg-secondary-contrast mt-1.5 block h-0.5 w-7"></span>
+			<span class="icon-mask bg-secondary-contrast size-7" [class]="menuOpen() ? 'icon-menu-close' : 'icon-menu'"></span>
 		</button>
 	</div>
 
@@ -66,11 +64,11 @@
 			</nav>
 
 			<div class="flex items-center gap-4">
-				<a href="#" aria-label="Descargar Movía en el App Store">
-					<img src="/imgs/icons/apple.svg" alt="" width="40" height="40" class="h-10 w-10" />
+				<a class="bg-surface flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en el App Store">
+					<span class="icon-mask icon-apple bg-ink size-5"></span>
 				</a>
-				<a href="#" aria-label="Descargar Movía en Google Play">
-					<img src="/imgs/icons/google-play.svg" alt="" width="40" height="40" class="h-10 w-10" />
+				<a class="bg-surface flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en Google Play">
+					<span class="icon-mask icon-android bg-ink size-5"></span>
 				</a>
 			</div>
 

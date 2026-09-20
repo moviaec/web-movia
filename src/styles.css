@@ -135,8 +135,94 @@
 	}
 }
 
-/* Utilidades propias (solo si Tailwind no las trae) */
-/* @utility ... {} */
+/*
+ * Iconos de marca como MÁSCARA, no como `<img>`.
+ *
+ * Los SVG que entrega diseño son siluetas sin atributo `fill`, así que dentro de un
+ * `<img>` se pintan siempre en negro: invisibles sobre el carbón y sin forma de
+ * recolorearlos desde CSS. Como máscara, el color lo pone el `background-color` del
+ * elemento, así que se puede usar un token del tema (`bg-primary`, `bg-current`…) y
+ * el mismo archivo sirve en fondo claro y en fondo oscuro. Tailwind no trae ninguna
+ * utilidad equivalente.
+ *
+ * Uso: `<span class="icon-mask icon-flecha-abajo bg-ink size-6" aria-hidden="true"></span>`
+ */
+@utility icon-mask {
+	display: inline-block;
+	flex-shrink: 0;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
+}
+
+@utility icon-flecha-arriba {
+	--icon-url: url('/imgs/iconos/flecha-arriba.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
+
+@utility icon-flecha-abajo {
+	--icon-url: url('/imgs/iconos/flecha-abajo.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
+
+@utility icon-flecha-diagonal {
+	--icon-url: url('/imgs/iconos/flecha-diagonal.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
+
+@utility icon-check {
+	--icon-url: url('/imgs/iconos/check.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
+
+@utility icon-menu {
+	--icon-url: url('/imgs/iconos/menu.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
+
+@utility icon-menu-close {
+	--icon-url: url('/imgs/iconos/menu-close.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
+
+@utility icon-apple {
+	--icon-url: url('/imgs/iconos/apple.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
+
+@utility icon-android {
+	--icon-url: url('/imgs/iconos/android.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
+
+@utility icon-flexibilidad {
+	--icon-url: url('/imgs/home/iconos/flexibilidad.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
+
+@utility icon-descubrimiento {
+	--icon-url: url('/imgs/home/iconos/descubrimiento.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
+
+@utility icon-simplicidad {
+	--icon-url: url('/imgs/home/iconos/simplicidad.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
 
 /* Componentes CSS propios (solo patrones muy repetidos) */
 @layer components {

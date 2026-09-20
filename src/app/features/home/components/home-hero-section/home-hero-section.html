@@ -1,11 +1,27 @@
 <section class="bg-secondary relative isolate overflow-hidden" aria-labelledby="home-hero-title">
-	<img
-		class="absolute inset-0 -z-10 object-cover opacity-50"
-		ngSrc="/imgs/home/hero.jpg"
-		fill
-		priority
-		alt="Tres personas entrenando: carrera, tenis y atletismo"
-	/>
+	<!--
+		Art direction: el recorte de móvil no es el de escritorio, así que van dos archivos
+		y un <picture>. Por eso no se usa NgOptimizedImage aquí (no soporta <picture>); el
+		peso de LCP lo marca `fetchpriority="high"`.
+	-->
+	<picture>
+		<source media="(min-width: 1024px)" srcset="/imgs/home/hero.jpg" />
+		<img
+			class="absolute inset-0 -z-10 size-full object-cover"
+			src="/imgs/home/hero-movil.jpg"
+			alt="Tres personas entrenando de noche: carrera, tenis y atletismo"
+			width="1731"
+			height="1025"
+			fetchpriority="high"
+		/>
+	</picture>
+
+	<!--
+		Velo oscuro sobre la foto: sin él, el subtítulo cae sobre la zona clara del corredor
+		y el contraste se queda por debajo de 4,5:1. El diseño trae la foto ya tratada, pero
+		el archivo entregado es más luminoso.
+	-->
+	<div class="bg-secondary/45 absolute inset-0 -z-10"></div>
 
 	<div class="max-w-content mx-auto px-6 pt-24 pb-28 text-center lg:px-10 lg:pt-48 lg:pb-56">
 		<h1 id="home-hero-title" class="font-display text-secondary-contrast lg:text-display text-4xl font-extrabold sm:text-6xl">
@@ -25,7 +41,7 @@
 					<a class="bg-surface-muted rounded-card hover:bg-primary/20 block h-full p-6 transition-colors lg:p-8" [routerLink]="card.path">
 						<span class="flex items-start justify-between gap-4">
 							<span class="font-display text-ink text-title font-semibold">{{ card.title }}</span>
-							<ng-icon class="text-ink text-2xl" name="heroArrowUpRight" aria-hidden="true" />
+							<span class="icon-mask icon-flecha-diagonal bg-ink size-6"></span>
 						</span>
 
 						<span class="text-ink mt-6 block lg:mt-10">

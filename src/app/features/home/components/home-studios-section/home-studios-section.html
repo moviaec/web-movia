@@ -3,8 +3,8 @@
 		<img
 			class="rounded-card h-80 w-full object-cover lg:h-auto"
 			ngSrc="/imgs/home/estudios.jpg"
-			width="460"
-			height="520"
+			width="657"
+			height="1001"
 			alt="Entrenador de un estudio aliado con una tablilla en la mano"
 		/>
 
@@ -20,14 +20,14 @@
 				routerLink="/estudios"
 			>
 				Saber más
-				<ng-icon class="text-xl" name="heroArrowRight" aria-hidden="true" />
+				<span class="icon-mask icon-flecha-arriba bg-secondary-contrast size-6 rotate-90"></span>
 			</a>
 		</div>
 
 		<ul class="grid grid-cols-2 gap-4 lg:gap-6">
 			@for (perk of perks; track perk) {
 				<li class="bg-primary text-primary-contrast rounded-card p-5 lg:p-6">
-					<ng-icon class="text-2xl" name="heroCheckCircle" aria-hidden="true" />
+					<span class="icon-mask icon-check bg-primary-contrast size-7"></span>
 
 					<p class="lg:text-body-lg mt-6 font-medium lg:mt-10">{{ perk }}</p>
 				</li>

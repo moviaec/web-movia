@@ -5,7 +5,7 @@
 		<ul class="mt-12 grid gap-12 lg:mt-20 lg:grid-cols-3 lg:gap-16">
 			@for (benefit of benefits; track benefit.title) {
 				<li class="text-center">
-					<img class="mx-auto size-12" [src]="benefit.icon" alt="" width="48" height="48" />
+					<span class="icon-mask bg-primary mx-auto size-12" [class]="benefit.icon"></span>
 
 					<h3 class="font-display text-secondary-contrast text-title mt-8 font-semibold lg:mt-12">{{ benefit.title }}</h3>
 

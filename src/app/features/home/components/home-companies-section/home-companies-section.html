@@ -3,8 +3,8 @@
 		<img
 			class="rounded-card h-72 w-full object-cover lg:order-last lg:h-auto"
 			ngSrc="/imgs/home/empresas.jpg"
-			width="600"
-			height="740"
+			width="657"
+			height="1001"
 			alt="Dos compañeros de trabajo chocando las manos después de entrenar"
 		/>
 
@@ -15,7 +15,7 @@
 				@for (perk of perks; track perk.title) {
 					<li>
 						<h3 class="font-display text-ink lg:text-title flex items-center gap-3 text-xl font-semibold">
-							<ng-icon class="text-2xl" name="heroArrowUpRight" aria-hidden="true" />
+							<span class="icon-mask icon-flecha-diagonal bg-ink size-6"></span>
 							{{ perk.title }}
 						</h3>
 
@@ -29,7 +29,7 @@
 				routerLink="/empresas"
 			>
 				Saber más
-				<ng-icon class="text-xl" name="heroArrowRight" aria-hidden="true" />
+				<span class="icon-mask icon-flecha-arriba bg-secondary-contrast size-6 rotate-90"></span>
 			</a>
 		</div>
 	</div>

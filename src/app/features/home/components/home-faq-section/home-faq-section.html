@@ -17,12 +17,10 @@
 						>
 							<span class="text-ink lg:text-body-lg font-semibold">{{ item.question }}</span>
 
-							<ng-icon
-								class="text-ink shrink-0 text-xl transition-transform"
+							<span
+								class="icon-mask icon-flecha-abajo bg-ink size-6 transition-transform"
 								[class.rotate-180]="openId() === item.id"
-								name="heroArrowDown"
-								aria-hidden="true"
-							/>
+							></span>
 						</button>
 					</h3>
 

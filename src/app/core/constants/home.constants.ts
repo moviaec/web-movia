@@ -28,23 +28,23 @@ export const ACTIVITY_CATEGORIES: readonly ActivityCategory[] = [
 	{ name: 'Gimnasio', image: '/imgs/home/categorias/gimnasio.jpg' },
 	{ name: 'Yoga', image: '/imgs/home/categorias/yoga.jpg' },
 	{ name: 'Natación', image: '/imgs/home/categorias/natacion.jpg' },
-	{ name: 'Danza', image: '/imgs/home/categorias/danza.jpg' }
+	{ name: 'Baile', image: '/imgs/home/categorias/baile.jpg' }
 ];
 
 /** The three reasons of the dark «Variedad sin límites» section. */
 export const BENEFITS: readonly Benefit[] = [
 	{
-		icon: '/imgs/icons/flexibilidad.svg',
+		icon: 'icon-flexibilidad',
 		title: 'Flexibilidad total',
 		description: 'Sin permanencia forzada ni pagos por local. Entrena en distintos centros y ciudades con la misma suscripción.'
 	},
 	{
-		icon: '/imgs/icons/descubrimiento.svg',
+		icon: 'icon-descubrimiento',
 		title: 'Descubrimiento',
 		description: 'Cambia de rutina cuando quieras: hoy natación, mañana artes marciales, el fin de semana un masaje en el spa.'
 	},
 	{
-		icon: '/imgs/icons/simplicidad.svg',
+		icon: 'icon-simplicidad',
 		title: 'Simplicidad',
 		description: 'Un solo cobro mensual, una sola app y check-in con QR. Todo tu bienestar, organizado en un solo lugar.'
 	}

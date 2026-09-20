@@ -30,7 +30,7 @@ export interface ActivityCategory {
 
 /** One of the three reasons listed on the dark «Variedad sin límites» section. */
 export interface Benefit {
-	/** Path of the lime line icon. */
+	/** Utility class that paints the icon as a mask, so the theme sets its colour. */
 	icon: string;
 	/** Title of the reason. */
 	title: string;
