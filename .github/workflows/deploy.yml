@@ -205,8 +205,8 @@ jobs:
             # El `--exclude` final va el ÚLTIMO y por eso gana: saca `index.csr.html`
             # —el cascarón vacío de client-side rendering que el build emite siempre—
             # de la subida, así que nunca llega a publicarse. Al quedar fuera de los
-            # filtros queda también fuera del `--delete`, y no lo borra ninguna
-            # pasada; hoy da igual porque nunca se ha subido.
+            # filtros queda también fuera del `--delete`, y por eso NINGUNA pasada lo
+            # retiraría si una vez llegó a subirse; de eso se ocupa el paso siguiente.
             - name: 'Grupo 3 · HTML, robots y sitemap (sin caché)'
               run: |
                   aws s3 sync dist/web-movia/browser s3://moviapass-com \
@@ -214,6 +214,25 @@ jobs:
                     --exclude "*" --include "*.html" --include "robots.txt" --include "sitemap.xml" \
                     --exclude "index.csr.html" \
                     --cache-control "no-cache"
+
+            # El cascarón de client-side rendering no se sube (lo excluye el grupo 3),
+            # pero excluirlo también lo deja fuera del `--delete`: si alguna vez se
+            # publicó —con la configuración anterior, o a mano— ahí seguiría, con un
+            # `<body>` vacío, respondiendo 200 y siendo indexable. La auditoría SEO lo
+            # marcó como URL a cerrar.
+            #
+            # Se retira aquí, en un paso propio y repetible. `aws s3 rm` sobre la clave
+            # exacta llama a DeleteObject, que en S3 es idempotente: responde igual
+            # exista el objeto o no, así que en el caso normal —que no esté— el paso
+            # sale en verde sin hacer nada.
+            #
+            # A propósito SIN `|| true`: así, si algún día falla de verdad —permisos
+            # del rol, bucket mal escrito—, el despliegue se entera en vez de tragarse
+            # el error. Y a propósito sin `--recursive` y sobre una clave literal: un
+            # borrado recursivo en la raíz de este bucket se lleva el sitio entero.
+            - name: 'Retirar index.csr.html si quedara publicado'
+              run: |
+                  aws s3 rm s3://moviapass-com/index.csr.html
 
             - name: Invalidar caché de CloudFront
               run: |
