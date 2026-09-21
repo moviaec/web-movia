@@ -1,0 +1,112 @@
+name: Deploy
+
+# Titulo de cada ejecucion en la lista de Actions. Sin esto, al venir de
+# `workflow_dispatch` GitHub no tiene mensaje de commit que mostrar y todas las
+# ejecuciones se llaman igual, sin distinguir un deploy normal de un rollback.
+run-name: 🚀 Deploy ${{ inputs.ref && format('de {0}', inputs.ref) || 'de main' }} por @${{ github.actor }}
+
+# SOLO a mano. No hay disparador por push y es deliberado: lo que llega a main
+# se valida en CI, pero quién y cuándo lo publica en moviapass.com es una
+# decisión de personas.
+on:
+    workflow_dispatch:
+        inputs:
+            ref:
+                description: 'Commit SHA o tag a desplegar (vacío = último de main)'
+                required: false
+                default: ''
+
+concurrency:
+    group: deploy-web-produccion
+    cancel-in-progress: false
+
+permissions:
+    # Necesario para que GitHub emita el token OIDC con el que se asume el rol.
+    id-token: write
+    contents: read
+
+jobs:
+    desplegar:
+        name: 🚀 Deploy a producción
+        runs-on: ubuntu-latest
+        environment: production
+
+        steps:
+            # Aquí no hay servidor que haga `git checkout`: lo que se publica es
+            # un montón de archivos estáticos, así que el rollback se resuelve en
+            # el propio checkout. Con `ref` vacío, actions/checkout toma la rama
+            # por defecto.
+            - uses: actions/checkout@v4
+              with:
+                  ref: ${{ inputs.ref }}
+
+            # En el resumen y no solo en los logs: al abrir el run se ve qué hay
+            # en producción sin desplegar ningún paso.
+            - name: Mostrar commit desplegado
+              run: |
+                  echo "### 🚀 Desplegado en moviapass.com" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "**Commit:** \`$(git rev-parse --short HEAD)\`" >> $GITHUB_STEP_SUMMARY
+                  echo "**Mensaje:** $(git log -1 --pretty=%s)" >> $GITHUB_STEP_SUMMARY
+                  echo "**Autor:** $(git log -1 --pretty=%an)" >> $GITHUB_STEP_SUMMARY
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: npm
+
+            - run: npm ci
+
+            # `outputMode: "static"`: esto prerenderiza un index.html por ruta
+            # dentro de dist/web-movia/browser. No se despliega ningún servidor
+            # de Node, solo esa carpeta.
+            - run: npm run build:prod
+
+            - uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+                  aws-region: us-east-1
+
+            # Assets con hash en el nombre: cachean un año sin riesgo.
+            # El `--delete` retira de S3 lo que ya no emite el build. Excluye
+            # `*.html`, así que no toca el HTML: de ese lado se ocupa la pasada
+            # siguiente, que lleva su propio `--delete`.
+            - name: Subir assets con caché larga
+              run: |
+                  aws s3 sync dist/web-movia/browser s3://moviapass-com \
+                    --delete --exclude "*.html" \
+                    --cache-control "public,max-age=31536000,immutable"
+
+            # El HTML NO se cachea: si no, los usuarios seguirían viendo la
+            # versión anterior tras cada despliegue. Aquí son once archivos, uno
+            # por ruta prerenderizada, y el patrón los coge todos: `--include`
+            # se aplica a la clave completa, así que /legal/terms/index.html
+            # entra igual que el de la raíz.
+            #
+            # El `--delete` de esta pasada NO borra los assets que acaba de
+            # subir la anterior: la documentación de `aws s3 sync` dice que «los
+            # archivos excluidos por los filtros quedan excluidos del borrado»,
+            # y `--exclude "*"` deja fuera todo lo que no sea `.html`. Lo que sí
+            # borra es el HTML de una ruta retirada, que antes se quedaba en S3
+            # sirviéndose y siendo indexable.
+            #
+            # Los filtros se evalúan EN ORDEN y gana el último que casa, así que
+            # el `--exclude` final saca `index.csr.html` —el cascarón vacío de
+            # client-side rendering que el build emite siempre— tanto de la
+            # subida como del borrado: deja de publicarse.
+            - name: Subir HTML sin caché
+              run: |
+                  aws s3 sync dist/web-movia/browser s3://moviapass-com \
+                    --delete --exclude "*" --include "*.html" --exclude "index.csr.html" \
+                    --cache-control "no-cache"
+
+            - name: Invalidar caché de CloudFront
+              run: |
+                  aws cloudfront create-invalidation \
+                    --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+                    --paths "/*"
+
+            - name: Verificar sitio
+              run: |
+                  sleep 20
+                  curl -sfI https://moviapass.com | head -1

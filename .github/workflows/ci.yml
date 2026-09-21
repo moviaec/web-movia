@@ -1,0 +1,57 @@
+name: CI
+
+on:
+    push:
+        branches: [main, master]
+    pull_request:
+
+jobs:
+    verify:
+        name: Validacion de codigo
+        runs-on: ubuntu-latest
+
+        # El runner corre en UTC y el sitio se construye con la hora del proceso:
+        # el año del copyright del pie sale de `new Date().getFullYear()`. Un build
+        # lanzado un 31 de diciembre por la tarde en Ecuador ya es 1 de enero en
+        # UTC, y saldría con el año equivocado. Se fija aquí, igual que en el resto
+        # de repositorios de Movía, para que CI y producción cuenten el mismo día.
+        env:
+            TZ: America/Guayaquil
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: npm
+
+            - run: npm ci
+
+            - run: npm run lint
+
+            # `--no-watch` explícito aunque hoy no haga falta: el builder de pruebas
+            # de Angular decide el modo vigilancia por TTY («true en TTY, false en el
+            # resto»), así que en un runner ya sale sin vigilancia. Pero eso es un
+            # comportamiento por defecto, no un contrato, y si algún día cambia el
+            # job no falla: se queda colgado hasta el límite de seis horas. La
+            # bandera va aquí y no en `package.json` porque en local sí se quiere
+            # la vigilancia al escribir pruebas.
+            - run: npm run test -- --no-watch
+
+            - run: npm run build:prod
+
+    secret-scan:
+        name: Escaneo de secretos
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  # Gitleaks necesita el historial completo: sin esto solo mira el
+                  # ultimo commit y se le escapa un secreto que se colo dias atras.
+                  fetch-depth: 0
+
+            - uses: gitleaks/gitleaks-action@v2
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
