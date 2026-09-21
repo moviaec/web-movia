@@ -28,12 +28,12 @@ export const SITE_LANG = 'es-EC';
  * Registered legal name of the company, the one the footer prints and `Organization`
  * declares.
  *
- * Va tal cual lo confirmó el usuario, en mayúsculas y con la TRIPLE S, que es como
- * suelen estar inscritas las razones sociales en el registro. No es el nombre comercial
- * —ese es `SITE_NAME`, «Movía»— y no se «arregla» a ojo: un dato del registro mercantil
- * se cambia con el documento delante, no porque parezca una errata.
+ * En mayúsculas, que es como suelen estar inscritas las razones sociales en el
+ * registro. No es el nombre comercial —ese es `SITE_NAME`, «Movía»—, y se escribe UNA
+ * sola vez: el pie lo lee de aquí en vez de teclearlo, porque una razón social en dos
+ * sitios acaba siendo dos razones sociales.
  */
-export const LEGAL_NAME = 'MOVIAPASSS SAS';
+export const LEGAL_NAME = 'MOVIAPASS SAS';
 
 /** Country the service operates in, as an ISO 3166 code. */
 export const AREA_SERVED = 'EC';
