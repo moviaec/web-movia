@@ -67,37 +67,99 @@ jobs:
                   role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
                   aws-region: us-east-1
 
-            # Assets con hash en el nombre: cachean un año sin riesgo.
-            # El `--delete` retira de S3 lo que ya no emite el build. Excluye
-            # `*.html`, así que no toca el HTML: de ese lado se ocupa la pasada
-            # siguiente, que lleva su propio `--delete`.
-            - name: Subir assets con caché larga
+            # ── Las tres pasadas de sincronización ────────────────────────────
+            #
+            # El dist mezcla archivos con y sin hash en el nombre, y NO se pueden
+            # cachear igual. Antes esta sincronización iba en dos pasadas, «HTML» y
+            # «todo lo demás», y ese «todo lo demás» se subía con un año de
+            # `immutable`: se llevaba por delante las 52 imágenes e iconos que vienen
+            # de `public/` —que no llevan hash y se sirven siempre con el mismo
+            # nombre— y también `robots.txt` y `sitemap.xml`. Un `robots.txt`
+            # equivocado con `immutable` es un año sin poder corregirlo.
+            #
+            # Ahora son tres grupos, y los filtros los PARTICIONAN: cada clave cae en
+            # una pasada y solo una. Eso es lo que hace seguro que las tres lleven
+            # `--delete` —cada una solo puede borrar dentro de su grupo, así que
+            # ninguna borra lo que otra acaba de subir— y es también lo que evita que
+            # un archivo se suba dos veces con cabeceras distintas.
+            #
+            # Los filtros van por PATRÓN y no por lista de archivos: una imagen nueva
+            # en `public/` cae sola en el grupo 2 sin tocar este archivo. El grupo 2
+            # es además el cajón por defecto, y a propósito: lo que no se reconoce se
+            # cachea un día, nunca un año. Equivocarse hacia un día se arregla al día
+            # siguiente; equivocarse hacia `immutable` no se arregla.
+            #
+            # El orden importa por otra razón: primero el código y las imágenes que
+            # el HTML nuevo va a pedir, y el HTML al final. Al revés habría una
+            # ventana en la que la página nueva referencia archivos que aún no están.
+            #
+            # Recordatorio de cómo funcionan los filtros de `aws s3 sync`: se evalúan
+            # EN ORDEN sobre la clave completa, gana el ÚLTIMO que casa, se parte de
+            # «incluido», y el `*` SÍ cruza las barras (por eso `*.html` coge
+            # `legal/terms/index.html`). Y lo que los filtros excluyen queda excluido
+            # también del `--delete`.
+
+            # GRUPO 1 · Con hash en el nombre, generados por Angular.
+            #
+            # `outputHashing: "all"` mete un hash de 8 caracteres en cada bundle
+            # (`main-EUQ5FH5G.js`, `chunk-0xu6aOu1.js`, `styles-EY4R6GX5.css`), así
+            # que el contenido de una clave NUNCA cambia: si cambia el contenido,
+            # cambia el nombre. Es el único caso en el que `immutable` es correcto, y
+            # el que de verdad interesa que lo sea, porque son los archivos pesados.
+            #
+            # Se filtra por extensión y no por el patrón del hash: hoy los 23 .js y
+            # .css del dist lo llevan sin excepción, y un `*-????????.js` se rompería
+            # solo si Angular cambiase la longitud del hash.
+            - name: 'Grupo 1 · JS y CSS con hash (caché de un año)'
               run: |
                   aws s3 sync dist/web-movia/browser s3://moviapass-com \
-                    --delete --exclude "*.html" \
+                    --delete \
+                    --exclude "*" --include "*.js" --include "*.css" \
                     --cache-control "public,max-age=31536000,immutable"
 
-            # El HTML NO se cachea: si no, los usuarios seguirían viendo la
-            # versión anterior tras cada despliegue. Aquí son once archivos, uno
-            # por ruta prerenderizada, y el patrón los coge todos: `--include`
-            # se aplica a la clave completa, así que /legal/terms/index.html
-            # entra igual que el de la raíz.
+            # GRUPO 2 · Sin hash, vienen de `public/`: imágenes, iconos, favicons,
+            # la imagen social, el logo de marca y el manifest.
             #
-            # El `--delete` de esta pasada NO borra los assets que acaba de
-            # subir la anterior: la documentación de `aws s3 sync` dice que «los
-            # archivos excluidos por los filtros quedan excluidos del borrado»,
-            # y `--exclude "*"` deja fuera todo lo que no sea `.html`. Lo que sí
-            # borra es el HTML de una ruta retirada, que antes se quedaba en S3
-            # sirviéndose y siendo indexable.
+            # Se sirven siempre con la misma clave, así que `immutable` los dejaría
+            # congelados hasta un año en el navegador de quien ya hubiera entrado.
+            # Pasó con `favicon.png` al reemplazarlo: el navegador seguía dando el
+            # viejo de 557 × 565. Un día es el equilibrio: se siguen cacheando bien y
+            # una corrección llega en 24 horas sin tener que renombrar el archivo.
             #
-            # Los filtros se evalúan EN ORDEN y gana el último que casa, así que
-            # el `--exclude` final saca `index.csr.html` —el cascarón vacío de
-            # client-side rendering que el build emite siempre— tanto de la
-            # subida como del borrado: deja de publicarse.
-            - name: Subir HTML sin caché
+            # Este es el grupo POR DEFECTO. No enumera lo que incluye, sino que
+            # excluye a los otros dos, de modo que cualquier cosa nueva que aparezca
+            # en `public/` —un .avif, una fuente, un vídeo— cae aquí sola.
+            - name: 'Grupo 2 · Estáticos de public/ sin hash (caché de un día)'
               run: |
                   aws s3 sync dist/web-movia/browser s3://moviapass-com \
-                    --delete --exclude "*" --include "*.html" --exclude "index.csr.html" \
+                    --delete \
+                    --exclude "*.js" --exclude "*.css" --exclude "*.html" \
+                    --exclude "robots.txt" --exclude "sitemap.xml" \
+                    --cache-control "public,max-age=86400"
+
+            # GRUPO 3 · Lo que tiene que estar fresco siempre: el HTML de las diez
+            # rutas prerenderizadas, `robots.txt` y `sitemap.xml`.
+            #
+            # El HTML es el que apunta a los bundles con hash: si se cachea, la gente
+            # sigue viendo la versión anterior por mucho que el resto se haya
+            # actualizado. Y los dos archivos de rastreo se corrigen el mismo día en
+            # que se detecta el error, no al año siguiente.
+            #
+            # `robots.txt` y `sitemap.xml` casan la clave EXACTA de la raíz, no
+            # cualquier `.txt` o `.xml`: un `legal/sitemap.xml` caería en el grupo 2,
+            # que es lo correcto.
+            #
+            # El `--exclude` final va el ÚLTIMO y por eso gana: saca `index.csr.html`
+            # —el cascarón vacío de client-side rendering que el build emite siempre—
+            # de la subida, así que nunca llega a publicarse. Al quedar fuera de los
+            # filtros queda también fuera del `--delete`, y no lo borra ninguna
+            # pasada; hoy da igual porque nunca se ha subido.
+            - name: 'Grupo 3 · HTML, robots y sitemap (sin caché)'
+              run: |
+                  aws s3 sync dist/web-movia/browser s3://moviapass-com \
+                    --delete \
+                    --exclude "*" --include "*.html" --include "robots.txt" --include "sitemap.xml" \
+                    --exclude "index.csr.html" \
                     --cache-control "no-cache"
 
             - name: Invalidar caché de CloudFront
