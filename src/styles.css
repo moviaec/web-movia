@@ -13,6 +13,15 @@
 :root {
 	/* Marca. El lima es el acento; el carbón es la tinta y el color de acción. */
 	--brand-lime: #d3f442;
+	/*
+	 * El lima tiene una segunda versión, más saturada y un punto más oscura, que el diseño
+	 * usa cuando el acento va SOBRE BLANCO y en trazo fino (los checks de «¿Cómo Empezar?»).
+	 * No es el mismo color con opacidad ni el lima mezclado con negro: el azul baja de 66 a
+	 * 13 y eso no sale de ninguna mezcla con los colores que ya hay, así que es un valor
+	 * crudo más. Sale de muestrear la captura y convertir de Display P3 a sRGB, igual que
+	 * el lima (el lima del prototipo da #d3f443 con esa conversión, que valida el método).
+	 */
+	--brand-lime-deep: #bee70d;
 	--brand-carbon: #1c242c;
 	--brand-white: #ffffff;
 
@@ -47,6 +56,8 @@
 	 */
 	--color-primary: var(--brand-lime);
 	--color-primary-contrast: var(--brand-carbon);
+	/* Ver `--brand-lime-deep`: el acento lima cuando va en trazo fino sobre blanco. */
+	--color-primary-shade: var(--brand-lime-deep);
 	--color-secondary: var(--brand-carbon);
 	--color-secondary-contrast: var(--brand-white);
 	--color-secondary-shade: color-mix(in srgb, var(--brand-carbon) 88%, black);
@@ -58,9 +69,33 @@
 	 * nada — es el acento.
 	 */
 	--color-surface: var(--brand-white);
+	/*
+	 * `surface-shade` es el blanco roto del diseño (#fafafa): el lienzo de la sección de
+	 * categorías, que en las capturas NO es blanco puro. Sale de un 2 % de carbón sobre
+	 * blanco en vez de un hex nuevo, igual que `border`, para no meter un valor crudo que
+	 * no está en la paleta de marca. Es un escalón MÁS CLARO que `surface-muted`: son dos
+	 * grises distintos en el diseño (categorías vs. empresas), no el mismo.
+	 */
+	--color-surface-shade: color-mix(in srgb, var(--brand-carbon) 2%, white);
 	--color-surface-muted: var(--brand-mist);
 	--color-ink: var(--brand-carbon);
-	--color-muted: var(--brand-gray);
+	/*
+	 * `muted` es el texto secundario SOBRE FONDO CLARO, y va oscurecido: el gris de marca
+	 * crudo da 3,03:1 sobre blanco y 2,78:1 sobre `surface-muted`, por debajo del 4,5:1 que
+	 * pide AA para texto normal, y era lo que suspendía `color-contrast` en /contact y /help.
+	 * Con un 76 % de gris sobre negro sube a 4,93:1 sobre `surface`, 4,52:1 sobre
+	 * `surface-muted` y 4,72:1 sobre `surface-shade`, que son los tres lienzos claros del
+	 * sitio. Mismo mecanismo que `success` y `warning`, que ya se oscurecen así.
+	 */
+	--color-muted: color-mix(in srgb, var(--brand-gray) 76%, black);
+	/*
+	 * Y este es el MISMO papel sobre fondo oscuro: el gris de marca tal cual, que sobre el
+	 * carbón ya da 5,19:1 y sobre `secondary-shade` 5,43:1. Existe porque oscurecer `muted`
+	 * lo dejaba en 3,18:1 sobre el carbón, o sea arreglando /contact y rompiendo el pie y
+	 * las tarjetas de /plans. Mismo criterio que `danger-tint`: la variante existe porque
+	 * cambia el FONDO, no porque cambie el color.
+	 */
+	--color-muted-tint: var(--brand-gray);
 	--color-border: color-mix(in srgb, var(--brand-carbon) 14%, white);
 
 	/* Estados: distinguen aprobado/pendiente/bloqueado sin ambigüedad. */
@@ -110,7 +145,13 @@
 	--text-lead--line-height: 1.4;
 	--text-title: 1.5rem; /* 24px · título de card y de paso (30 × 0,8) */
 	--text-title--line-height: 1.3;
-	--text-body-lg: 0.9rem; /* 14.4px · cuerpo destacado, nav y footer (18 × 0,8) */
+	/*
+	 * El cuerpo es la ÚNICA medida que se sale del factor 0,8, y a propósito: 18 × 0,8 son
+	 * 14,4 px y a ese tamaño los párrafos de la landing no se leen de un vistazo. Los
+	 * titulares aguantan la reducción (48 × 0,8 siguen siendo 38 px); el texto corrido no.
+	 * Así que aquí van los 18 px del diseño sin escalar.
+	 */
+	--text-body-lg: 1.125rem; /* 18px · cuerpo destacado, nav y footer (el 18 del diseño, sin el × 0,8) */
 	--text-body-lg--line-height: 1.6;
 
 	/*
@@ -222,6 +263,17 @@
 
 @utility icon-android {
 	--icon-url: url('/imgs/iconos/android.svg');
+	-webkit-mask-image: var(--icon-url);
+	mask-image: var(--icon-url);
+}
+
+/*
+ * WhatsApp va como máscara y no como Heroicon: Heroicons no trae logos de marca
+ * —ninguna red social— y una burbuja de chat genérica no se lee como WhatsApp.
+ * Mismo trato que apple y android, que también son marcas.
+ */
+@utility icon-whatsapp {
+	--icon-url: url('/imgs/iconos/whatsapp.svg');
 	-webkit-mask-image: var(--icon-url);
 	mask-image: var(--icon-url);
 }

@@ -20,10 +20,10 @@
 
 			<div class="flex flex-col gap-8 lg:items-end">
 				<div class="flex items-center gap-5">
-					<a href="#" aria-label="Descargar Movía en el App Store">
+					<a [href]="externalLinks.appStore" aria-label="Descargar Movía en el App Store">
 						<img class="h-12 w-auto lg:h-11" src="/imgs/layout/app-store.webp" alt="" width="280" height="96" />
 					</a>
-					<a href="#" aria-label="Descargar Movía en Google Play">
+					<a [href]="externalLinks.googlePlay" aria-label="Descargar Movía en Google Play">
 						<img class="h-12 w-auto lg:h-11" src="/imgs/layout/google-play.webp" alt="" width="282" height="96" />
 					</a>
 				</div>
@@ -64,17 +64,17 @@
 						compartir fila con algo que no quepa, los iconos se quedan cuadrados. -->
 					<ul class="flex shrink-0 items-center gap-4">
 						<li>
-							<a class="block" href="#" aria-label="Movía en Facebook">
+							<a class="block" [href]="externalLinks.facebook" aria-label="Movía en Facebook">
 								<img class="size-11" src="/imgs/layout/facebook.webp" alt="" width="88" height="88" />
 							</a>
 						</li>
 						<li>
-							<a class="block" href="#" aria-label="Movía en Instagram">
+							<a class="block" [href]="externalLinks.instagram" aria-label="Movía en Instagram">
 								<img class="size-11" src="/imgs/layout/instagram.webp" alt="" width="88" height="88" />
 							</a>
 						</li>
 						<li>
-							<a class="block" href="#" aria-label="Movía en LinkedIn">
+							<a class="block" [href]="externalLinks.linkedin" aria-label="Movía en LinkedIn">
 								<img class="size-11" src="/imgs/layout/linkedin.webp" alt="" width="88" height="88" />
 							</a>
 						</li>
@@ -90,13 +90,21 @@
 			etiquetas se partían por la mitad («Política de Uso de / Datos»). Ahora saltan de
 			línea enteras y los huecos se aprietan hasta `xl`, donde vuelven los del diseño.
 		-->
+		<!--
+			`block py-2 -my-2` en cada enlace: el objetivo táctil pasa de 17 a 33 px de alto
+			—el mínimo de WCAG 2.5.8 son 24— y el diseño NO se mueve, porque el margen
+			negativo devuelve al `<li>` la altura que tenía. Sin él, los 16 px de relleno de
+			cada uno se sumarían al hueco que ya existe entre filas y el pie crecería.
+		-->
 		<div class="mt-10 flex flex-wrap justify-between gap-x-8 gap-y-6 lg:mt-13">
 			<ul class="flex flex-col gap-6 lg:flex-row lg:flex-wrap lg:gap-x-5 lg:gap-y-3 xl:gap-x-9.5">
 				@for (link of navLinks; track link.path) {
 					<li>
-						<a class="text-body-lg hover:text-primary text-sm whitespace-nowrap transition-colors" [routerLink]="link.path">{{
-							link.label
-						}}</a>
+						<a
+							class="text-body-lg hover:text-primary -my-2 block py-2 text-sm whitespace-nowrap transition-colors"
+							[routerLink]="link.path"
+							>{{ link.label }}</a
+						>
 					</li>
 				}
 			</ul>
@@ -104,14 +112,16 @@
 			<ul class="flex flex-col gap-6 text-right lg:flex-row lg:flex-wrap lg:justify-end lg:gap-x-5 lg:gap-y-3 xl:gap-x-9.5">
 				@for (link of legalLinks; track link.path) {
 					<li>
-						<a class="text-body-lg hover:text-primary text-sm whitespace-nowrap transition-colors" [routerLink]="link.path">{{
-							link.label
-						}}</a>
+						<a
+							class="text-body-lg hover:text-primary -my-2 block py-2 text-sm whitespace-nowrap transition-colors"
+							[routerLink]="link.path"
+							>{{ link.label }}</a
+						>
 					</li>
 				}
 			</ul>
 		</div>
 
-		<p class="text-muted mt-12 text-center text-sm lg:mt-13">© {{ year }} MoviaPass SAS · Todos los derechos reservados</p>
+		<p class="text-muted-tint mt-12 text-center text-sm lg:mt-13">© {{ year }} MoviaPass SAS · Todos los derechos reservados</p>
 	</div>
 </footer>

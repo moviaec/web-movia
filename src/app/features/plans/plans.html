@@ -1,0 +1,140 @@
+<!--
+	Toda la página es una banda oscura, un punto MÁS oscura que las tarjetas: el lienzo
+	es `secondary-shade` y cada tarjeta `secondary`, que es justo la relación que se mide
+	en la captura sin inventar un gris nuevo.
+-->
+<section class="bg-secondary-shade" aria-labelledby="plans-title">
+	<div class="max-w-content mx-auto px-6 pt-24 pb-20 lg:px-8 lg:pt-[15rem] lg:pb-[8.6rem]">
+		<h1
+			id="plans-title"
+			class="font-display text-primary mx-auto text-center text-4xl font-bold lg:max-w-[84%] lg:text-[2.92rem] lg:leading-[1.29]"
+		>
+			Elige la suscripción que mejor se adapta a tus necesidades
+		</h1>
+
+		<!--
+			En MÓVIL las tarjetas no se apilan: se pasan de izquierda a derecha. La lista es
+			un carrusel con `snap` y cada tarjeta ocupa el 94 % del ancho, así que la
+			siguiente solo ASOMA por el borde: lo justo para que se vea que hay más sin
+			robarle sitio a la que se está leyendo. Los `-mx-6 px-6` sacan el
+			carrusel a los bordes de la pantalla pero dejan la primera tarjeta alineada con
+			el resto del contenido. El `scroll-pl-6` hace que el `snap` respete ese gutter:
+			sin él la tarjeta se pega al borde de la pantalla y el hueco desaparece. Y el
+			`pt-5` es el sitio que necesita la pastilla del plan popular, porque al haber
+			scroll horizontal lo que sobresalga por arriba se recorta.
+
+			En escritorio vuelve a ser una rejilla de tres y `items-stretch` (el default)
+			iguala las alturas; el botón se pega abajo con `mt-auto`.
+		-->
+		<ul
+			class="-mx-6 mt-14 flex snap-x snap-mandatory scroll-pl-6 [scrollbar-width:none] gap-4 overflow-x-auto px-6 pt-5 pb-4 [-ms-overflow-style:none] lg:mx-0 lg:mt-[5.75rem] lg:grid lg:grid-cols-3 lg:gap-[1.9%] lg:overflow-visible lg:px-0 lg:pt-0 lg:pb-0 [&::-webkit-scrollbar]:hidden"
+		>
+			@for (plan of plans; track plan.name) {
+				<li
+					class="relative flex w-[94%] shrink-0 snap-start flex-col rounded-2xl p-7 lg:w-auto lg:px-[1.76rem] lg:pt-[1.36rem] lg:pb-[1.54rem]"
+					[class]="plan.featured ? 'bg-primary text-primary-contrast' : 'border-secondary-tint bg-secondary text-secondary-contrast border'"
+				>
+					@if (plan.featured) {
+						<!-- La pastilla se monta sobre el borde superior de la tarjeta, centrada. -->
+						<span
+							class="bg-surface text-ink absolute -top-[0.85rem] left-1/2 -translate-x-1/2 rounded-full px-4 py-1 text-[0.7rem] font-semibold tracking-wider uppercase"
+						>
+							{{ featuredBadge }}
+						</span>
+					}
+
+					<h2 class="font-display text-xl font-semibold lg:text-[1.07rem]">{{ plan.name }}</h2>
+
+					<p class="font-display mt-2 flex items-baseline gap-2 text-4xl font-bold lg:mt-[0.3rem] lg:text-[3.24rem]">
+						{{ plan.price }}
+						<span class="text-base font-normal lg:text-sm" [class]="plan.featured ? 'text-primary-contrast/70' : 'text-muted-tint'">{{
+							plan.period
+						}}</span>
+					</p>
+
+					<p class="mt-4 lg:mt-0 lg:text-[0.9rem]" [class]="plan.featured ? 'text-primary-contrast/75' : 'text-muted-tint'">
+						{{ plan.description }}
+					</p>
+
+					<ul
+						class="mt-8 mb-10 grid gap-4 lg:mt-[1.57rem] lg:mb-[1.78rem] lg:gap-[0.6rem]"
+						[class]="plan.featured ? 'text-primary-contrast' : 'text-primary'"
+					>
+						@for (feature of plan.features; track feature) {
+							<li class="flex items-start gap-3 lg:gap-[0.68rem]">
+								<!-- El círculo es el MISMO color a baja opacidad; el tic va a color pleno, y va centrado con la PRIMERA línea. -->
+								<span class="mt-0.5 flex size-[1.12rem] shrink-0 items-center justify-center rounded-full bg-current/20">
+									<ng-icon class="text-[0.7rem]" name="heroCheck" aria-hidden="true" />
+								</span>
+
+								<span class="lg:text-[0.9rem]" [class]="plan.featured ? 'text-primary-contrast' : 'text-secondary-contrast'">{{
+									feature
+								}}</span>
+							</li>
+						}
+					</ul>
+
+					<a
+						class="mt-auto block rounded-full px-6 py-3.5 text-center font-medium transition-opacity hover:opacity-90 lg:py-[0.62rem]"
+						[class]="plan.featured ? 'bg-secondary text-primary' : 'bg-primary text-primary-contrast'"
+						href="https://app.moviapass.com/"
+						target="_blank"
+						>Suscribirme</a
+					>
+				</li>
+			}
+		</ul>
+
+		<!--
+			El plan corporativo va APARTE del grupo de planes individuales, y se distingue de
+			ellos por tres cosas a la vez: la pastilla «Para empresas», el borde lima en vez
+			del gris, y que ocupa el ancho entero en dos columnas en lugar de ser una tarjeta
+			más de la fila. Se entiende que es otra cosa sin tener que leer el nombre.
+		-->
+		<div
+			class="border-primary bg-secondary relative mt-16 rounded-2xl border p-7 lg:mt-[4.4rem] lg:grid lg:grid-cols-[38%_1fr] lg:gap-x-[6%] lg:px-[2.6rem] lg:pt-[2.4rem] lg:pb-[2.6rem]"
+		>
+			<span
+				class="bg-primary text-primary-contrast absolute -top-[0.85rem] left-7 rounded-full px-4 py-1 text-[0.7rem] font-semibold tracking-wider uppercase lg:left-[2.6rem]"
+			>
+				{{ corporateBadge }}
+			</span>
+
+			<div>
+				<h2 class="font-display text-secondary-contrast text-xl font-semibold lg:text-[1.07rem]">{{ corporatePlan.name }}</h2>
+
+				<p class="font-display text-secondary-contrast mt-2 flex items-baseline gap-2 text-4xl font-bold lg:mt-[0.3rem] lg:text-[3.24rem]">
+					{{ corporatePlan.price }}
+					<span class="text-muted-tint text-base font-normal lg:text-sm">{{ corporatePlan.period }}</span>
+				</p>
+
+				<p class="text-muted-tint mt-4 lg:mt-0 lg:text-[0.9rem]">{{ corporatePlan.description }}</p>
+
+				<a
+					class="bg-primary text-primary-contrast mt-8 block rounded-full px-6 py-3.5 text-center font-medium transition-opacity hover:opacity-90 lg:mt-[2.2rem] lg:w-fit lg:px-10 lg:py-[0.62rem]"
+					href="https://partner.moviapass.com/"
+					target="_blank"
+					>Ver Movia para Empresas</a
+				>
+			</div>
+
+			<ul class="text-primary mt-8 grid gap-4 lg:mt-0 lg:grid-cols-2 lg:gap-x-[8%] lg:gap-y-[0.6rem] lg:self-center">
+				@for (feature of corporatePlan.features; track feature) {
+					<li class="flex items-start gap-3 lg:gap-[0.68rem]">
+						<span class="mt-0.5 flex size-[1.12rem] shrink-0 items-center justify-center rounded-full bg-current/20">
+							<ng-icon class="text-[0.7rem]" name="heroCheck" aria-hidden="true" />
+						</span>
+
+						<span class="text-secondary-contrast lg:text-[0.9rem]">{{ feature }}</span>
+					</li>
+				}
+			</ul>
+		</div>
+
+		<div class="text-secondary-contrast mx-auto mt-16 max-w-[80%] text-center text-sm lg:mt-[8.35rem] lg:max-w-[94%] lg:text-[0.92rem]">
+			@for (paragraph of legalNote; track paragraph) {
+				<p class="lg:leading-[1.72]">{{ paragraph }}</p>
+			}
+		</div>
+	</div>
+</section>

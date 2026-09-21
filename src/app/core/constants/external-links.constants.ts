@@ -28,6 +28,30 @@ export const INSTAGRAM_URL = '';
 export const LINKEDIN_URL = '';
 
 /**
+ * What goes in the `href` while the real URL does not exist.
+ *
+ * An empty `href` reloads the page and an invented URL sends people to somebody else's
+ * account. `#` is a link with no destination, which is exactly what this is.
+ */
+const PENDING_HREF = '#';
+
+/**
+ * The hrefs the templates bind to, ready to paint.
+ *
+ * Están agrupadas porque cada una aparece en varias plantillas —las insignias de tienda
+ * salen en la cabecera, en el cajón de móvil y en el pie— y porque el día que lleguen
+ * las URLs reales se rellenan ARRIBA, en su constante, y todos los enlaces cambian a la
+ * vez. Mientras tanto se pintan como `#`, que es lo que hay hoy en el HTML.
+ */
+export const EXTERNAL_LINKS = {
+	appStore: APP_STORE_URL || PENDING_HREF,
+	googlePlay: GOOGLE_PLAY_URL || PENDING_HREF,
+	facebook: FACEBOOK_URL || PENDING_HREF,
+	instagram: INSTAGRAM_URL || PENDING_HREF,
+	linkedin: LINKEDIN_URL || PENDING_HREF
+};
+
+/**
  * The social profiles that `sameAs` declares, with the empty ones left out.
  *
  * It stays an empty array until the URLs above exist, and while it is empty the

@@ -1,4 +1,11 @@
 <!--
+	El elemento raíz del componente es un `<div>` (lo pone Angular con el selector), así
+	que el landmark `banner` hay que ponerlo aquí dentro: sin un `<header>` de verdad un
+	lector de pantalla no tiene el atajo a la cabecera y Google pierde la señal que
+	separa la plantilla del contenido. Cuenta como `banner` porque está fuera de `<main>`.
+-->
+<header>
+	<!--
 	El header está FIJO arriba (el `fixed` y el fondo condicional van en el `host` del
 	componente). Arriba del todo no tiene banda propia, porque en el diseño la foto del
 	hero llega hasta el borde de la página; en cuanto se hace scroll toma el carbón. El
@@ -9,130 +16,139 @@
 	la barra se compacta. Las dos alturas van en el MISMO binding y ninguna en el `class`
 	estático: son la misma propiedad, y dejar una fija dejaría a Tailwind eligiendo.
 -->
-<div
-	class="text-secondary-contrast max-w-wide mx-auto flex items-center justify-between gap-6 px-6 transition-[padding] duration-300 lg:px-8"
-	[class]="scrolled() ? 'py-3 lg:py-4' : 'py-6 lg:pt-17.5 lg:pb-6.5'"
->
-	<div class="flex items-center gap-6 xl:gap-13">
-		<!-- `shrink-0`: el logo es muy apaisado y, con las etiquetas largas del menú, el flex lo aplastaba. -->
-		<a class="shrink-0" routerLink="/" aria-label="Movía, ir al inicio" (click)="closeMenu()">
-			<img class="h-9 w-auto lg:h-10.5" src="/imgs/layout/logo-movia.webp" alt="Movía · belong everywhere" width="622" height="84" />
-		</a>
-
-		<nav class="hidden lg:block" aria-label="Navegación principal">
-			<ul class="flex items-center gap-4 xl:gap-10">
-				@for (link of navLinks; track link.path) {
-					<li>
-						<!-- `whitespace-nowrap`: «Para ti» partía en dos líneas y descuadraba el header. -->
-						<a
-							class="text-body-lg hover:text-primary whitespace-nowrap transition-colors"
-							[routerLink]="link.path"
-							routerLinkActive="text-primary"
-							[routerLinkActiveOptions]="{ exact: true }"
-							>{{ link.label }}</a
-						>
-					</li>
-				}
-			</ul>
-		</nav>
-	</div>
-
-	<!--
-		De 1024 a 1280 no caben las cuatro entradas del menú con las insignias de tienda al
-		lado: el logo mide 311 px él solo. Hasta `xl` se esconden las insignias —están
-		repetidas en el footer y en el cajón de móvil— y el botón va más estrecho.
-	-->
-	<div class="hidden items-center gap-4 lg:flex">
-		<a
-			class="bg-secondary-tint hidden size-11 items-center justify-center rounded-full xl:flex"
-			href="#"
-			aria-label="Descargar Movía en el App Store"
-		>
-			<span class="icon-mask icon-apple bg-secondary-contrast size-5"></span>
-		</a>
-		<a
-			class="bg-secondary-tint hidden size-11 items-center justify-center rounded-full xl:flex"
-			href="#"
-			aria-label="Descargar Movía en Google Play"
-		>
-			<span class="icon-mask icon-android bg-secondary-contrast size-5"></span>
-		</a>
-		<!--
-			`routerLink` y no `href`: son dos cosas distintas aunque lleven al mismo sitio.
-			Un `href` a una ruta propia sale de la aplicación y la vuelve a arrancar entera
-			—descarga, arranque y scroll perdido— para acabar en una pantalla que el router
-			ya sabía pintar.
-		-->
-		<a
-			class="bg-primary text-primary-contrast text-body-lg ml-2 rounded-full px-6 py-2.5 font-medium transition-opacity hover:opacity-90 xl:px-11"
-			routerLink="/plans"
-		>
-			Suscribirme
-		</a>
-	</div>
-
-	<button
-		class="focus-visible:ring-primary rounded-lg p-2 focus-visible:ring-2 focus-visible:outline-none lg:hidden"
-		type="button"
-		[attr.aria-expanded]="menuOpen()"
-		aria-controls="header-mobile-menu"
-		[attr.aria-label]="menuOpen() ? 'Cerrar el menú' : 'Abrir el menú'"
-		(click)="toggleMenu()"
-	>
-		<span class="icon-mask bg-secondary-contrast size-7" [class]="menuOpen() ? 'icon-menu-close' : 'icon-menu'"></span>
-	</button>
-</div>
-
-@if (menuOpen()) {
-	<!--
-		`max-h` + `overflow-y-auto`: el cajón cuelga de una barra fija, así que ya no se
-		va con la página. En un móvil apaisado, sin esto, lo de abajo queda fuera de la
-		pantalla y no hay forma de llegar.
-	-->
 	<div
-		class="bg-secondary text-secondary-contrast border-secondary-tint max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t px-6 pb-8 lg:hidden"
-		id="header-mobile-menu"
+		class="text-secondary-contrast max-w-wide mx-auto flex items-center justify-between gap-6 px-6 transition-[padding] duration-300 lg:px-8"
+		[class]="scrolled() ? 'py-3 lg:py-4' : 'py-6 lg:pt-17.5 lg:pb-6.5'"
 	>
-		<nav aria-label="Navegación principal">
-			<ul class="flex flex-col gap-1 py-4">
-				@for (link of navLinks; track link.path) {
-					<li>
-						<a
-							class="text-title block py-3"
-							[routerLink]="link.path"
-							routerLinkActive="text-primary"
-							[routerLinkActiveOptions]="{ exact: true }"
-							(click)="closeMenu()"
-							>{{ link.label }}</a
-						>
-					</li>
-				}
-			</ul>
-		</nav>
+		<div class="flex items-center gap-6 xl:gap-13">
+			<!-- `shrink-0`: el logo es muy apaisado y, con las etiquetas largas del menú, el flex lo aplastaba. -->
+			<a class="shrink-0" routerLink="/" aria-label="Movía, ir al inicio" (click)="closeMenu()">
+				<img class="h-9 w-auto lg:h-10.5" src="/imgs/layout/logo-movia.webp" alt="Movía · belong everywhere" width="622" height="84" />
+			</a>
 
-		<div class="flex items-center gap-4">
-			<a class="bg-secondary-tint flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en el App Store">
-				<span class="icon-mask icon-apple bg-secondary-contrast size-5"></span>
-			</a>
-			<a class="bg-secondary-tint flex size-11 items-center justify-center rounded-full" href="#" aria-label="Descargar Movía en Google Play">
-				<span class="icon-mask icon-android bg-secondary-contrast size-5"></span>
-			</a>
+			<nav class="hidden lg:block" aria-label="Navegación principal">
+				<ul class="flex items-center gap-4 xl:gap-10">
+					@for (link of navLinks; track link.path) {
+						<li>
+							<!-- `whitespace-nowrap`: «Para ti» partía en dos líneas y descuadraba el header. -->
+							<a
+								class="text-body-lg hover:text-primary whitespace-nowrap transition-colors"
+								[routerLink]="link.path"
+								routerLinkActive="text-primary"
+								[routerLinkActiveOptions]="{ exact: true }"
+								>{{ link.label }}</a
+							>
+						</li>
+					}
+				</ul>
+			</nav>
 		</div>
 
 		<!--
-			El mismo destino que el de escritorio, que es lo que se espera del mismo botón.
-			Iba a `#`, así que en el móvil no hacía nada: el cajón se quedaba abierto encima
-			de la misma página y se leía como que la app no responde.
-
-			`closeMenu()` porque aquí el cajón sí tapa la pantalla: navegar sin cerrarlo
-			dejaría el menú encima de la página nueva. Lo de arriba no lo necesita.
+			De 1024 a 1280 no caben las cuatro entradas del menú con las insignias de tienda al
+			lado: el logo mide 311 px él solo. Hasta `xl` se esconden las insignias —están
+			repetidas en el footer y en el cajón de móvil— y el botón va más estrecho.
 		-->
-		<a
-			class="bg-primary text-primary-contrast text-body-lg mt-6 block rounded-full px-6 py-2.5 text-center font-medium"
-			routerLink="/plans"
-			(click)="closeMenu()"
+		<div class="hidden items-center gap-4 lg:flex">
+			<a
+				class="bg-secondary-tint hidden size-11 items-center justify-center rounded-full xl:flex"
+				[href]="externalLinks.appStore"
+				aria-label="Descargar Movía en el App Store"
+			>
+				<span class="icon-mask icon-apple bg-secondary-contrast size-5"></span>
+			</a>
+			<a
+				class="bg-secondary-tint hidden size-11 items-center justify-center rounded-full xl:flex"
+				[href]="externalLinks.googlePlay"
+				aria-label="Descargar Movía en Google Play"
+			>
+				<span class="icon-mask icon-android bg-secondary-contrast size-5"></span>
+			</a>
+			<!--
+				`routerLink` y no `href`: son dos cosas distintas aunque lleven al mismo sitio.
+				Un `href` a una ruta propia sale de la aplicación y la vuelve a arrancar entera
+				—descarga, arranque y scroll perdido— para acabar en una pantalla que el router
+				ya sabía pintar.
+			-->
+			<a
+				class="bg-primary text-primary-contrast text-body-lg ml-2 rounded-full px-6 py-2.5 font-medium transition-opacity hover:opacity-90 xl:px-11"
+				routerLink="/plans"
+			>
+				Suscribirme
+			</a>
+		</div>
+
+		<button
+			class="focus-visible:ring-primary rounded-lg p-2 focus-visible:ring-2 focus-visible:outline-none lg:hidden"
+			type="button"
+			[attr.aria-expanded]="menuOpen()"
+			aria-controls="header-mobile-menu"
+			[attr.aria-label]="menuOpen() ? 'Cerrar el menú' : 'Abrir el menú'"
+			(click)="toggleMenu()"
 		>
-			Suscribirme
-		</a>
+			<span class="icon-mask bg-secondary-contrast size-7" [class]="menuOpen() ? 'icon-menu-close' : 'icon-menu'"></span>
+		</button>
 	</div>
-}
+
+	@if (menuOpen()) {
+		<!--
+			`max-h` + `overflow-y-auto`: el cajón cuelga de una barra fija, así que ya no se
+			va con la página. En un móvil apaisado, sin esto, lo de abajo queda fuera de la
+			pantalla y no hay forma de llegar.
+		-->
+		<div
+			class="bg-secondary text-secondary-contrast border-secondary-tint max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t px-6 pb-8 lg:hidden"
+			id="header-mobile-menu"
+		>
+			<nav aria-label="Navegación principal">
+				<ul class="flex flex-col gap-1 py-4">
+					@for (link of navLinks; track link.path) {
+						<li>
+							<a
+								class="text-title block py-3"
+								[routerLink]="link.path"
+								routerLinkActive="text-primary"
+								[routerLinkActiveOptions]="{ exact: true }"
+								(click)="closeMenu()"
+								>{{ link.label }}</a
+							>
+						</li>
+					}
+				</ul>
+			</nav>
+
+			<div class="flex items-center gap-4">
+				<a
+					class="bg-secondary-tint flex size-11 items-center justify-center rounded-full"
+					[href]="externalLinks.appStore"
+					aria-label="Descargar Movía en el App Store"
+				>
+					<span class="icon-mask icon-apple bg-secondary-contrast size-5"></span>
+				</a>
+				<a
+					class="bg-secondary-tint flex size-11 items-center justify-center rounded-full"
+					[href]="externalLinks.googlePlay"
+					aria-label="Descargar Movía en Google Play"
+				>
+					<span class="icon-mask icon-android bg-secondary-contrast size-5"></span>
+				</a>
+			</div>
+
+			<!--
+				El mismo destino que el de escritorio, que es lo que se espera del mismo botón.
+				Iba a `#`, así que en el móvil no hacía nada: el cajón se quedaba abierto encima
+				de la misma página y se leía como que la app no responde.
+
+				`closeMenu()` porque aquí el cajón sí tapa la pantalla: navegar sin cerrarlo
+				dejaría el menú encima de la página nueva. Lo de arriba no lo necesita.
+			-->
+			<a
+				class="bg-primary text-primary-contrast text-body-lg mt-6 block rounded-full px-6 py-2.5 text-center font-medium"
+				routerLink="/plans"
+				(click)="closeMenu()"
+			>
+				Suscribirme
+			</a>
+		</div>
+	}
+</header>
