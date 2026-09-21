@@ -1,4 +1,4 @@
-<section class="bg-surface" aria-labelledby="home-categories-title">
+<section class="bg-surface-shade" aria-labelledby="home-categories-title">
 	<div class="max-w-content lg:pt-section mx-auto px-6 pt-16 lg:px-8">
 		<h2 id="home-categories-title" class="font-display lg:text-headline text-ink text-3xl font-bold">Categorías de actividades</h2>
 
@@ -23,8 +23,8 @@
 						class="rounded-card h-72 w-auto max-w-none object-cover"
 						[class]="index === 2 ? 'lg:h-[20.1rem]' : index === 1 || index === 3 ? 'lg:h-[17.2rem]' : 'lg:h-[15.1rem]'"
 						ngSrc="{{ category.image }}"
-						width="596"
-						height="744"
+						width="516"
+						height="644"
 						[alt]="category.name"
 					/>
 				</li>
@@ -32,10 +32,11 @@
 		</ul>
 	</div>
 
-	<div class="bg-secondary lg:pb-section px-6 pb-16 text-center">
+	<div class="bg-secondary lg:pb-section px-6 pt-16 pb-10 text-center">
 		<a
-			class="border-secondary-contrast text-secondary-contrast hover:bg-secondary-contrast hover:text-secondary inline-flex w-full items-center justify-center rounded-full border px-6 py-3 transition-colors sm:w-auto"
-			routerLink="/planes"
+			class="border-secondary-contrast text-secondary-contrast hover:bg-secondary-contrast hover:text-secondary inline-flex w-full items-center justify-center rounded-full border px-15 py-3 transition-colors sm:w-auto"
+			href="https://app.moviapass.com/"
+			target="_blank"
 			>Ver todas</a
 		>
 	</div>
