@@ -164,6 +164,32 @@ jobs:
                     --exclude "robots.txt" --exclude "sitemap.xml" \
                     --cache-control "public,max-age=86400"
 
+            # El paso de arriba sube `manifest.webmanifest` con el `content-type`
+            # equivocado, y no es culpa suya: `aws s3 sync` deduce el tipo de la
+            # extensión con la tabla `mimetypes` de Python, y `.webmanifest` NO está
+            # en ella. Lo sube entonces como `application/octet-stream` o
+            # `binary/octet-stream`, y un navegador que recibe eso descarta el
+            # manifest: se queda sin nombre, sin iconos y sin «Añadir a pantalla de
+            # inicio», con un aviso en consola que no dice de dónde viene.
+            #
+            # Se arregla copiando el objeto SOBRE SÍ MISMO. `--metadata-directive
+            # REPLACE` es lo que obliga a S3 a reescribir los metadatos en lugar de
+            # conservarlos, que es lo que haría por defecto en una copia. Y hay que
+            # repetir aquí el `cache-control`, porque REPLACE sustituye TODOS los
+            # metadatos: si no se pone, el objeto se queda sin él y pierde el día de
+            # caché que le acaba de dar el grupo 2.
+            #
+            # Va como paso aparte y no dentro del sync porque `--content-type` se
+            # aplicaría a todos los archivos de la pasada, no solo a este.
+            - name: 'Grupo 2 bis · Corregir el content-type del manifest'
+              run: |
+                  aws s3 cp \
+                    s3://moviapass-com/manifest.webmanifest \
+                    s3://moviapass-com/manifest.webmanifest \
+                    --metadata-directive REPLACE \
+                    --content-type "application/manifest+json" \
+                    --cache-control "public,max-age=86400"
+
             # GRUPO 3 · Lo que tiene que estar fresco siempre: el HTML de las diez
             # rutas prerenderizadas, `robots.txt` y `sitemap.xml`.
             #
