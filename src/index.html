@@ -15,16 +15,24 @@
 		<meta name="theme-color" content="#1C242C" />
 
 		<!--
-			El `sizes` del favicon dice el tamaño REAL del archivo (557 × 565). Antes el
-			manifest lo declaraba como 64 × 64, que es falso, y un tamaño mentido hace que
-			el navegador elija mal el icono cuando hay varios candidatos.
+			Los tres iconos del navegador, cada uno para quien no entiende a los otros:
+
+			- El `.ico` lleva dentro 16, 32 y 48 px y es lo que piden Windows y los
+			  navegadores viejos; se declara a 48 porque es la mayor que contiene.
+			- El PNG de 96 es el que usan los navegadores actuales, y sustituye al de
+			  557 × 565 que había aquí: un icono siete veces más grande de lo que se
+			  llega a pintar, con el tamaño además declarado en falso en el manifest.
+			- iOS NO lee el manifest para «Añadir a pantalla de inicio»: busca este
+			  `apple-touch-icon` y, sin él, genera una miniatura de la captura en vez
+			  del logo — justo en el gesto de más compromiso con el sitio.
+
+			Las tres rutas van ABSOLUTAS, con `/` delante. Hoy `<base href="/">` ya
+			resolvería bien una relativa, pero eso ata el icono a que esa etiqueta no
+			cambie nunca; sin ella, en `/legal/terms` el navegador buscaría
+			`/legal/terms/favicon.png` y no encontraría nada.
 		-->
-		<link rel="icon" type="image/png" sizes="557x565" href="favicon.png" />
-		<!--
-			iOS NO lee el manifest para «Añadir a pantalla de inicio»: busca este `<link>`, y
-			sin él genera una miniatura de la captura de pantalla en vez del logo — justo en
-			el gesto de más compromiso que hace alguien con el sitio.
-		-->
+		<link rel="icon" href="/favicon.ico" sizes="48x48" />
+		<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<link rel="manifest" href="manifest.webmanifest" />
 

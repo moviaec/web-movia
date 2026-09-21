@@ -45,11 +45,15 @@ const IMAGES_DIR = 'public/imgs';
  *   y X piden JPG o PNG de 1200 × 630; varios de ellos ni siquiera descargan un WebP.
  * - `public/brand/` — el logo cuadrado de los datos estructurados. Google exige para el
  *   `logo` de `Organization` un formato rastreable y un mínimo de 112 × 112 px.
+ * - `public/icons/` — los iconos del manifest. El `purpose` y el `type` que declara el
+ *   manifest tienen que corresponder al archivo real: convertirlos a WebP dejaría el
+ *   manifest anunciando `image/png` de archivos que ya no lo son, y Android descarta el
+ *   icono que no puede leer justo cuando alguien intenta instalar la aplicación.
  *
  * `apple-touch-icon.png` vive en la raíz de `public/` por convención —iOS lo pide ahí—
  * y por eso tampoco entra en un recorrido de `public/imgs`.
  */
-const EXCLUDED_DIRS = ['public/og', 'public/brand'];
+const EXCLUDED_DIRS = ['public/og', 'public/brand', 'public/icons'];
 
 /** Lo que se convierte. El SVG se queda como está: ya es vectorial y pesa nada. */
 const SOURCE_EXTENSIONS = ['.jpg', '.jpeg', '.png'];
