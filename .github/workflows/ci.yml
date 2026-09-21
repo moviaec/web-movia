@@ -68,6 +68,12 @@ jobs:
         name: Validacion de los workflows
         runs-on: ubuntu-latest
 
+        env:
+            # La version de actionlint, en un UNICO sitio. De aqui salen las tres
+            # cosas que la nombran: la etiqueta de la release, el nombre del tar y
+            # el del archivo de checksums.
+            ACTIONLINT_VERSION: 1.7.12
+
         steps:
             # `fetch-depth: 0` porque el paso siguiente compara dos commits para
             # saber si hay que hacer algo: con el historial recortado, ese `git
@@ -116,21 +122,51 @@ jobs:
                     echo "workflows=false" >> "$GITHUB_OUTPUT"
                   fi
 
-            # Script oficial del repositorio de actionlint, con la version FIJADA
-            # en los dos sitios: la etiqueta de la que se descarga el script y el
-            # argumento que elige el binario. Nada de `latest` ni de `main`, que
-            # convierten cada ejecucion en una version distinta sin que el
-            # historial lo registre. El argumento va SIN la `v` inicial, que es lo
-            # que pide el script.
+            # Descarga DIRECTA del binario, sin pasar por `download-actionlint.bash`.
             #
-            # Para subir de version: cambiar el numero en los dos sitios a la vez.
+            # Ese script fallaba en el runner: bajaba 92 bytes en lugar del tar
+            # —no seguia la redireccion con la que GitHub sirve los artefactos de
+            # una release— y `tar` abortaba con «not in gzip format». Noventa y dos
+            # bytes es el tamano de una respuesta de redireccion, no de un binario
+            # de 5 MB, asi que lo que se extraia era una pagina, no el programa.
+            #
+            # Haciendolo aqui se gana ademas lo que el script no daba: la descarga
+            # se VERIFICA antes de ejecutar nada. Sin esa comprobacion, este paso
+            # descarga un binario de internet y lo ejecuta contra el repositorio;
+            # con ella, si el archivo no es exactamente el que publico la release,
+            # el paso se detiene.
+            #
+            # `curl -sSfL`: la `f` hace que un 404 devuelva error en vez de guardar
+            # la pagina de error como si fuera el tar, y la `L` sigue la redireccion
+            # que es justo lo que le faltaba al script.
+            #
+            # El `grep` va a un archivo y no por tuberia a proposito: como comando
+            # suelto, si la linea no aparece devuelve 1 y el `set -e` del shell para
+            # el paso. Dentro de una tuberia ese fallo se perderia, porque GitHub no
+            # activa `pipefail`.
+            #
+            # `tar` extrae SOLO `actionlint`: el archivo trae tambien LICENSE,
+            # README, la pagina de manual y la carpeta `docs/`, y nada de eso pinta
+            # en el directorio de trabajo del job.
+            #
+            # `linux_amd64` porque los runners de `ubuntu-latest` son x86-64. Si eso
+            # cambiara algun dia, el `--version` de abajo falla en el acto con
+            # «cannot execute binary file», que es mejor que un error a media
+            # ejecucion.
             - name: Instalar actionlint
               if: steps.cambios.outputs.workflows == 'true'
               run: |
-                  curl -sSfL \
-                    https://raw.githubusercontent.com/rhysd/actionlint/v1.7.12/scripts/download-actionlint.bash \
-                    -o download-actionlint.bash
-                  bash download-actionlint.bash 1.7.12 .
+                  base="https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}"
+                  tar_gz="actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+                  checksums="actionlint_${ACTIONLINT_VERSION}_checksums.txt"
+
+                  curl -sSfL "${base}/${tar_gz}" -o "${tar_gz}"
+                  curl -sSfL "${base}/${checksums}" -o "${checksums}"
+
+                  grep " ${tar_gz}$" "${checksums}" > esperado.sha256
+                  sha256sum --check --strict esperado.sha256
+
+                  tar -xzf "${tar_gz}" actionlint
                   ./actionlint --version
 
             - name: Validar los workflows
