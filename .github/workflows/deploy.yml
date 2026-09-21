@@ -78,10 +78,13 @@ jobs:
             # equivocado con `immutable` es un año sin poder corregirlo.
             #
             # Ahora son tres grupos, y los filtros los PARTICIONAN: cada clave cae en
-            # una pasada y solo una. Eso es lo que hace seguro que las tres lleven
-            # `--delete` —cada una solo puede borrar dentro de su grupo, así que
-            # ninguna borra lo que otra acaba de subir— y es también lo que evita que
-            # un archivo se suba dos veces con cabeceras distintas.
+            # una pasada y solo una. Eso es lo que evita que un archivo se suba dos
+            # veces con cabeceras distintas, y lo que hace seguro el `--delete` donde
+            # lo hay: una pasada solo puede borrar dentro de su grupo, así que ninguna
+            # borra lo que otra acaba de subir.
+            #
+            # Borran los grupos 2 y 3, y NO el 1. Los archivos con hash se acumulan a
+            # propósito; el porqué está entero sobre el paso del grupo 1.
             #
             # Los filtros van por PATRÓN y no por lista de archivos: una imagen nueva
             # en `public/` cae sola en el grupo 2 sin tocar este archivo. El grupo 2
@@ -110,10 +113,34 @@ jobs:
             # Se filtra por extensión y no por el patrón del hash: hoy los 23 .js y
             # .css del dist lo llevan sin excepción, y un `*-????????.js` se rompería
             # solo si Angular cambiase la longitud del hash.
-            - name: 'Grupo 1 · JS y CSS con hash (caché de un año)'
+            #
+            # ⚠️  ESTA PASADA NO LLEVA `--delete`, Y ES A PROPÓSITO. NO LO AÑADAS.
+            #
+            # Los archivos con hash se ACUMULAN en el bucket queriendo. El motivo es
+            # que un despliegue no es instantáneo y el HTML viejo sigue vivo un rato:
+            #
+            #   · Durante el despliegue, entre esta pasada y la del grupo 3 pasan
+            #     segundos en los que el HTML antiguo sigue sirviéndose y pide los
+            #     chunks antiguos. Si se hubieran borrado, esas peticiones son 404 y
+            #     la página se rompe a media carga.
+            #   · Después del despliegue es peor, porque dura más: quien tenga la
+            #     página abierta conserva el HTML viejo en memoria, y al navegar a
+            #     otra ruta el router pide un chunk perezoso —`loadComponent`— con el
+            #     hash antiguo. Borrado ese chunk, la navegación falla en la cara de
+            #     alguien que no ha hecho nada raro. Y la caché de CloudFront alarga
+            #     la ventana hasta que la invalidación termina de propagarse.
+            #
+            # Borrarlos no aporta nada a cambio: son 23 archivos de unos 400 KB en
+            # total, sus nombres no pueden colisionar nunca —el hash es del contenido,
+            # así que dos builds distintos no generan la misma clave— y no se sirven a
+            # nadie salvo que un HTML los pida. Lo único que crece es la factura de
+            # almacenamiento de S3, en céntimos.
+            #
+            # La limpieza, cuando haga falta, va a mano y con criterio: el comando
+            # está al final de este archivo.
+            - name: 'Grupo 1 · JS y CSS con hash (caché de un año, SIN --delete)'
               run: |
                   aws s3 sync dist/web-movia/browser s3://moviapass-com \
-                    --delete \
                     --exclude "*" --include "*.js" --include "*.css" \
                     --cache-control "public,max-age=31536000,immutable"
 
@@ -172,3 +199,45 @@ jobs:
               run: |
                   sleep 20
                   curl -sfI https://moviapass.com | head -1
+
+# ── Limpiar a mano los chunks antiguos ────────────────────────────────────────
+#
+# El grupo 1 no borra, así que los .js y .css de builds anteriores se quedan en
+# el bucket. Es lo que se quiere (ver el comentario de ese paso), pero cada
+# despliegue deja unos cuantos y conviene barrer de vez en cuando: una vez cada
+# muchos despliegues, o cuando el bucket empiece a pesar.
+#
+# NADA DE ESTO SE EJECUTA AUTOMÁTICAMENTE, Y NO DEBE. Va a mano, mirando lo que
+# se borra, porque un chunk que todavía referencia alguien es una navegación
+# rota en la cara de un usuario.
+#
+# 1) Qué chunks pide el sitio AHORA MISMO. Esta es la lista intocable: sale del
+#    HTML que se está sirviendo, no del dist local, que puede ir por delante.
+#
+#      for ruta in "" plans partners corporate contact help legal; do
+#        aws s3 cp "s3://moviapass-com/${ruta:+$ruta/}index.html" - 2>/dev/null
+#      done | grep -oE '(main|chunk|styles)-[A-Za-z0-9_-]{8}\.(js|css)' | sort -u
+#
+# 2) Todos los que hay en el bucket, del más viejo al más nuevo. La fecha es la
+#    de subida, así que los de arriba son los candidatos.
+#
+#      aws s3api list-objects-v2 --bucket moviapass-com \
+#        --query "sort_by(Contents, &LastModified)[?ends_with(Key, '.js') || ends_with(Key, '.css')].[LastModified, Size, Key]" \
+#        --output text
+#
+# 3) La diferencia entre (2) y (1) es lo que sobra. Se borra DE UNA EN UNA y por
+#    su clave exacta:
+#
+#      aws s3 rm s3://moviapass-com/chunk-VIEJO123.js
+#
+#    Nunca con `--recursive` y nunca con comodín: en la raíz de este bucket eso
+#    se lleva el sitio por delante.
+#
+# Margen de seguridad: no borres nada de los últimos despliegues aunque no
+# aparezca en (1). Alguien puede tener la pestaña abierta desde ayer con el HTML
+# viejo en memoria, y su router seguirá pidiendo aquellos chunks al navegar.
+#
+# La alternativa a hacerlo a mano es una regla de ciclo de vida en el bucket que
+# expire los objetos por antigüedad. Se configura en S3, no aquí, y habría que
+# acotarla a `.js` y `.css` para que no se lleve las imágenes de `public/`, que
+# no cambian de nombre nunca.
