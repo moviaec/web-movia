@@ -1,0 +1,25 @@
+<!--
+	Fondo tintado con texto en tinta, no relleno sólido con texto blanco: el verde del
+	tema sobre blanco da 4,4:1, justo por debajo del mínimo para texto normal. Así el
+	tinte y el borde dan el color, y lo que se lee lo lleva `text-ink`, que pasa de 12:1.
+
+	Las dos parejas de clases van en el MISMO binding: son las mismas propiedades, y
+	dejar una fija en el `class` estático dejaría a Tailwind eligiendo cuál gana.
+-->
+<div
+	class="flex items-start gap-3 rounded-xl border p-4 shadow-lg"
+	[class]="tone() === 'success' ? 'border-success bg-success-surface' : 'border-danger bg-danger-surface'"
+>
+	<div class="text-ink grow text-sm">
+		<ng-content />
+	</div>
+
+	<button
+		class="text-muted hover:text-ink focus-visible:ring-ink shrink-0 rounded-lg p-1 transition-colors focus-visible:ring-2 focus-visible:outline-none"
+		type="button"
+		aria-label="Cerrar el aviso"
+		(click)="dismissed.emit()"
+	>
+		<span class="icon-mask icon-menu-close size-4 bg-current" aria-hidden="true"></span>
+	</button>
+</div>

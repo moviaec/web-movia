@@ -4,36 +4,13 @@
 
 		<p class="text-ink lg:text-body-lg mt-6 text-lg lg:text-center">Aquí encontrarás todo lo que necesitas saber antes de empezar con Movia.</p>
 
-		<ul class="mt-12 grid gap-x-16 lg:mt-16 lg:grid-flow-col lg:grid-cols-2 lg:grid-rows-3">
-			@for (item of items; track item.id) {
-				<li class="border-border border-b">
-					<h3>
-						<button
-							class="focus-visible:ring-secondary flex w-full items-center justify-between gap-5 py-5 text-left focus-visible:ring-2 focus-visible:outline-none lg:py-6"
-							type="button"
-							[attr.aria-expanded]="openId() === item.id"
-							[attr.aria-controls]="'faq-panel-' + item.id"
-							(click)="toggle(item.id)"
-						>
-							<span class="text-ink lg:text-body-lg font-semibold">{{ item.question }}</span>
-
-							<span
-								class="icon-mask icon-flecha-abajo bg-ink size-6 transition-transform"
-								[class.rotate-180]="openId() === item.id"
-							></span>
-						</button>
-					</h3>
-
-					@if (openId() === item.id) {
-						<p class="text-muted pb-6" [id]="'faq-panel-' + item.id">{{ item.answer }}</p>
-					}
-				</li>
-			}
-		</ul>
+		<div class="mt-12 lg:mt-16">
+			<app-faq-accordion [items]="items" [twoColumns]="true" idPrefix="home-faq" />
+		</div>
 
 		<p class="text-ink mt-12 text-center lg:mt-13">
 			¿Tienes más preguntas? Visita nuestro
-			<a class="hover:text-primary underline transition-colors" href="#">Centro de ayuda</a>
+			<a class="hover:text-primary underline transition-colors" routerLink="/help">Centro de ayuda</a>
 		</p>
 	</div>
 </section>

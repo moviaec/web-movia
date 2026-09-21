@@ -1,0 +1,44 @@
+<!-- CABECERA -->
+<section class="bg-secondary text-secondary-contrast" aria-labelledby="contact-title">
+	<div class="max-w-content mx-auto px-6 pt-40 pb-16 lg:px-8 lg:pt-45 lg:pb-20">
+		<h1 id="contact-title" class="font-display lg:text-headline text-3xl font-bold">Contáctanos</h1>
+
+		<p class="lg:text-body-lg mt-6 max-w-2xl text-lg">
+			Escríbenos y te respondemos. Da igual si entrenas con Movia, si quieres darlo como beneficio en tu empresa o si tienes un centro y quieres
+			formar parte de la red: elige quién eres y cuéntanos.
+		</p>
+	</div>
+</section>
+<!-- END CABECERA -->
+
+<app-contact-form-section />
+
+<!-- CANALES DIRECTOS -->
+<!--
+	Bloque estático: dos enlaces y su texto, sin estado ni lógica, así que vive en la
+	plantilla de la página y no en un componente propio (`RULES.md` regla 7).
+-->
+<section class="bg-surface-shade" aria-labelledby="contact-channels-title">
+	<div class="max-w-content mx-auto px-6 pb-16 lg:px-8 lg:pb-20">
+		<div class="border-border bg-surface rounded-2xl border p-6 lg:flex lg:items-center lg:justify-between lg:gap-8 lg:p-8">
+			<div>
+				<h2 id="contact-channels-title" class="font-display text-ink text-xl font-bold lg:text-2xl">¿Prefieres escribirnos directamente?</h2>
+
+				<p class="text-muted mt-2">También estamos en el correo y en WhatsApp, de lunes a viernes.</p>
+			</div>
+
+			<ul class="mt-6 flex flex-col gap-3 lg:mt-0 lg:shrink-0 lg:items-end">
+				<li>
+					<a class="text-ink hover:text-primary-shade transition-colors" [href]="'mailto:' + email">{{ email }}</a>
+				</li>
+
+				<li>
+					<a class="text-ink hover:text-primary-shade transition-colors" [href]="whatsappUrl" target="_blank" rel="noopener">{{
+						whatsapp
+					}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</section>
+<!-- END CANALES DIRECTOS -->

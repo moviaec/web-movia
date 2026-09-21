@@ -1,0 +1,30 @@
+<section class="bg-surface" aria-labelledby="partners-growth-title">
+	<!-- Sin padding inferior: la sección termina donde arranca la banda gris, y las tarjetas la cruzan. -->
+	<div class="max-w-content lg:pt-section mx-auto px-6 pt-14 lg:px-8">
+		<h2 id="partners-growth-title" class="font-display text-ink lg:text-display text-4xl font-bold lg:text-center">
+			¿Cuánto puedes crecer con Movia?
+		</h2>
+
+		<p class="text-ink mt-6 lg:mt-7 lg:text-center lg:text-[1.2rem]">
+			Cada spot vacío es dinero que se pierde para siempre: tus costos fijos (instructor, espacio, energía) se pagan igual con 5 o con 20
+			alumnos. Movia llena esos lugares con clientes nuevos y los convierte en ingresos:
+		</p>
+
+		<!--
+			Las tarjetas SE SALEN por abajo y se montan sobre la banda gris de «La solución»,
+			como en el diseño (medido: la banda empieza 94 px de diseño por debajo del borde
+			superior de las tarjetas, o sea 206 antes de que acaben). De ahí el margen inferior
+			negativo; y el `z-10` hace falta porque la sección siguiente va DESPUÉS en el árbol
+			y su fondo se pintaría encima. Es la misma trampa que las tarjetas del hero del Home.
+		-->
+		<ul class="relative z-10 mt-12 grid gap-8 lg:mt-14 lg:-mb-[10.3rem] lg:grid-cols-3 lg:gap-[7.06%]">
+			@for (stat of stats; track stat.value) {
+				<li class="bg-primary text-primary-contrast flex h-42 flex-col justify-between rounded-xl p-6 lg:h-60 lg:p-6.5">
+					<p class="font-display text-3xl font-bold lg:text-[2.2rem]">{{ stat.value }}</p>
+
+					<p class="text-right">{{ stat.description }}</p>
+				</li>
+			}
+		</ul>
+	</div>
+</section>

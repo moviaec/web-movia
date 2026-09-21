@@ -1,0 +1,25 @@
+<section class="bg-surface" aria-labelledby="corporate-onboarding-title">
+	<!-- El padding inferior es el hueco que la tarjeta lima del cierre ocupa dentro de esta sección: se monta 147 px sobre ella. -->
+	<div class="max-w-content mx-auto px-6 pt-16 pb-[29.6rem] lg:px-8 lg:pt-[9.39rem] lg:pb-[15.1rem]">
+		<h2 id="corporate-onboarding-title" class="font-display text-ink text-4xl font-bold lg:text-center lg:text-[3.2rem]">¿Cómo Empezar?</h2>
+
+		<ol class="mt-10 grid grid-cols-2 gap-x-6 gap-y-12 lg:mt-[7.7rem] lg:grid-cols-4 lg:gap-x-[11.3%]">
+			@for (step of steps; track step) {
+				<li>
+					<!--
+						El color va por `--ng-icon__color` y no por `text-*`: el host de `<ng-icon>`
+						pinta con esa variable, así que una utilidad de color de Tailwind no le
+						llega. El valor sigue saliendo de un token del tema, no de un hex suelto.
+					-->
+					<ng-icon
+						class="text-[2.47rem] [--ng-icon__color:var(--color-primary-shade)] lg:text-[3.2rem]"
+						name="heroCheckCircle"
+						aria-hidden="true"
+					/>
+
+					<p class="text-ink mt-6 lg:mt-[3.3rem] lg:text-[1.4rem]">{{ step }}</p>
+				</li>
+			}
+		</ol>
+	</div>
+</section>

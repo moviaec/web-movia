@@ -1,0 +1,244 @@
+<!--
+	Formulario de contacto. Tres partes en este orden y no en otro: PARA QUÉ escribes,
+	quién eres y qué necesitas. La audiencia va primero porque decide el resto —a qué
+	equipo le toca responder y si se pide el nombre de la empresa—, así que preguntarla
+	al final obligaría a releer lo ya escrito.
+
+	El `[formRoot]` no es decorativo: es lo que desactiva la validación del navegador y
+	hace el `preventDefault()` del envío. Sin él, `(submit)` deja que el navegador
+	recargue la página con los campos en la URL (ver `RULES.md` regla 23).
+-->
+<section class="bg-surface" aria-labelledby="contact-form-title">
+	<div class="max-w-content mx-auto px-6 py-16 lg:px-8 lg:py-20">
+		<h2 id="contact-form-title" class="font-display text-ink text-2xl font-bold lg:text-3xl">Escríbenos</h2>
+
+		<p class="text-muted mt-4 max-w-2xl lg:text-lg">
+			Cuéntanos quién eres y qué necesitas. Te confirmamos por correo con un número de solicitud y te respondemos a esa misma dirección.
+		</p>
+
+		<form class="border-border bg-surface-muted mt-10 rounded-2xl border p-6 lg:mt-12 lg:p-8" [formRoot]="contactForm" (submit)="onSubmit()">
+			<!-- AUDIENCIA -->
+			<!--
+				Un `<select>` nativo, no tres tarjetas: son opciones excluyentes de una misma
+				pregunta, y en móvil el navegador lo abre con su propia rueda, que es más cómoda
+				de usar con el pulgar que tres cajas apiladas.
+
+				`appearance-none` quita la flecha del sistema —que cada navegador pinta a su
+				manera— y la sustituye por la del sitio, con `pointer-events-none` para que el
+				clic siga llegando al `<select>` que hay debajo. El `pr-12` es el hueco que ocupa.
+			-->
+			<div>
+				<label class="text-ink block font-medium" for="contact-audience">¿Quién nos escribe?</label>
+
+				<div class="relative mt-2">
+					<select
+						class="border-border bg-surface text-ink focus:border-ink w-full appearance-none rounded-xl border px-4 py-3 pr-12 outline-none"
+						id="contact-audience"
+						[formField]="contactForm.audience"
+					>
+						@for (audience of audiences; track audience.value) {
+							<option [value]="audience.value">{{ audience.label }}</option>
+						}
+					</select>
+
+					<span
+						class="icon-mask icon-flecha-abajo bg-ink pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2"
+						aria-hidden="true"
+					></span>
+				</div>
+
+				<!--
+					La descripción de la opción elegida. En las tarjetas se leían las tres a la vez;
+					al plegarlas en un `<select>` se perdía, y es lo que confirma que se eligió bien.
+				-->
+				<p class="text-muted mt-2 text-sm">{{ selectedAudience().description }}</p>
+			</div>
+			<!-- END AUDIENCIA -->
+
+			<!-- DATOS DE CONTACTO -->
+			<div class="mt-8 grid gap-6 md:grid-cols-2">
+				<div>
+					<label class="text-ink block font-medium" for="contact-full-name">Nombre y apellido</label>
+
+					<input
+						class="border-border bg-surface text-ink placeholder:text-muted focus:border-ink mt-2 w-full rounded-xl border px-4 py-3 outline-none"
+						id="contact-full-name"
+						type="text"
+						autocomplete="name"
+						[placeholder]="placeholders.fullName"
+						[formField]="contactForm.fullName"
+						[attr.aria-invalid]="contactForm.fullName().touched() && contactForm.fullName().invalid()"
+						aria-describedby="contact-full-name-error"
+					/>
+
+					<p class="text-danger mt-2 text-sm" id="contact-full-name-error">
+						@if (contactForm.fullName().touched() && contactForm.fullName().invalid()) {
+							{{ contactForm.fullName().errors()[0].message }}
+						}
+					</p>
+				</div>
+
+				<div>
+					<label class="text-ink block font-medium" for="contact-email">Correo electrónico</label>
+
+					<input
+						class="border-border bg-surface text-ink placeholder:text-muted focus:border-ink mt-2 w-full rounded-xl border px-4 py-3 outline-none"
+						id="contact-email"
+						type="email"
+						autocomplete="email"
+						[placeholder]="placeholders.email"
+						[formField]="contactForm.email"
+						[attr.aria-invalid]="contactForm.email().touched() && contactForm.email().invalid()"
+						aria-describedby="contact-email-error"
+					/>
+
+					<p class="text-danger mt-2 text-sm" id="contact-email-error">
+						@if (contactForm.email().touched() && contactForm.email().invalid()) {
+							{{ contactForm.email().errors()[0].message }}
+						}
+					</p>
+				</div>
+
+				<div>
+					<label class="text-ink block font-medium" for="contact-phone">
+						Teléfono
+						<span class="text-muted font-normal">(opcional)</span>
+					</label>
+
+					<input
+						class="border-border bg-surface text-ink placeholder:text-muted focus:border-ink mt-2 w-full rounded-xl border px-4 py-3 outline-none"
+						id="contact-phone"
+						type="tel"
+						autocomplete="tel"
+						[placeholder]="placeholders.phone"
+						[formField]="contactForm.phone"
+						[attr.aria-invalid]="contactForm.phone().touched() && contactForm.phone().invalid()"
+						aria-describedby="contact-phone-error"
+					/>
+
+					<p class="text-danger mt-2 text-sm" id="contact-phone-error">
+						@if (contactForm.phone().touched() && contactForm.phone().invalid()) {
+							{{ contactForm.phone().errors()[0].message }}
+						}
+					</p>
+				</div>
+
+				<!--
+					El campo de la empresa solo existe para quien representa a alguien. No se
+					esconde con una clase: se saca del DOM, porque un input invisible pero
+					presente lo sigue leyendo un lector de pantalla y lo sigue rellenando el
+					autocompletado del navegador.
+				-->
+				@if (selectedAudience().needsCompany) {
+					<div>
+						<label class="text-ink block font-medium" for="contact-company">{{ selectedAudience().companyLabel }}</label>
+
+						<input
+							class="border-border bg-surface text-ink placeholder:text-muted focus:border-ink mt-2 w-full rounded-xl border px-4 py-3 outline-none"
+							id="contact-company"
+							type="text"
+							autocomplete="organization"
+							[placeholder]="selectedAudience().companyPlaceholder"
+							[formField]="contactForm.company"
+							[attr.aria-invalid]="contactForm.company().touched() && contactForm.company().invalid()"
+							aria-describedby="contact-company-error"
+						/>
+
+						<p class="text-danger mt-2 text-sm" id="contact-company-error">
+							@if (contactForm.company().touched() && contactForm.company().invalid()) {
+								{{ contactForm.company().errors()[0].message }}
+							}
+						</p>
+					</div>
+				}
+			</div>
+			<!-- END DATOS DE CONTACTO -->
+
+			<!-- MENSAJE -->
+			<div class="mt-6">
+				<label class="text-ink block font-medium" for="contact-message">¿En qué podemos ayudarte?</label>
+
+				<textarea
+					class="border-border bg-surface text-ink placeholder:text-muted focus:border-ink mt-2 w-full rounded-xl border px-4 py-3 outline-none"
+					id="contact-message"
+					rows="5"
+					[placeholder]="placeholders.message"
+					[formField]="contactForm.message"
+					[attr.aria-invalid]="contactForm.message().touched() && contactForm.message().invalid()"
+					aria-describedby="contact-message-error contact-message-count"
+				></textarea>
+
+				<div class="mt-2 flex items-start justify-between gap-4 text-sm">
+					<p class="text-danger" id="contact-message-error">
+						@if (contactForm.message().touched() && contactForm.message().invalid()) {
+							{{ contactForm.message().errors()[0].message }}
+						}
+					</p>
+
+					<p class="text-muted shrink-0" id="contact-message-count">{{ messageLeft() }} caracteres</p>
+				</div>
+			</div>
+			<!-- END MENSAJE -->
+
+			<!-- ENVÍO -->
+			<!--
+				El resultado sale en un toast flotante, no en una caja dentro del formulario:
+				el botón de enviar puede quedar fuera de la pantalla en un móvil, y un aviso
+				que aparece donde no se está mirando no lo lee nadie.
+
+				Dos ramas del MISMO `@if` y no una con la audiencia por dentro: al cambiar de
+				rama Angular destruye una vista y crea la otra, así que cada aviso estrena
+				componente y con él sus cinco segundos. Con un único toast al que solo le
+				cambiara el contenido, el segundo heredaría el tiempo ya corrido del primero.
+
+				La región `aria-live` se queda aquí y SIEMPRE en el DOM, aunque esté vacía:
+				un `aria-live` que se inserta a la vez que su contenido no se anuncia. El
+				`<div>` no ocupa sitio —lo que se ve va `fixed` dentro del toast—, así que el
+				botón sigue pegado al último campo.
+			-->
+			<div aria-live="polite">
+				@if (status() === 'success') {
+					<app-toast tone="success" (dismissed)="dismissToast()">
+						<p class="font-medium">Recibimos tu mensaje.</p>
+
+						<p class="mt-1">
+							Tu número de solicitud es <strong>{{ reference() }}</strong
+							>. Te lo enviamos también por correo y te respondemos a esa dirección.
+						</p>
+					</app-toast>
+				} @else if (status() === 'error') {
+					<app-toast tone="error" (dismissed)="dismissToast()">
+						<p class="font-medium">No pudimos enviar tu mensaje.</p>
+
+						<p class="mt-1">
+							Inténtalo de nuevo en unos minutos o escríbenos directamente a
+							<a class="underline" [href]="'mailto:' + contactEmail">{{ contactEmail }}</a
+							>.
+						</p>
+					</app-toast>
+				}
+			</div>
+
+			<button
+				class="border-secondary bg-secondary text-secondary-contrast hover:bg-surface hover:text-ink mt-6 inline-flex w-full items-center justify-center rounded-full border px-6 py-3 transition-colors disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+				type="submit"
+				[disabled]="status() === 'sending'"
+			>
+				{{ status() === 'sending' ? 'Enviando…' : 'Enviar mensaje' }}
+			</button>
+
+			<!--
+				Consentimiento por envío, no una casilla que marcar: el formulario pide lo
+				justo para poder responder, y una casilla obligatoria a estas alturas es un
+				clic más para decir lo mismo. El enlace sale de `DATA_USAGE_LINK`, el mismo
+				que lista el pie.
+			-->
+			<p class="text-muted mt-4 text-sm">
+				Al enviar este formulario aceptas nuestra
+				<a class="hover:text-ink underline transition-colors" [routerLink]="dataUsageLink.path">{{ dataUsageLink.label }}</a
+				>.
+			</p>
+			<!-- END ENVÍO -->
+		</form>
+	</div>
+</section>

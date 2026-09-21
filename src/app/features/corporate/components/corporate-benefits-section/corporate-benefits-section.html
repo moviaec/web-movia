@@ -1,0 +1,68 @@
+<!--
+	La sección es CARBÓN y el blanco de arriba lo pinta una banda dentro de la rejilla,
+	no al revés. Hacerlo así es lo que permite que el corte caiga siempre justo donde
+	empiezan las tarjetas, sin una altura fija que se descuadre en cuanto el texto rompa
+	en otra línea: la banda ocupa filas de la rejilla, y son las filas las que mandan.
+
+	Por eso el titular también es un elemento de la rejilla (fila 1) y la sección no
+	lleva padding superior: si lo llevase, la banda blanca empezaría por debajo de él.
+-->
+<section class="bg-secondary isolate overflow-x-clip" aria-labelledby="corporate-benefits-title">
+	<div class="max-w-content mx-auto px-6 lg:px-8">
+		<!--
+			En escritorio la colocación es explícita (fila 2 las fotos, fila 3 las tarjetas)
+			porque `grid-flow-col` no se lleva bien con el titular que ocupa toda la fila 1.
+			En móvil no hay colocación ninguna y sale foto → tarjeta → foto → tarjeta, que
+			es el orden del diseño.
+		-->
+		<div class="grid lg:grid-cols-2 lg:gap-x-[5.65%]">
+			<div class="bg-surface relative z-[-1] col-span-full row-start-1 row-end-5 -mx-[calc(50vw-50%)] lg:row-end-3" aria-hidden="true"></div>
+
+			<h2
+				id="corporate-benefits-title"
+				class="font-display text-ink lg:text-headline col-span-full row-start-1 pt-14 pb-10 text-4xl font-bold lg:pt-[2.85rem] lg:pb-[4.1rem] lg:text-center"
+			>
+				Beneficios que te ofrece Movia
+			</h2>
+
+			@for (benefit of benefits; track benefit.title; let first = $first) {
+				<img
+					class="aspect-[2.06] w-full rounded-t-2xl object-cover"
+					[class]="first ? 'col-start-1 row-start-2' : 'col-start-1 row-start-4 lg:col-start-2 lg:row-start-2'"
+					[ngSrc]="benefit.image"
+					width="1064"
+					height="544"
+					[alt]="benefit.imageAlt"
+				/>
+
+				<div
+					class="bg-surface-shade mb-12 rounded-b-2xl px-6 pt-10 pb-12 lg:mb-0 lg:px-[2.9rem] lg:pt-[2.7rem] lg:pb-[4.3rem]"
+					[class]="first ? 'col-start-1 row-start-3' : 'col-start-1 row-start-5 lg:col-start-2 lg:row-start-3'"
+				>
+					<h3 class="font-display text-ink text-2xl font-semibold lg:text-[1.55rem]">{{ benefit.title }}</h3>
+
+					<ul class="mt-6 grid gap-3 lg:mt-[2rem] lg:gap-0">
+						@for (item of benefit.items; track item) {
+							<li class="text-ink flex gap-3 lg:gap-[1.1rem] lg:text-[1.2rem] lg:leading-[1.88]">
+								<!--
+									El check va centrado con la PRIMERA línea del texto: el margen superior es
+									la mitad de lo que sobra entre el alto de línea y el icono ((36 − 16,8) / 2
+									en escritorio, (24 − 16,8) / 2 en móvil). Sin él, el icono se pega al borde
+									de la caja de línea y queda visiblemente más alto que el texto.
+								-->
+								<ng-icon class="mt-1 shrink-0 text-[1.05rem] lg:mt-[0.6rem]" name="heroCheckCircle" aria-hidden="true" />
+								{{ item }}
+							</li>
+						}
+					</ul>
+				</div>
+			}
+		</div>
+
+		<blockquote
+			class="font-display text-secondary-contrast pt-12 pb-16 text-2xl font-semibold lg:max-w-[91%] lg:pt-[6.3rem] lg:pb-[9.6rem] lg:text-[3.45rem] lg:leading-[0.9]"
+		>
+			{{ quote }}
+		</blockquote>
+	</div>
+</section>
