@@ -1,3 +1,5 @@
+import { JsonLdNode } from '@core/types/json-ld.type';
+
 /**
  * Metadata of one route, as it has to end up baked into its prerendered HTML.
  *
@@ -28,4 +30,13 @@ export interface RouteSeo {
 	image?: string;
 	/** `og:image:alt` of that image. Mandatory in practice when `image` is set. */
 	imageAlt?: string;
+	/**
+	 * Structured data of this route, one entry per `<script type="application/ld+json">`.
+	 *
+	 * Los bloques se construyen en `core/constants/structured-data.constants.ts` a partir
+	 * de las MISMAS constantes que pintan la pantalla; aquí solo se dice qué ruta lleva
+	 * cuál. Una ruta sin datos estructurados no declara nada, que es lo correcto: un
+	 * bloque genérico repetido en las diez páginas no aporta ninguna señal.
+	 */
+	structuredData?: readonly JsonLdNode[];
 }

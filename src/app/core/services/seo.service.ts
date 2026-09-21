@@ -2,16 +2,8 @@ import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
-import {
-	DEFAULT_OG_IMAGE,
-	DEFAULT_OG_IMAGE_ALT,
-	FALLBACK_SEO,
-	OG_IMAGE_HEIGHT,
-	OG_IMAGE_WIDTH,
-	ROUTE_SEO,
-	SITE_LOCALE,
-	SITE_NAME
-} from '@core/constants/seo.constants';
+import { FALLBACK_SEO, ROUTE_SEO } from '@core/constants/seo.constants';
+import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_ALT, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH, SITE_LOCALE, SITE_NAME } from '@core/constants/site.constants';
 import { RouteSeo } from '@core/interfaces/seo.interface';
 
 import { environment } from '../../../environments/environment';
@@ -53,6 +45,7 @@ export class SeoService {
 		this._setRobots(seo);
 		this._setOpenGraph(seo, canonical, image);
 		this._setTwitter(seo, image);
+		this._setStructuredData(seo);
 	}
 
 	/**
@@ -118,6 +111,30 @@ export class SeoService {
 		this._meta.updateTag({ property: 'og:image:width', content: OG_IMAGE_WIDTH });
 		this._meta.updateTag({ property: 'og:image:height', content: OG_IMAGE_HEIGHT });
 		this._meta.updateTag({ property: 'og:image:alt', content: seo.imageAlt ?? DEFAULT_OG_IMAGE_ALT });
+	}
+
+	/**
+	 * Writes the JSON-LD blocks of the route, one `<script>` each.
+	 *
+	 * The ones of the previous route are REMOVED first, and they are found by the
+	 * `data-seo` attribute: on the client the head survives every navigation, and without
+	 * this the `Product` of `/plans` would still be declared while reading the home.
+	 *
+	 * The content goes in through `textContent` and never as HTML, so a quote or a `<` in
+	 * the copy cannot close the tag.
+	 */
+	private _setStructuredData(seo: RouteSeo): void {
+		const head = this._document.head;
+		for (const script of Array.from(head.querySelectorAll('script[type="application/ld+json"][data-seo]'))) script.remove();
+		if (!seo.structuredData?.length) return;
+
+		for (const node of seo.structuredData) {
+			const script = this._document.createElement('script');
+			script.setAttribute('type', 'application/ld+json');
+			script.setAttribute('data-seo', '');
+			script.textContent = JSON.stringify(node);
+			head.appendChild(script);
+		}
 	}
 
 	/** X reads its own names; without them it falls back to the small card with no photo. */

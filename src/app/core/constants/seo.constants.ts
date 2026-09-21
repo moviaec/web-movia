@@ -1,37 +1,5 @@
+import { ORGANIZATION_SCHEMA, PLANS_PRODUCT_SCHEMA, WEBSITE_SCHEMA } from '@core/constants/structured-data.constants';
 import { RouteSeo } from '@core/interfaces/seo.interface';
-
-/**
- * Brand name, WITH the accent, everywhere it is written.
- *
- * It is the name that goes in `og:site_name` and the one that closes every title.
- * «Movia» without the accent is the same brand written wrong, and mixing both is how
- * a search engine ends up treating them as two different things.
- */
-export const SITE_NAME = 'Movía';
-
-/** `og:locale`: Spanish of Ecuador, which is where the product operates. */
-export const SITE_LOCALE = 'es_EC';
-
-/** `<html lang>` and `inLanguage` of the structured data. */
-export const SITE_LANG = 'es-EC';
-
-/**
- * Social image used by every route that does not bring its own.
- *
- * PENDIENTE: el archivo NO existe todavía; lo aporta el usuario. Tiene que ser
- * 1200 × 630 px, JPG y por debajo de 300 KB, que es el peso a partir del cual
- * WhatsApp deja de descargar la vista previa.
- */
-export const DEFAULT_OG_IMAGE = '/og/og-default.jpg';
-
-/** `og:image:alt` of that default image. */
-export const DEFAULT_OG_IMAGE_ALT = 'Movía · una membresía para gimnasios, estudios y centros de bienestar del Ecuador';
-
-/** Width of a social card, in pixels. The four networks ask for 1200 × 630. */
-export const OG_IMAGE_WIDTH = '1200';
-
-/** Height of a social card, in pixels. */
-export const OG_IMAGE_HEIGHT = '630';
 
 /**
  * Metadata of every route of the site, keyed by its path with no trailing slash.
@@ -55,13 +23,15 @@ export const ROUTE_SEO: Readonly<Record<string, RouteSeo>> = {
 		title: 'Movía · Gimnasios, yoga y natación con una sola membresía',
 		description:
 			'Una sola membresía mensual para entrenar en gimnasios, estudios de yoga, natación y bienestar de todo el Ecuador. Eliges el centro y haces check-in con la app.',
-		indexable: true
+		indexable: true,
+		structuredData: [ORGANIZATION_SCHEMA, WEBSITE_SCHEMA]
 	},
 	'/plans': {
 		title: 'Planes y precios de Movía desde $39,99 al mes',
 		description:
 			'Planes de Movía desde $39,99 al mes, de 8 a 28 check-ins en toda la red de centros aliados del Ecuador. Sin permanencia: cambias o cancelas desde la app.',
-		indexable: true
+		indexable: true,
+		structuredData: [PLANS_PRODUCT_SCHEMA]
 	},
 	'/partners': {
 		title: 'Suma tu gimnasio o estudio a la red de Movía',
