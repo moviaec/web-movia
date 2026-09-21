@@ -4,5 +4,14 @@ export const environment = {
 	// Base pública del sitio, con la que se componen enlaces absolutos (canónicas,
 	// metadatos sociales). Absolutos y no relativos: una ruta relativa la recoge el
 	// router y acaba en su propio 404.
-	siteUrl: 'https://moviapass.com'
+	siteUrl: 'https://moviapass.com',
+	// Base de `api-movia`, el único servicio remoto del sitio: lo usa el formulario
+	// de contacto y nada más (ver `docs/decisiones/`).
+	//
+	// PENDIENTE: el subdominio real de la API en producción. `api.moviapass.com` es
+	// la forma que sigue a `app.moviapass.com`, pero todavía no está desplegada ahí:
+	// mientras no lo esté, el formulario de una build de producción no envía nada.
+	// Al fijarlo hay que añadir `https://moviapass.com` a `CORS_ORIGINS` de la API,
+	// o el navegador bloquea la petición antes de salir.
+	apiUrl: 'https://api.moviapass.com'
 };

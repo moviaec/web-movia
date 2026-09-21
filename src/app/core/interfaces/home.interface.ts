@@ -45,13 +45,3 @@ export interface CompanyPerk {
 	/** One sentence expanding on it. */
 	description: string;
 }
-
-/** A question of the frequently asked questions section. */
-export interface FaqItem {
-	/** Stable key, used to track the list and to tie the button to its panel. */
-	id: string;
-	/** The question, as written in the design. */
-	question: string;
-	/** The answer. PROVISIONAL: the design shows every accordion closed. */
-	answer: string;
-}
