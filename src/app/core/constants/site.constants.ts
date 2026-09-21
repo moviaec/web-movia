@@ -24,8 +24,16 @@ export const SITE_LOCALE = 'es_EC';
 /** `<html lang>` and `inLanguage` of the structured data. */
 export const SITE_LANG = 'es-EC';
 
-/** Legal name of the company, the one that already closes the footer. */
-export const LEGAL_NAME = 'MoviaPass SAS';
+/**
+ * Registered legal name of the company, the one the footer prints and `Organization`
+ * declares.
+ *
+ * Va tal cual lo confirmó el usuario, en mayúsculas y con la TRIPLE S, que es como
+ * suelen estar inscritas las razones sociales en el registro. No es el nombre comercial
+ * —ese es `SITE_NAME`, «Movía»— y no se «arregla» a ojo: un dato del registro mercantil
+ * se cambia con el documento delante, no porque parezca una errata.
+ */
+export const LEGAL_NAME = 'MOVIAPASSS SAS';
 
 /** Country the service operates in, as an ISO 3166 code. */
 export const AREA_SERVED = 'EC';
@@ -48,5 +56,11 @@ export const OG_IMAGE_WIDTH = '1200';
 /** Height of a social card, in pixels. */
 export const OG_IMAGE_HEIGHT = '630';
 
-/** Path of the brand logo, used by the structured data with an absolute URL. */
-export const SITE_LOGO = '/imgs/layout/logo-movia.webp';
+/**
+ * Path of the brand logo for the structured data, with an absolute URL.
+ *
+ * Es el CUADRADO de 512 × 512 y no el logo horizontal de la cabecera: ese mide 622 × 84
+ * y no llega al mínimo de 112 × 112 que Google exige para el `logo` de `Organization`,
+ * así que declararlo era declarar algo que se iba a descartar.
+ */
+export const SITE_LOGO = '/brand/logo-square.png';
