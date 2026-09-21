@@ -1,24 +1,24 @@
-<section class="bg-surface relative" aria-labelledby="home-steps-title">
-	<img
-		class="mx-auto mb-4 h-auto w-full max-w-md lg:absolute lg:top-[5rem] lg:right-0 lg:mt-0 lg:w-[34vw] lg:max-w-none"
-		ngSrc="/imgs/home/app-movia.png"
-		width="714"
-		height="1216"
-		alt="La aplicación de Movía mostrando el plan activo, los estudios cercanos y el mapa"
-	/>
+<section class="bg-surface" aria-labelledby="home-steps-title">
+	<!--
+		Dos columnas: los pasos ocupan todo el espacio sobrante (`1fr`) y la composición de
+		móviles tiene ancho fijo, para que no crezca con la ventana. En móvil la imagen va
+		delante del titular, como en el diseño.
+	-->
+	<div class="max-w-content lg:py-section mx-auto grid gap-8 px-6 py-16 lg:grid-cols-[1fr_22.9rem] lg:items-center lg:gap-12 lg:px-8">
+		<img
+			class="mx-auto h-auto w-full max-w-md lg:order-last lg:w-full lg:max-w-none"
+			ngSrc="/imgs/home/app-movia.png"
+			width="714"
+			height="1216"
+			alt="La aplicación de Movía mostrando el plan activo, los estudios cercanos y el mapa"
+		/>
 
-	<div class="max-w-content lg:py-section mx-auto px-6 py-16 lg:px-8">
-		<!--
-			El bloque de texto no ocupa todo el contenedor: en el diseño mide 870 px de los
-			1414 del contenido, y la composición de móviles vive a su derecha, pegada al borde
-			de la ventana (por eso va absoluta y no dentro del contenedor).
-		-->
-		<div class="lg:max-w-[45rem]">
+		<div>
 			<h2 id="home-steps-title" class="font-display lg:text-headline text-ink text-3xl font-bold">
 				Así Es Como Movia Transforma La Manera En Que Te Mueves
 			</h2>
 
-			<ol class="mt-10 grid gap-10 sm:grid-cols-2 lg:mt-13 lg:max-w-[45.2rem] lg:grid-cols-4 lg:gap-[5.3rem]">
+			<ol class="mt-10 grid gap-10 sm:grid-cols-2 lg:mt-13 lg:grid-cols-4 lg:gap-[3.5rem]">
 				@for (step of steps; track step.number) {
 					<li>
 						<span
