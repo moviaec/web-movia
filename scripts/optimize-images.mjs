@@ -31,6 +31,26 @@ import { extname, join, relative } from 'node:path';
 /** Carpeta de las imágenes del sitio. */
 const IMAGES_DIR = 'public/imgs';
 
+/**
+ * Carpetas de `public/` que NO se convierten nunca, pase lo que pase con `IMAGES_DIR`.
+ *
+ * Hoy ninguna cuelga de `public/imgs`, así que el recorrido ni las ve; la guardia está
+ * por si mañana alguien amplía `IMAGES_DIR` a `public` entero, que es el cambio de una
+ * línea y se llevaría estas por delante sin que nadie se entere hasta que WhatsApp deje
+ * de pintar la tarjeta.
+ *
+ * Son imágenes de MARCA y tienen que quedarse en su formato y su tamaño exactos:
+ *
+ * - `public/og/` — la tarjeta social. Los rastreadores de WhatsApp, Facebook, LinkedIn
+ *   y X piden JPG o PNG de 1200 × 630; varios de ellos ni siquiera descargan un WebP.
+ * - `public/brand/` — el logo cuadrado de los datos estructurados. Google exige para el
+ *   `logo` de `Organization` un formato rastreable y un mínimo de 112 × 112 px.
+ *
+ * `apple-touch-icon.png` vive en la raíz de `public/` por convención —iOS lo pide ahí—
+ * y por eso tampoco entra en un recorrido de `public/imgs`.
+ */
+const EXCLUDED_DIRS = ['public/og', 'public/brand'];
+
 /** Lo que se convierte. El SVG se queda como está: ya es vectorial y pesa nada. */
 const SOURCE_EXTENSIONS = ['.jpg', '.jpeg', '.png'];
 
@@ -117,6 +137,8 @@ const PIXEL_RATIO = 2;
  */
 function findImages(dir) {
 	const found = [];
+	if (EXCLUDED_DIRS.includes(dir)) return found;
+
 	for (const entry of readdirSync(dir)) {
 		const path = join(dir, entry);
 		if (statSync(path).isDirectory()) {

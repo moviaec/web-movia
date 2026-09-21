@@ -14,7 +14,18 @@
 		<meta name="color-scheme" content="light" />
 		<meta name="theme-color" content="#1C242C" />
 
-		<link rel="icon" type="image/png" href="favicon.png" />
+		<!--
+			El `sizes` del favicon dice el tamaño REAL del archivo (557 × 565). Antes el
+			manifest lo declaraba como 64 × 64, que es falso, y un tamaño mentido hace que
+			el navegador elija mal el icono cuando hay varios candidatos.
+		-->
+		<link rel="icon" type="image/png" sizes="557x565" href="favicon.png" />
+		<!--
+			iOS NO lee el manifest para «Añadir a pantalla de inicio»: busca este `<link>`, y
+			sin él genera una miniatura de la captura de pantalla en vez del logo — justo en
+			el gesto de más compromiso que hace alguien con el sitio.
+		-->
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<link rel="manifest" href="manifest.webmanifest" />
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
