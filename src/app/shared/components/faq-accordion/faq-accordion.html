@@ -1,0 +1,41 @@
+<div class="grid gap-x-16" [class.lg:grid-cols-2]="twoColumns()">
+	@for (column of columns(); track $index) {
+		<ul>
+			@for (item of column; track item.id) {
+				<li class="border-border border-b">
+					<h3>
+						<button
+							class="focus-visible:ring-secondary flex w-full items-center justify-between gap-5 py-5 text-left focus-visible:ring-2 focus-visible:outline-none lg:py-6"
+							type="button"
+							[attr.aria-expanded]="isOpen(item.id)"
+							[attr.aria-controls]="idPrefix() + '-panel-' + item.id"
+							(click)="toggle(item.id)"
+						>
+							<span class="text-ink lg:text-body-lg font-semibold">{{ item.question }}</span>
+
+							<span
+								class="icon-mask icon-flecha-abajo bg-ink size-6 shrink-0 transition-transform"
+								[class.rotate-180]="isOpen(item.id)"
+							></span>
+						</button>
+					</h3>
+
+					<!--
+						La respuesta está SIEMPRE en el DOM y lo que hace el acordeón es taparla:
+						con `@if` no existía, y quien lee el HTML sin ejecutar JavaScript —Google,
+						pero también WhatsApp o un lector de pantalla con el JS caído— veía la
+						pregunta y ninguna respuesta. Es el hallazgo 7 de la auditoría.
+
+						`[attr.hidden]` y no `[hidden]`: el segundo es una propiedad del DOM, y lo
+						que tiene que quedar escrito en el HTML del prerender es el ATRIBUTO. El
+						`hidden` vale además por la accesibilidad, porque saca del árbol lo que no
+						se está leyendo, que es justo lo que dice `aria-expanded="false"`.
+					-->
+					<p class="text-muted lg:text-body-lg pb-6" [id]="idPrefix() + '-panel-' + item.id" [attr.hidden]="isOpen(item.id) ? null : true">
+						{{ item.answer }}
+					</p>
+				</li>
+			}
+		</ul>
+	}
+</div>

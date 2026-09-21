@@ -1,0 +1,101 @@
+<!-- CABECERA -->
+<section class="bg-secondary text-secondary-contrast" aria-labelledby="help-title">
+	<div class="max-w-content mx-auto px-6 pt-40 pb-16 lg:px-8 lg:pt-45 lg:pb-20">
+		<h1 id="help-title" class="font-display lg:text-headline text-3xl font-bold">Centro de ayuda</h1>
+
+		<p class="lg:text-body-lg mt-6 max-w-2xl text-lg">
+			Aquí están las respuestas a lo que más nos preguntan, ordenadas por a quién le interesan: si entrenas con Movia, si quieres darlo como
+			beneficio en tu empresa o si tienes un centro y quieres formar parte de la red.
+		</p>
+
+		<!-- Sobre el carbón la acción va en lima, como en el footer. -->
+		<div class="bg-secondary-tint mt-10 rounded-2xl p-6 lg:mt-12 lg:flex lg:items-center lg:justify-between lg:gap-8 lg:p-8">
+			<p class="lg:text-body-lg text-lg">¿No encontraste lo que buscabas? Escríbenos y te respondemos.</p>
+
+			<a
+				class="bg-primary text-primary-contrast mt-6 inline-flex items-center gap-4 rounded-full px-6 py-3 font-medium transition-opacity hover:opacity-90 lg:mt-0 lg:shrink-0"
+				routerLink="/contact"
+			>
+				Contáctanos
+				<span class="icon-mask icon-flecha-arriba bg-primary-contrast size-5 rotate-90" aria-hidden="true"></span>
+			</a>
+		</div>
+	</div>
+</section>
+<!-- END CABECERA -->
+
+<!-- PREGUNTAS POR PÚBLICO -->
+<!--
+	Las tres audiencias son pestañas, no bloques apilados: la mayoría de quien entra es de
+	una sola de ellas, así que se elige primero y se lee después.
+
+	El comportamiento (roles, `aria-selected`, foco y flechas del teclado) lo pone Angular
+	Aria; aquí solo van los estilos, que es lo que pide `CLAUDE.md` para un componente
+	interactivo.
+-->
+<section class="bg-surface" aria-labelledby="help-groups-title">
+	<div class="max-w-content mx-auto px-6 py-16 lg:px-8 lg:py-20">
+		<h2 id="help-groups-title" class="font-display text-ink lg:text-headline text-center text-2xl font-bold">Preguntas frecuentes</h2>
+
+		<div ngTabs>
+			<ul class="mt-8 flex flex-wrap justify-center gap-3 lg:mt-10 lg:gap-4" ngTabList [(selectedTab)]="selectedGroupId">
+				@for (group of groups; track group.id) {
+					<!--
+						El fondo y el borde van SIEMPRE por binding, nunca uno fijo y otro condicional:
+						`bg-surface` y `bg-primary` son dos utilidades de la misma propiedad, así que
+						cuál gana lo decide el orden del CSS y no el estado del botón. Con las dos
+						atadas al estado, el seleccionado sale lima de verdad.
+					-->
+					<li
+						class="text-ink lg:text-body-lg focus-visible:ring-secondary cursor-pointer rounded-full border px-6 py-3 font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none"
+						[class.bg-primary]="tab.selected()"
+						[class.border-primary]="tab.selected()"
+						[class.bg-surface]="!tab.selected()"
+						[class.border-border]="!tab.selected()"
+						ngTab
+						#tab="ngTab"
+						[value]="group.id"
+					>
+						{{ group.title }}
+					</li>
+				}
+			</ul>
+
+			<!--
+				Los tres paneles están SIEMPRE en el DOM y lo que hace la pestaña es taparlos.
+				El `<ng-template ngTabContent>` que llevaban es la carga perezosa de Angular
+				Aria: pinta el panel la primera vez que se SELECCIONA, y en el prerender no
+				hay nadie que pulse, así que el Centro de ayuda llegaba a Google con cero
+				preguntas y cero respuestas (hallazgo 6). Con el contenido directamente
+				dentro del `ngTabPanel` se renderiza siempre.
+
+				La accesibilidad no depende de eso: `ngTabPanel` sigue poniendo `role`,
+				`aria-labelledby`, el `tabindex` y —en el panel que no se está leyendo— el
+				`inert`, que lo saca del árbol de accesibilidad y de la tabulación. Lo único
+				que hay que poner a mano es la ocultación VISUAL, que es lo que dice la
+				documentación de la directiva; de ahí el `hidden` atado a `panel.visible()`.
+
+				La ocultación se decide con `selectedGroupId()` y NO leyendo el `visible()`
+				del propio panel: una variable de plantilla leída en un binding de su mismo
+				elemento se evalúa antes de que Angular haya fijado el `[value]`, y el
+				prerender se cae con NG0950 (la entrada obligatoria todavía no tiene valor).
+				El signal del componente ya es el mismo estado, atado en dos sentidos a
+				`ngTabList`, así que no hay una segunda verdad.
+
+				A cambio, en desarrollo Angular Aria avisa por consola de que el panel no
+				lleva `ngTabContent`. Es la nota de una carga perezosa que aquí es justo lo
+				que no se quiere: en el build de producción no aparece.
+			-->
+			@for (group of groups; track group.id) {
+				<div ngTabPanel [value]="group.id" [class.hidden]="group.id !== selectedGroupId()">
+					<p class="text-muted lg:text-body-lg mt-8 text-center lg:mt-10">{{ group.description }}</p>
+
+					<div class="mt-6 lg:mt-8">
+						<app-faq-accordion [items]="group.items" [idPrefix]="group.id" />
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</section>
+<!-- END PREGUNTAS POR PÚBLICO -->
