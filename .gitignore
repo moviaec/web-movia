@@ -6,8 +6,11 @@
 /out-tsc
 /bazel-out
 
-# Claude
-.claude
+# Claude — la gobernanza se versiona; lo demás no
+.claude/*
+!.claude/CLAUDE.md
+!.claude/RULES.md
+!.claude/SETUP.md
 
 # Node
 /node_modules
