@@ -1,8 +1,14 @@
 <section class="bg-surface-muted" aria-labelledby="home-companies-title">
-	<div class="max-w-content lg:py-section mx-auto grid gap-10 px-6 py-20 lg:grid-cols-2 lg:items-center lg:gap-13 lg:px-8">
+	<!--
+		La foto ocupa el 31 % como la de «Movia para Estudios» y no media sección: con
+		`grid-cols-2` salía a 662 px, el doble que en el diseño, y se comía la mitad de la
+		banda. Y se monta por arriba los mismos 51 px que la otra, que es el gesto que el
+		diseño repite en las dos secciones.
+	-->
+	<div class="max-w-content lg:py-section mx-auto grid gap-10 px-6 py-20 lg:grid-cols-[1fr_31%] lg:items-center lg:gap-13 lg:px-8">
 		<img
-			class="rounded-card h-72 w-full object-cover lg:order-last lg:-mt-24 lg:h-auto lg:self-start"
-			ngSrc="/imgs/home/empresas.jpg"
+			class="h-72 w-full rounded-2xl object-cover lg:order-last lg:-mt-[calc(var(--spacing-section)+3.2rem)] lg:h-auto lg:self-start"
+			ngSrc="/imgs/home/empresas.webp"
 			width="657"
 			height="1001"
 			alt="Dos compañeros de trabajo chocando las manos después de entrenar"
@@ -26,7 +32,7 @@
 
 			<a
 				class="bg-secondary text-secondary-contrast hover:bg-secondary-shade mt-10 flex w-full items-center justify-between gap-6 rounded-full px-6 py-4 font-medium transition-colors sm:w-fit sm:justify-start lg:mt-11"
-				routerLink="/empresas"
+				routerLink="/corporate"
 			>
 				Saber más
 				<span class="icon-mask icon-flecha-arriba bg-secondary-contrast size-6 rotate-90"></span>

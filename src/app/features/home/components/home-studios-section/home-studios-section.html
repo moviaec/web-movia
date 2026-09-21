@@ -4,9 +4,22 @@
 		las cuatro tarjetas lima (medido sobre el frame de 1920: 443 / 345 / 449 px).
 	-->
 	<div class="max-w-content lg:py-section mx-auto grid gap-8 px-6 py-16 lg:grid-cols-[31%_25%_1fr] lg:items-center lg:gap-x-[6%] lg:px-8">
+		<!--
+			La foto se SALE por arriba de la sección y se monta sobre el mapa de «Encuentra tu
+			club», como en el diseño (medido en la captura: 51 px por encima del borde). De ahí
+			los tres ingredientes:
+
+			- `self-start` en vez del centrado de la rejilla: con `items-center` un margen
+			  negativo se reparte entre arriba y abajo y la foto solo sube la mitad.
+			- El margen negativo vale el padding de la sección MÁS esos 51 px, que es lo que
+			  hay que subir desde el inicio de la fila para cruzar el borde.
+			- `z-10`: la sección del mapa está posicionada (`relative isolate`), así que pinta
+			  por encima de todo lo que no lo esté y se comía la parte montada. Es la misma
+			  trampa de las tarjetas del hero.
+		-->
 		<img
-			class="rounded-card h-80 w-full object-cover lg:h-auto"
-			ngSrc="/imgs/home/estudios.jpg"
+			class="h-80 w-full rounded-2xl object-cover lg:z-10 lg:-mt-[calc(var(--spacing-section)+3.2rem)] lg:h-auto lg:self-start"
+			ngSrc="/imgs/home/estudios.webp"
 			width="657"
 			height="1001"
 			alt="Entrenador de un estudio aliado con una tablilla en la mano"
@@ -21,7 +34,7 @@
 
 			<a
 				class="bg-secondary text-secondary-contrast hover:bg-secondary-shade mt-8 flex w-full items-center justify-between gap-6 rounded-full px-6 py-4 font-medium transition-colors sm:w-fit sm:justify-start lg:mt-10"
-				routerLink="/estudios"
+				routerLink="/partners"
 			>
 				Saber más
 				<span class="icon-mask icon-flecha-arriba bg-secondary-contrast size-5 rotate-90"></span>
@@ -33,7 +46,7 @@
 				<li class="bg-primary text-primary-contrast rounded-card p-5 lg:px-5 lg:pt-5 lg:pb-10">
 					<span class="icon-mask icon-check bg-primary-contrast size-6 lg:size-5"></span>
 
-					<p class="mt-6 font-medium lg:mt-5 lg:text-sm">{{ perk }}</p>
+					<p class="lg:text-body-lg mt-6 font-medium lg:mt-5">{{ perk }}</p>
 				</li>
 			}
 		</ul>

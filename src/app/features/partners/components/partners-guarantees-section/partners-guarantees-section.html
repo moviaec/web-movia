@@ -1,0 +1,35 @@
+<section class="bg-surface" aria-labelledby="partners-guarantees-title">
+	<div
+		class="max-w-content mx-auto grid grid-cols-[47%_1fr] gap-x-6 px-6 pt-16 pb-16 lg:grid-cols-[28.7%_1fr] lg:gap-x-[7.4%] lg:px-8 lg:pt-[5.9rem] lg:pb-[6.6rem]"
+	>
+		<!--
+			La foto del corredor pertenece a esta sección pero SE SALE por arriba y se monta
+			sobre la banda gris de «La solución», igual que la foto de «Movia para Estudios»
+			en el Home. Los tres ingredientes son los mismos: `self-start` (con la rejilla
+			centrada, medio margen negativo se pierde), el margen negativo que cruza el borde
+			y el `z-10`, porque la sección anterior pinta su fondo por encima de lo que no
+			está posicionado.
+		-->
+		<img
+			class="z-10 col-start-1 row-start-1 -mt-[11.1rem] w-full self-start rounded-2xl lg:row-span-2 lg:-mt-[12.25rem]"
+			ngSrc="/imgs/partners/riesgo-cero.webp"
+			width="650"
+			height="990"
+			alt="Corredor entrenando sobre fondo claro"
+		/>
+
+		<h2 id="partners-guarantees-title" class="font-display text-ink lg:text-display col-start-2 row-start-1 text-4xl font-bold">
+			Riesgo Cero. Solo Ganas
+		</h2>
+
+		<ul class="col-span-2 row-start-2 mt-10 grid grid-cols-2 gap-x-6 gap-y-12 lg:col-span-1 lg:col-start-2 lg:mt-6 lg:grid-cols-4 lg:gap-x-[8%]">
+			@for (guarantee of guarantees; track guarantee.title) {
+				<li>
+					<h3 class="font-display text-ink text-2xl font-semibold lg:text-[1.375rem]">{{ guarantee.title }}</h3>
+
+					<p class="text-ink mt-6 lg:mt-8">{{ guarantee.description }}</p>
+				</li>
+			}
+		</ul>
+	</div>
+</section>

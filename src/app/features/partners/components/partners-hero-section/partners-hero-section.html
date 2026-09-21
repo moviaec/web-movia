@@ -1,0 +1,47 @@
+<section class="bg-secondary rounded-b-hero relative isolate overflow-hidden" aria-labelledby="partners-hero-title">
+	<!--
+		Mismo trato que el hero del Home: el recorte de móvil no es el de escritorio, así
+		que van dos archivos en un <picture>, y por eso este <img> no usa NgOptimizedImage
+		(no soporta <picture>). El peso de LCP lo marca `fetchpriority="high"`.
+	-->
+	<picture>
+		<source media="(min-width: 1024px)" srcset="/imgs/partners/hero.webp" />
+		<img
+			class="absolute inset-0 -z-10 size-full object-cover"
+			src="/imgs/partners/hero-movil.webp"
+			alt="Dos entrenadores sonriendo dentro de su estudio"
+			width="1920"
+			height="1080"
+			fetchpriority="high"
+		/>
+	</picture>
+
+	<!-- Velo de carbón: aquí es más suave que en el Home porque la foto entregada ya viene oscura. -->
+	<div class="bg-secondary/80 absolute inset-0 -z-10"></div>
+
+	<div class="max-w-content mx-auto px-6 pt-[23.5rem] pb-6 lg:px-8 lg:pt-49 lg:pb-30">
+		<p class="text-secondary-contrast text-[1.4rem] lg:text-[2rem]">Movia para Estudios</p>
+
+		<h1 id="partners-hero-title" class="font-display text-primary lg:text-display mt-4 text-[3.125rem] leading-[1.04] font-extrabold lg:mt-1">
+			Llena tus clases.<br class="hidden lg:inline" />
+			Gana más. Sin riesgo.
+		</h1>
+
+		<p class="text-secondary-contrast lg:text-lead mt-6 text-xl lg:mt-8 lg:max-w-[52%]">
+			Te conectamos con miles de usuarios activos que buscan tu tipo de clase, y solo pagas cuando alguien asiste.
+		</p>
+
+		<!--
+			Pastilla de contorno: sobre la foto no lleva relleno, solo el borde blanco. En
+			móvil ocupa todo el ancho con la flecha al final, como en la captura.
+		-->
+		<a
+			class="border-secondary-contrast text-secondary-contrast hover:bg-secondary-contrast hover:text-ink mt-8 flex items-center justify-between gap-6 rounded-full border px-8 py-4 font-medium transition-colors sm:w-fit lg:mt-7 lg:px-9 lg:py-[1.15rem]"
+			href="https://partner.moviapass.com/"
+			target="_blank"
+		>
+			Quiero ser parte
+			<span class="icon-mask icon-flecha-arriba size-5 rotate-90 bg-current" aria-hidden="true"></span>
+		</a>
+	</div>
+</section>

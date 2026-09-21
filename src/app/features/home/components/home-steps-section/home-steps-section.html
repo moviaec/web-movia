@@ -5,9 +5,17 @@
 		delante del titular, como en el diseño.
 	-->
 	<div class="max-w-content lg:py-section mx-auto grid gap-8 px-6 py-16 lg:grid-cols-[1fr_26.1rem] lg:items-center lg:gap-12 lg:px-8">
+		<!--
+			La composición de móviles se SALE por abajo y se monta sobre «Categorías de
+			actividades», como en el diseño (medido en la captura: la banda gris empieza 66 px
+			antes de que acabe la foto). Los tres ingredientes son los de «Movia para Estudios»,
+			pero al revés —`self-end` y margen inferior—, y el `z-10` hace más falta todavía:
+			la sección de categorías va DESPUÉS en el árbol, así que su fondo se pinta encima de
+			todo lo que no esté posicionado y tapaba justo el trozo montado.
+		-->
 		<img
-			class="mx-auto h-auto w-full max-w-md lg:order-last lg:w-full lg:max-w-none"
-			ngSrc="/imgs/home/app-movia.png"
+			class="mx-auto h-auto w-full max-w-md lg:z-10 lg:order-last lg:-mb-[calc(var(--spacing-section)+3.2rem)] lg:w-full lg:max-w-none lg:self-end"
+			ngSrc="/imgs/home/app-movia.webp"
 			width="714"
 			height="1216"
 			alt="La aplicación de Movía mostrando el plan activo, los estudios cercanos y el mapa"
@@ -18,7 +26,12 @@
 				Así Es Como Movia Transforma La Manera En Que Te Mueves
 			</h2>
 
-			<ol class="mt-10 grid gap-10 sm:grid-cols-2 lg:mt-13 lg:grid-cols-4 lg:gap-[3.5rem]">
+			<!--
+				Tres columnas desde `sm` y no dos: con tres pasos, una rejilla de dos deja el
+				último solo en su fila y una de cuatro deja una columna vacía a la derecha, que
+				es justo lo que se nota cuando se quita un paso y no se toca la rejilla.
+			-->
+			<ol class="mt-10 grid gap-10 sm:grid-cols-3 lg:mt-13 lg:gap-[3.5rem]">
 				@for (step of steps; track step.number) {
 					<li>
 						<span
@@ -29,7 +42,7 @@
 
 						<h3 class="font-display lg:text-title text-ink mt-6 text-xl font-semibold lg:mt-10">{{ step.title }}</h3>
 
-						<p class="text-ink mt-4 lg:mt-8 lg:text-sm">{{ step.description }}</p>
+						<p class="text-ink lg:text-body-lg mt-4 lg:mt-8">{{ step.description }}</p>
 					</li>
 				}
 			</ol>

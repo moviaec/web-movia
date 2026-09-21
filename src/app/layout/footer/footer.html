@@ -1,41 +1,81 @@
 <footer class="bg-secondary text-secondary-contrast">
-	<div class="max-w-wide mx-auto px-6 py-16 lg:px-8 lg:py-25.5">
+	<div class="max-w-wide mx-auto px-6 pt-16 pb-10 lg:px-8">
 		<div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
 			<div class="lg:max-w-xl">
-				<img class="h-9 w-auto lg:h-9" src="/imgs/layout/logo-movia.png" alt="Movía · belong everywhere" width="4106" height="554" />
+				<img class="h-9 w-auto lg:h-9" src="/imgs/layout/logo-movia.webp" alt="Movía · belong everywhere" width="622" height="84" />
 
 				<p class="text-body-lg mt-8 lg:mt-8">
 					Disponible en todo el Ecuador. Conectando personas, clubes y experiencias deportivas desde una sola aplicación.
 				</p>
+
+				<!-- Sobre el carbón del footer la acción va en lima, que es el acento de marca. -->
+				<a
+					class="bg-primary text-primary-contrast mt-8 inline-flex items-center gap-4 rounded-full px-6 py-3 font-medium transition-opacity hover:opacity-90"
+					routerLink="/help"
+				>
+					Ir al Centro de Ayuda
+					<span class="icon-mask icon-flecha-arriba bg-primary-contrast size-5 rotate-90" aria-hidden="true"></span>
+				</a>
 			</div>
 
 			<div class="flex flex-col gap-8 lg:items-end">
 				<div class="flex items-center gap-5">
 					<a href="#" aria-label="Descargar Movía en el App Store">
-						<img class="h-12 w-auto lg:h-11" src="/imgs/layout/app-store.png" alt="" width="1057" height="362" />
+						<img class="h-12 w-auto lg:h-11" src="/imgs/layout/app-store.webp" alt="" width="280" height="96" />
 					</a>
 					<a href="#" aria-label="Descargar Movía en Google Play">
-						<img class="h-12 w-auto lg:h-11" src="/imgs/layout/google-play.png" alt="" width="1063" height="362" />
+						<img class="h-12 w-auto lg:h-11" src="/imgs/layout/google-play.webp" alt="" width="282" height="96" />
 					</a>
 				</div>
 
-				<div class="flex items-center justify-between gap-8 lg:flex-col lg:items-end">
-					<a class="text-body-lg hover:text-primary transition-colors" [href]="'mailto:' + email">{{ email }}</a>
+				<!--
+					En una pantalla estrecha el correo y las tres redes NO caben en la misma
+					fila: el bloque de contacto no se encoge (el correo es una palabra sola) y
+					el que cedía era el de los iconos, que pasaban de 44 px a 12 y se veían
+					como tres óvalos. Se apilan hasta `sm` y desde ahí vuelve la fila.
+				-->
+				<div class="flex flex-col items-start gap-8 sm:flex-row sm:items-center sm:justify-between lg:flex-col lg:items-end">
+					<ul class="flex flex-col gap-3 lg:items-end">
+						<li>
+							<a class="text-body-lg hover:text-primary flex items-center gap-3 transition-colors" [href]="'mailto:' + email">
+								<ng-icon class="shrink-0 text-2xl" name="heroEnvelopeSolid" aria-hidden="true" />
+								{{ email }}
+							</a>
+						</li>
 
-					<ul class="flex items-center gap-4">
+						<!--
+						Abre en otra pestaña con `rel="noopener"` y SIN `noreferrer`: WhatsApp usa el
+						referer para saber desde dónde le llega la conversación.
+					-->
+						<li>
+							<a
+								class="text-body-lg hover:text-primary flex items-center gap-3 transition-colors"
+								[href]="whatsappUrl"
+								target="_blank"
+								rel="noopener"
+							>
+								<span class="icon-mask icon-whatsapp size-6 shrink-0 bg-current" aria-hidden="true"></span>
+								{{ whatsapp }}
+							</a>
+						</li>
+					</ul>
+
+					<!-- `shrink-0`: el cinturón de la corrección de arriba. Aunque un día vuelvan a
+						compartir fila con algo que no quepa, los iconos se quedan cuadrados. -->
+					<ul class="flex shrink-0 items-center gap-4">
 						<li>
 							<a class="block" href="#" aria-label="Movía en Facebook">
-								<img class="size-11" src="/imgs/layout/facebook.png" alt="" width="400" height="400" />
+								<img class="size-11" src="/imgs/layout/facebook.webp" alt="" width="88" height="88" />
 							</a>
 						</li>
 						<li>
 							<a class="block" href="#" aria-label="Movía en Instagram">
-								<img class="size-11" src="/imgs/layout/instagram.png" alt="" width="400" height="400" />
+								<img class="size-11" src="/imgs/layout/instagram.webp" alt="" width="88" height="88" />
 							</a>
 						</li>
 						<li>
 							<a class="block" href="#" aria-label="Movía en LinkedIn">
-								<img class="size-11" src="/imgs/layout/linkedin.png" alt="" width="400" height="400" />
+								<img class="size-11" src="/imgs/layout/linkedin.webp" alt="" width="88" height="88" />
 							</a>
 						</li>
 					</ul>
@@ -45,24 +85,33 @@
 
 		<hr class="border-secondary-tint mt-12 lg:mt-19" />
 
-		<div class="mt-10 flex justify-between gap-8 lg:mt-13">
-			<ul class="flex flex-col gap-6 lg:flex-row lg:gap-9.5">
+		<!--
+			Con ocho enlaces en la fila, a 1024 px ya no caben en una línea: sin `flex-wrap` las
+			etiquetas se partían por la mitad («Política de Uso de / Datos»). Ahora saltan de
+			línea enteras y los huecos se aprietan hasta `xl`, donde vuelven los del diseño.
+		-->
+		<div class="mt-10 flex flex-wrap justify-between gap-x-8 gap-y-6 lg:mt-13">
+			<ul class="flex flex-col gap-6 lg:flex-row lg:flex-wrap lg:gap-x-5 lg:gap-y-3 xl:gap-x-9.5">
 				@for (link of navLinks; track link.path) {
 					<li>
-						<a class="text-body-lg hover:text-primary transition-colors" [routerLink]="link.path">{{ link.label }}</a>
+						<a class="text-body-lg hover:text-primary text-sm whitespace-nowrap transition-colors" [routerLink]="link.path">{{
+							link.label
+						}}</a>
 					</li>
 				}
 			</ul>
 
-			<ul class="flex flex-col gap-6 text-right lg:flex-row lg:gap-9.5">
-				@for (link of legalLinks; track link.label) {
+			<ul class="flex flex-col gap-6 text-right lg:flex-row lg:flex-wrap lg:justify-end lg:gap-x-5 lg:gap-y-3 xl:gap-x-9.5">
+				@for (link of legalLinks; track link.path) {
 					<li>
-						<a class="text-body-lg hover:text-primary transition-colors" href="#">{{ link.label }}</a>
+						<a class="text-body-lg hover:text-primary text-sm whitespace-nowrap transition-colors" [routerLink]="link.path">{{
+							link.label
+						}}</a>
 					</li>
 				}
 			</ul>
 		</div>
 
-		<p class="text-muted mt-12 text-center lg:mt-13">© {{ year }} movia · Todos los derechos reservados</p>
+		<p class="text-muted mt-12 text-center text-sm lg:mt-13">© {{ year }} MoviaPass SAS · Todos los derechos reservados</p>
 	</div>
 </footer>

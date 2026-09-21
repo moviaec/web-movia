@@ -1,0 +1,48 @@
+<section class="bg-secondary" aria-labelledby="partners-steps-title">
+	<!--
+		Las fotos van ANTES en el árbol porque en móvil el diseño las pone delante del
+		titular; en escritorio `lg:order-last` las manda a la derecha.
+	-->
+	<div
+		class="max-w-content mx-auto grid gap-y-12 px-6 pt-10 pb-[4.8rem] lg:grid-cols-[1fr_26.1%] lg:gap-x-[6.5%] lg:px-8 lg:pt-[7.1rem] lg:pb-[8.4rem]"
+	>
+		<div class="relative -mt-[5.9rem] ml-[18%] w-[47%] self-start lg:order-last lg:-mt-[9.35rem] lg:ml-0 lg:w-full">
+			<img
+				class="h-auto w-full rounded-2xl"
+				ngSrc="/imgs/partners/como-funciona.webp"
+				width="592"
+				height="902"
+				alt="Dos personas chocando las manos después de entrenar"
+			/>
+
+			<!-- La foto pequeña pisa la esquina inferior derecha de la grande y se sale del contenedor, como en el diseño. -->
+			<img
+				class="absolute -right-[35.8%] -bottom-[19.3%] w-[68.6%] rounded-2xl"
+				ngSrc="/imgs/partners/como-funciona-pequena.webp"
+				width="406"
+				height="335"
+				alt="Entrenador de un estudio aliado con una tablilla en la mano"
+			/>
+		</div>
+
+		<div>
+			<h2 id="partners-steps-title" class="font-display text-secondary-contrast text-4xl font-bold lg:text-[2.7rem]">
+				¿Cómo Funciona En Tu Estudio?
+			</h2>
+
+			<ol class="mt-12 grid grid-cols-2 gap-x-6 gap-y-14 lg:mt-16 lg:grid-cols-4 lg:gap-x-[9.4%]">
+				@for (step of steps; track step.number) {
+					<li>
+						<span class="bg-primary text-primary-contrast flex size-8 items-center justify-center rounded-full text-sm font-semibold">
+							{{ step.number }}
+						</span>
+
+						<h3 class="font-display text-secondary-contrast lg:text-title mt-8 text-xl font-semibold lg:mt-12">{{ step.title }}</h3>
+
+						<p class="text-secondary-contrast lg:text-body-lg mt-6 lg:mt-10">{{ step.description }}</p>
+					</li>
+				}
+			</ol>
+		</div>
+	</div>
+</section>

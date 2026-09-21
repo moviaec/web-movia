@@ -1,0 +1,54 @@
+<section class="bg-surface-muted" aria-labelledby="partners-solution-title">
+	<!--
+		El padding superior de escritorio incluye lo que ocupan las tarjetas lima de la
+		sección anterior, que se montan sobre esta banda: por eso son 290 px y no el ritmo
+		normal de sección. En móvil no hay montaje, así que el padding es el de siempre.
+
+		La rejilla coloca el texto y la foto en la MISMA columna (filas 1 y 2) y la lista
+		en la de al lado ocupando las dos filas. Se hace con `col-start`/`row-start` y no
+		metiendo texto y foto en un div, porque en móvil el orden del diseño es
+		texto → lista → foto, y un div los dejaría pegados.
+	-->
+	<div
+		class="max-w-content mx-auto grid gap-y-12 px-6 pt-16 pb-14 lg:grid-cols-[1fr_45%] lg:grid-rows-[auto_auto] lg:gap-x-[7.06%] lg:gap-y-0 lg:px-8 lg:pt-[18.2rem] lg:pb-15"
+	>
+		<div class="lg:col-start-1 lg:row-start-1">
+			<h2 id="partners-solution-title" class="font-display text-ink lg:text-display text-4xl font-bold">
+				La solución: Movia llena tus spots vacíos
+			</h2>
+
+			<p class="text-ink mt-6 lg:mt-8 lg:text-2xl lg:leading-[1.35]">
+				Te conectamos con miles de usuarios activos que buscan tu tipo de clase. Así de simple:
+			</p>
+		</div>
+
+		<ul class="grid gap-10 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:gap-[3.4rem]">
+			@for (step of steps; track step.title) {
+				<li class="flex gap-4 lg:gap-7">
+					<span class="icon-mask icon-flecha-diagonal bg-ink mt-1.5 size-5 shrink-0" aria-hidden="true"></span>
+
+					<span>
+						<strong class="font-display text-ink block text-2xl font-semibold lg:text-[2rem] lg:leading-[1.22]">{{ step.title }}</strong>
+						<span class="text-ink lg:text-[1.2rem]">{{ step.note }}</span>
+					</span>
+				</li>
+			}
+		</ul>
+
+		<!--
+			Las dos fotos se solapan: la pequeña va arriba y a la derecha, y la grande
+			—la del corredor— vive en la sección siguiente porque se monta sobre ella
+			(ver `partners-guarantees-section`). Aquí solo está la pequeña, colocada con
+			porcentajes del contenedor para que conserve la proporción del diseño.
+		-->
+		<div class="lg:col-start-1 lg:row-start-2 lg:self-end">
+			<img
+				class="ml-[35%] w-[30%] rounded-2xl lg:ml-[38.6%] lg:w-[42.6%]"
+				ngSrc="/imgs/partners/solucion.webp"
+				width="462"
+				height="382"
+				alt="Dos personas entrenando en las bicicletas estáticas de un estudio"
+			/>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,45 @@
+<section class="bg-surface-shade" aria-labelledby="corporate-reasons-title">
+	<!--
+		Las fotos van ANTES en el árbol porque en móvil el diseño las pone delante del
+		titular; en escritorio `lg:order-last` las manda a la derecha. La grande se SALE
+		por arriba y se monta sobre la banda carbón (124 px medidos), así que su margen
+		negativo vale el padding de la sección MÁS ese montaje.
+	-->
+	<div class="max-w-content mx-auto grid gap-y-12 px-6 pt-16 pb-16 lg:grid-cols-[69.2%_1fr] lg:gap-x-0 lg:px-8 lg:pt-[6.6rem] lg:pb-[4rem]">
+		<div class="relative -mt-28 ml-[5%] w-[66%] self-start lg:order-last lg:-mt-[14.34rem] lg:ml-0 lg:w-[92.8%]">
+			<img
+				class="h-auto w-full rounded-2xl"
+				ngSrc="/imgs/corporate/por-que.webp"
+				width="648"
+				height="987"
+				alt="Una persona estirando antes de entrenar frente a una oficina"
+			/>
+
+			<!-- La foto pequeña pisa la esquina inferior derecha de la grande y se sale del contenedor, como en el diseño. -->
+			<img
+				class="absolute -right-[31.8%] -bottom-[13.4%] w-[68.8%] rounded-2xl lg:w-[84.2%]"
+				ngSrc="/imgs/corporate/por-que-pequena.webp"
+				width="546"
+				height="451"
+				alt="Dos personas charlando con una raqueta de tenis en la mano"
+			/>
+		</div>
+
+		<div>
+			<h2 id="corporate-reasons-title" class="font-display text-ink lg:text-headline text-4xl font-bold">¿Por qué Movia?</h2>
+
+			<ul class="mt-10 grid gap-10 lg:mt-[3rem] lg:grid-cols-2 lg:gap-x-[6%] lg:gap-y-[4.5rem]">
+				@for (reason of reasons; track reason.title) {
+					<li class="flex gap-4 lg:gap-[2.4rem]">
+						<span class="icon-mask icon-flecha-diagonal bg-ink mt-1 size-5 shrink-0" aria-hidden="true"></span>
+
+						<span>
+							<strong class="font-display text-ink block text-xl font-semibold lg:text-[1.4rem]">{{ reason.title }}</strong>
+							<span class="text-ink mt-2 block lg:mt-[0.9rem] lg:text-[1.05rem]">{{ reason.description }}</span>
+						</span>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+</section>

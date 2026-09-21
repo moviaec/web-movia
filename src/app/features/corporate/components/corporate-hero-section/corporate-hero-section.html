@@ -1,0 +1,38 @@
+<section class="bg-secondary rounded-b-hero relative isolate overflow-hidden" aria-labelledby="corporate-hero-title">
+	<!-- Una sola foto para las dos anchuras: el diseño no entrega recorte de móvil, así que aquí sí cabe NgOptimizedImage. -->
+	<img
+		class="absolute inset-0 -z-10 object-cover"
+		ngSrc="/imgs/corporate/hero.webp"
+		fill
+		priority
+		alt="Un equipo de trabajo chocando las manos después de entrenar"
+	/>
+
+	<!-- Velo de carbón, medido contra la foto entregada punto a punto; ver el informe de la página. -->
+	<div class="bg-secondary/80 absolute inset-0 -z-10"></div>
+
+	<div class="max-w-content mx-auto px-6 pt-[23.5rem] pb-6 text-center lg:px-8 lg:pt-[14.15rem] lg:pb-[7.35rem]">
+		<p class="text-secondary-contrast text-[1.4rem] lg:text-[1.925rem]">Movia para Empresas</p>
+
+		<h1
+			id="corporate-hero-title"
+			class="font-display text-primary mx-auto mt-4 text-[3rem] leading-[1.04] font-extrabold lg:mt-1 lg:max-w-[62%] lg:text-[3.4rem] lg:leading-[1.34]"
+		>
+			Bienestar corporativo que genera retorno.
+		</h1>
+
+		<p class="text-secondary-contrast mx-auto mt-6 text-xl lg:mt-4 lg:max-w-[64%] lg:text-[1.2rem] lg:leading-[1.28]">
+			Co-financiar el bienestar de tu equipo es una de las decisiones más rentables que puede tomar tu empresa.
+		</p>
+
+		<!-- Pastilla de contorno sobre la foto: sin relleno, solo el borde blanco. En móvil ocupa todo el ancho. -->
+		<a
+			class="border-secondary-contrast text-secondary-contrast hover:bg-secondary-contrast hover:text-ink mt-8 flex items-center justify-between gap-6 rounded-full border px-8 py-4 font-medium transition-colors sm:w-fit lg:mx-auto lg:mt-[2.95rem] lg:px-9 lg:py-[1.15rem]"
+			href="https://corporate.moviapass.com/"
+			target="_blank"
+		>
+			Quiero ser parte
+			<span class="icon-mask icon-flecha-arriba size-5 rotate-90 bg-current" aria-hidden="true"></span>
+		</a>
+	</div>
+</section>
