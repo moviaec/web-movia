@@ -13,5 +13,12 @@ export const environment = {
 	// mientras no lo esté, el formulario de una build de producción no envía nada.
 	// Al fijarlo hay que añadir `https://moviapass.com` a `CORS_ORIGINS` de la API,
 	// o el navegador bloquea la petición antes de salir.
-	apiUrl: 'https://api.moviapass.com'
+	apiUrl: 'https://api.moviapass.com',
+	// Base de `web-partner-movia`, el portal de los estudios. Es a donde lleva
+	// «Iniciar sesión» y los dos CTA de /partners.
+	//
+	// En PLURAL: es como ese proyecto se declara a sí mismo en su
+	// `environment.prod.ts`. Estuvo escrito en singular en dos plantillas de esta
+	// página y por eso ahora es una constante y no un literal suelto.
+	partnerPortalUrl: 'https://partners.moviapass.com'
 };
