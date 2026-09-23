@@ -1,3 +1,5 @@
+> **Superado en parte** (2026-09-23): el formulario ya no es la única llamada del sitio a la API. `/plans` también lee de ella; ver [`2026-09-23-planes-desde-la-api.md`](2026-09-23-planes-desde-la-api.md). El resto de este documento sigue vigente.
+
 # El formulario de contacto habla con `api-movia`
 
 **Estado:** decidido y aplicado · el despliegue de la API para producción sigue ABIERTO

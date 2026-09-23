@@ -10,9 +10,9 @@ import { environment } from '../../../environments/environment';
 /**
  * The contact form against `api-movia`.
  *
- * This is the ONLY place in the landing that talks to a server. The site is a
- * static build with its content in `core/constants/`, and that has not changed:
- * what a contact message needs is somewhere to be stored and an address to
+ * One of the two places in the landing that talk to a server (the other is
+ * `PlansService`). The site is a static build with the rest of its content in
+ * `core/constants/`: what a contact message needs is somewhere to be stored and an address to
  * answer, and neither of those can live in a prerendered HTML file. The decision
  * and its consequences are written down in `docs/decisiones/`.
  */

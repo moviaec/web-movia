@@ -14,9 +14,10 @@ export const appConfig: ApplicationConfig = {
 		/** Replays the clicks that land before the JS hydrates; without it, a CTA pressed early does nothing. */
 		provideClientHydration(withEventReplay()),
 		/**
-		 * The site has no backend and loads no data: the ONLY remote call is the contact
-		 * form, which posts to `api-movia` (see `docs/decisiones/`). `withFetch()` because
-		 * the build prerenders every route and `fetch` is what runs on both sides.
+		 * The site has no backend of its own, and talks to `api-movia` in exactly two
+		 * places: the contact form posts to it, and `/plans` reads the plans catalogue
+		 * from it, in the browser (see `docs/decisiones/`). `withFetch()` because the
+		 * build prerenders every route and `fetch` is what runs on both sides.
 		 */
 		provideHttpClient(withFetch()),
 		/**

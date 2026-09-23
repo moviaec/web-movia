@@ -1,4 +1,4 @@
-import { ORGANIZATION_SCHEMA, PLANS_PRODUCT_SCHEMA, WEBSITE_SCHEMA } from '@core/constants/structured-data.constants';
+import { ORGANIZATION_SCHEMA, WEBSITE_SCHEMA } from '@core/constants/structured-data.constants';
 import { RouteSeo } from '@core/interfaces/seo.interface';
 
 /**
@@ -30,8 +30,9 @@ export const ROUTE_SEO: Readonly<Record<string, RouteSeo>> = {
 		title: 'Planes y precios de Movía desde $39,99 al mes',
 		description:
 			'Planes de Movía desde $39,99 al mes, de 8 a 28 check-ins en toda la red de centros aliados del Ecuador. Sin permanencia: cambias o cancelas desde la app.',
-		indexable: true,
-		structuredData: [PLANS_PRODUCT_SCHEMA]
+		// Sin `structuredData` aquí: el `Product` de esta página lleva los precios de la
+		// API, así que lo escribe la propia página cuando llegan (`buildPlansProductSchema`).
+		indexable: true
 	},
 	'/partners': {
 		title: 'Suma tu gimnasio o estudio a la red de Movía',

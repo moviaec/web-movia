@@ -5,6 +5,7 @@ import { Meta, Title } from '@angular/platform-browser';
 import { FALLBACK_SEO, ROUTE_SEO } from '@core/constants/seo.constants';
 import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_ALT, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH, SITE_LOCALE, SITE_NAME } from '@core/constants/site.constants';
 import { RouteSeo } from '@core/interfaces/seo.interface';
+import { JsonLdNode } from '@core/types/json-ld.type';
 
 import { environment } from '../../../environments/environment';
 
@@ -46,6 +47,17 @@ export class SeoService {
 		this._setOpenGraph(seo, canonical, image);
 		this._setTwitter(seo, image);
 		this._setStructuredData(seo);
+	}
+
+	/**
+	 * Adds a JSON-LD block that depends on data loaded after the navigation.
+	 *
+	 * It is the way in for the `Product` of `/plans`, whose prices come from the API.
+	 * The block carries the same `data-seo` mark as the route's own, so the next
+	 * navigation removes it like any other: it cannot outlive its page.
+	 */
+	addStructuredData(node: JsonLdNode): void {
+		this._appendStructuredData(node);
 	}
 
 	/**
@@ -128,13 +140,16 @@ export class SeoService {
 		for (const script of Array.from(head.querySelectorAll('script[type="application/ld+json"][data-seo]'))) script.remove();
 		if (!seo.structuredData?.length) return;
 
-		for (const node of seo.structuredData) {
-			const script = this._document.createElement('script');
-			script.setAttribute('type', 'application/ld+json');
-			script.setAttribute('data-seo', '');
-			script.textContent = JSON.stringify(node);
-			head.appendChild(script);
-		}
+		for (const node of seo.structuredData) this._appendStructuredData(node);
+	}
+
+	/** Writes one JSON-LD block into the head, marked with `data-seo` so the next route removes it. */
+	private _appendStructuredData(node: JsonLdNode): void {
+		const script = this._document.createElement('script');
+		script.setAttribute('type', 'application/ld+json');
+		script.setAttribute('data-seo', '');
+		script.textContent = JSON.stringify(node);
+		this._document.head.appendChild(script);
 	}
 
 	/** X reads its own names; without them it falls back to the small card with no photo. */

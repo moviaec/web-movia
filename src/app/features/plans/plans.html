@@ -13,123 +13,265 @@
 		</h1>
 
 		<!--
-			En MÓVIL las tarjetas no se apilan: se pasan de izquierda a derecha. La lista es
-			un carrusel con `snap` y cada tarjeta ocupa el 94 % del ancho, así que la
-			siguiente solo ASOMA por el borde: lo justo para que se vea que hay más sin
-			robarle sitio a la que se está leyendo. Los `-mx-6 px-6` sacan el
-			carrusel a los bordes de la pantalla pero dejan la primera tarjeta alineada con
-			el resto del contenido. El `scroll-pl-6` hace que el `snap` respete ese gutter:
-			sin él la tarjeta se pega al borde de la pantalla y el hueco desaparece. Y el
-			`pt-5` es el sitio que necesita la pastilla del plan popular, porque al haber
-			scroll horizontal lo que sobresalga por arriba se recorta.
-
-			En escritorio vuelve a ser una rejilla de tres y `items-stretch` (el default)
-			iguala las alturas; el botón se pega abajo con `mt-auto`.
+			La región `aria-live` está SIEMPRE en el DOM, aunque vacía: una región que se
+			inserta a la vez que su texto no se anuncia. Dice en voz alta lo que las
+			tarjetas de relleno solo enseñan, que los planes están cargando.
 		-->
-		<ul
-			class="-mx-6 mt-14 flex snap-x snap-mandatory scroll-pl-6 [scrollbar-width:none] gap-4 overflow-x-auto px-6 pt-5 pb-4 [-ms-overflow-style:none] lg:mx-0 lg:mt-[5.75rem] lg:grid lg:grid-cols-3 lg:gap-[1.9%] lg:overflow-visible lg:px-0 lg:pt-0 lg:pb-0 [&::-webkit-scrollbar]:hidden"
-		>
-			@for (plan of plans; track plan.name) {
-				<li
-					class="relative flex w-[94%] shrink-0 snap-start flex-col rounded-2xl p-7 lg:w-auto lg:px-[1.76rem] lg:pt-[1.36rem] lg:pb-[1.54rem]"
-					[class]="plan.featured ? 'bg-primary text-primary-contrast' : 'border-secondary-tint bg-secondary text-secondary-contrast border'"
+		<p class="sr-only" aria-live="polite">
+			@if (catalogue.isLoading()) {
+				Cargando los planes…
+			}
+		</p>
+
+		@if (catalogue.error()) {
+			<!-- Sin planes no hay página: el error ocupa el sitio de las tarjetas y ofrece reintentar. -->
+			<div
+				class="border-secondary-tint bg-secondary text-secondary-contrast mt-14 rounded-2xl border p-7 text-center lg:mt-[5.75rem]"
+				role="alert"
+			>
+				<p class="font-display text-xl font-semibold">No pudimos cargar los planes.</p>
+				<p class="text-muted-tint mt-2">Revisa tu conexión y vuelve a intentarlo en unos segundos.</p>
+				<button
+					class="bg-primary text-primary-contrast mt-6 rounded-full px-8 py-3 font-medium transition-opacity hover:opacity-90"
+					type="button"
+					(click)="retry()"
 				>
-					@if (plan.featured) {
-						<!-- La pastilla se monta sobre el borde superior de la tarjeta, centrada. -->
-						<span
-							class="bg-surface text-ink absolute -top-[0.85rem] left-1/2 -translate-x-1/2 rounded-full px-4 py-1 text-[0.7rem] font-semibold tracking-wider uppercase"
-						>
-							{{ featuredBadge }}
-						</span>
-					}
-
-					<h2 class="font-display text-xl font-semibold lg:text-[1.07rem]">{{ plan.name }}</h2>
-
-					<p class="font-display mt-2 flex items-baseline gap-2 text-4xl font-bold lg:mt-[0.3rem] lg:text-[3.24rem]">
-						{{ plan.price }}
-						<span class="text-base font-normal lg:text-sm" [class]="plan.featured ? 'text-primary-contrast/70' : 'text-muted-tint'">{{
-							plan.period
-						}}</span>
-					</p>
-
-					<p class="mt-4 lg:mt-0 lg:text-[0.9rem]" [class]="plan.featured ? 'text-primary-contrast/75' : 'text-muted-tint'">
-						{{ plan.description }}
-					</p>
-
-					<ul
-						class="mt-8 mb-10 grid gap-4 lg:mt-[1.57rem] lg:mb-[1.78rem] lg:gap-[0.6rem]"
-						[class]="plan.featured ? 'text-primary-contrast' : 'text-primary'"
+					Reintentar
+				</button>
+			</div>
+		} @else if (catalogue.hasValue()) {
+			<!-- El gratuito y la fila de pago van en una columna con un solo hueco entre ellos, así el margen no depende de si hay gratuito o no. -->
+			<div class="mt-14 flex flex-col gap-10 lg:mt-[5.75rem] lg:gap-[4.4rem]">
+				<!--
+					El plan gratuito va en UNA fila a lo ancho, encima de los de pago, con la misma
+					composición que el bloque corporativo (datos a la izquierda, beneficios a la
+					derecha) pero con el borde gris de las tarjetas individuales: es otra oferta
+					—un mes, una sola vez, y luego pasa a un plan de pago— y en la misma fila se
+					compararía como si fuese uno más.
+				-->
+				@for (freePlan of freePlans(); track freePlan.id) {
+					<div
+						class="border-secondary-tint bg-secondary relative mt-5 rounded-2xl border p-7 lg:mt-0 lg:grid lg:grid-cols-[38%_1fr] lg:gap-x-[6%] lg:px-[2.6rem] lg:pt-[2.4rem] lg:pb-[2.6rem]"
 					>
-						@for (feature of plan.features; track feature) {
+						@if (freePlan.badge) {
+							<span
+								class="bg-surface text-ink absolute -top-[0.85rem] left-7 rounded-full px-4 py-1 text-[0.7rem] font-semibold tracking-wider uppercase lg:left-[2.6rem]"
+							>
+								{{ freePlan.badge }}
+							</span>
+						}
+
+						<div>
+							<h2 class="font-display text-secondary-contrast text-xl font-semibold lg:text-[1.07rem]">{{ freePlan.name }}</h2>
+
+							<p class="font-display text-secondary-contrast mt-2 text-4xl font-bold lg:mt-[0.3rem] lg:text-[3.24rem]">
+								{{ freePlan.price }}
+							</p>
+
+							@if (freePlan.description) {
+								<p class="text-muted-tint mt-4 lg:mt-0 lg:text-[0.9rem]">{{ freePlan.description }}</p>
+							}
+
+							<!-- Quien entra gratis empieza a pagar después, y tiene que leerlo ANTES de suscribirse. -->
+							@if (freePlan.renewalNote) {
+								<p class="text-primary mt-2 text-sm font-medium">{{ freePlan.renewalNote }}</p>
+							}
+
+							<a
+								class="bg-primary text-primary-contrast mt-8 block rounded-full px-6 py-3.5 text-center font-medium transition-opacity hover:opacity-90 lg:mt-[2.2rem] lg:w-fit lg:px-10 lg:py-[0.62rem]"
+								href="https://app.moviapass.com/"
+								target="_blank"
+								>Suscribirme</a
+							>
+						</div>
+
+						<ul class="text-primary mt-8 grid gap-4 lg:mt-0 lg:grid-cols-2 lg:gap-x-[8%] lg:gap-y-[0.6rem] lg:self-center">
+							@for (benefit of freePlan.benefits; track $index) {
+								<li class="flex items-start gap-3 lg:gap-[0.68rem]">
+									<span class="mt-0.5 flex size-[1.12rem] shrink-0 items-center justify-center rounded-full bg-current/20">
+										<ng-icon class="text-[0.7rem]" name="heroCheck" aria-hidden="true" />
+									</span>
+
+									<span class="text-secondary-contrast lg:text-[0.9rem]">{{ benefit }}</span>
+								</li>
+							}
+						</ul>
+					</div>
+				}
+
+				<!--
+				En MÓVIL las tarjetas no se apilan: se pasan de izquierda a derecha. La lista es
+				un carrusel con `snap` y cada tarjeta ocupa el 94 % del ancho, así que la
+				siguiente solo ASOMA por el borde: lo justo para que se vea que hay más sin
+				robarle sitio a la que se está leyendo. Los `-mx-6 px-6` sacan el
+				carrusel a los bordes de la pantalla pero dejan la primera tarjeta alineada con
+				el resto del contenido. El `scroll-pl-6` hace que el `snap` respete ese gutter:
+				sin él la tarjeta se pega al borde de la pantalla y el hueco desaparece. Y el
+				`pt-5` es el sitio que necesita la pastilla de la tarjeta, porque al haber
+				scroll horizontal lo que sobresalga por arriba se recorta.
+
+				En escritorio es UNA fila con tantas columnas iguales como planes de pago devuelva
+				la API (`grid-flow-col` + `auto-cols-fr`): el número no es fijo, y una rejilla de
+				tres dejaría un cuarto solo en una segunda fila.
+				`items-stretch` (el default) iguala las alturas; el botón se pega abajo con `mt-auto`.
+			-->
+				<ul
+					class="-mx-6 flex snap-x snap-mandatory scroll-pl-6 [scrollbar-width:none] gap-4 overflow-x-auto px-6 pt-5 pb-4 [-ms-overflow-style:none] lg:mx-0 lg:grid lg:auto-cols-fr lg:grid-flow-col lg:gap-[1.9%] lg:overflow-visible lg:px-0 lg:pt-0 lg:pb-0 [&::-webkit-scrollbar]:hidden"
+				>
+					@for (plan of plans(); track plan.id) {
+						<li
+							class="relative flex w-[94%] shrink-0 snap-start flex-col rounded-2xl p-7 lg:w-auto lg:px-[1.76rem] lg:pt-[1.36rem] lg:pb-[1.54rem]"
+							[class]="
+								plan.featured
+									? 'bg-primary text-primary-contrast'
+									: 'border-secondary-tint bg-secondary text-secondary-contrast border'
+							"
+						>
+							@if (plan.badge) {
+								<!-- La pastilla se monta sobre el borde superior de la tarjeta, centrada. -->
+								<span
+									class="bg-surface text-ink absolute -top-[0.85rem] left-1/2 -translate-x-1/2 rounded-full px-4 py-1 text-[0.7rem] font-semibold tracking-wider whitespace-nowrap uppercase"
+								>
+									{{ plan.badge }}
+								</span>
+							}
+
+							<h2 class="font-display text-xl font-semibold lg:text-[1.07rem]">{{ plan.name }}</h2>
+
+							<p class="font-display mt-2 flex flex-wrap items-baseline gap-x-2 text-4xl font-bold lg:mt-[0.3rem] lg:text-[3.24rem]">
+								{{ plan.price }}
+								@if (plan.period) {
+									<span
+										class="text-base font-normal lg:text-sm"
+										[class]="plan.featured ? 'text-primary-contrast/70' : 'text-muted-tint'"
+										>{{ plan.period }}</span
+									>
+								}
+							</p>
+
+							@if (plan.description) {
+								<p class="mt-4 lg:mt-0 lg:text-[0.9rem]" [class]="plan.featured ? 'text-primary-contrast/75' : 'text-muted-tint'">
+									{{ plan.description }}
+								</p>
+							}
+
+							<!-- El aviso de a qué pasa el plan al acabar el mes: quien entra gratis empieza a pagar después, y tiene que leerlo ANTES. -->
+							@if (plan.renewalNote) {
+								<p class="mt-2 text-sm font-medium" [class]="plan.featured ? 'text-primary-contrast' : 'text-primary'">
+									{{ plan.renewalNote }}
+								</p>
+							}
+
+							<ul
+								class="mt-8 mb-10 grid gap-4 lg:mt-[1.57rem] lg:mb-[1.78rem] lg:gap-[0.6rem]"
+								[class]="plan.featured ? 'text-primary-contrast' : 'text-primary'"
+							>
+								@for (benefit of plan.benefits; track $index) {
+									<li class="flex items-start gap-3 lg:gap-[0.68rem]">
+										<!-- El círculo es el MISMO color a baja opacidad; el tic va a color pleno, y va centrado con la PRIMERA línea. -->
+										<span class="mt-0.5 flex size-[1.12rem] shrink-0 items-center justify-center rounded-full bg-current/20">
+											<ng-icon class="text-[0.7rem]" name="heroCheck" aria-hidden="true" />
+										</span>
+
+										<span
+											class="lg:text-[0.9rem]"
+											[class]="plan.featured ? 'text-primary-contrast' : 'text-secondary-contrast'"
+											>{{ benefit }}</span
+										>
+									</li>
+								}
+							</ul>
+
+							<a
+								class="mt-auto block rounded-full px-6 py-3.5 text-center font-medium transition-opacity hover:opacity-90 lg:py-[0.62rem]"
+								[class]="plan.featured ? 'bg-secondary text-primary' : 'bg-primary text-primary-contrast'"
+								href="https://app.moviapass.com/"
+								target="_blank"
+								>Suscribirme</a
+							>
+						</li>
+					} @empty {
+						<li class="text-secondary-contrast w-full text-center lg:col-span-full">Pronto publicaremos los planes disponibles.</li>
+					}
+				</ul>
+			</div>
+
+			<!--
+				El plan corporativo va APARTE del grupo de planes individuales, y se distingue de
+				ellos por tres cosas a la vez: la pastilla «Para empresas», el borde lima en vez
+				del gris, y que ocupa el ancho entero en dos columnas en lugar de ser una tarjeta
+				más de la fila. Se entiende que es otra cosa sin tener que leer el nombre.
+			-->
+			@for (corporatePlan of corporatePlans(); track corporatePlan.id) {
+				<div
+					class="border-primary bg-secondary relative mt-16 rounded-2xl border p-7 lg:mt-[4.4rem] lg:grid lg:grid-cols-[38%_1fr] lg:gap-x-[6%] lg:px-[2.6rem] lg:pt-[2.4rem] lg:pb-[2.6rem]"
+				>
+					<span
+						class="bg-primary text-primary-contrast absolute -top-[0.85rem] left-7 rounded-full px-4 py-1 text-[0.7rem] font-semibold tracking-wider uppercase lg:left-[2.6rem]"
+					>
+						{{ corporatePlan.badge ?? corporateBadge }}
+					</span>
+
+					<div>
+						<h2 class="font-display text-secondary-contrast text-xl font-semibold lg:text-[1.07rem]">{{ corporatePlan.name }}</h2>
+
+						<p
+							class="font-display text-secondary-contrast mt-2 flex items-baseline gap-2 text-4xl font-bold lg:mt-[0.3rem] lg:text-[3.24rem]"
+						>
+							{{ corporatePlan.price }}
+							@if (corporatePlan.period) {
+								<span class="text-muted-tint text-base font-normal lg:text-sm">{{ corporatePlan.period }}</span>
+							}
+						</p>
+
+						@if (corporatePlan.description) {
+							<p class="text-muted-tint mt-4 lg:mt-0 lg:text-[0.9rem]">{{ corporatePlan.description }}</p>
+						}
+
+						<a
+							class="bg-primary text-primary-contrast mt-8 block rounded-full px-6 py-3.5 text-center font-medium transition-opacity hover:opacity-90 lg:mt-[2.2rem] lg:w-fit lg:px-10 lg:py-[0.62rem]"
+							href="https://partner.moviapass.com/"
+							target="_blank"
+							>Ver Movia para Empresas</a
+						>
+					</div>
+
+					<ul class="text-primary mt-8 grid gap-4 lg:mt-0 lg:grid-cols-2 lg:gap-x-[8%] lg:gap-y-[0.6rem] lg:self-center">
+						@for (benefit of corporatePlan.benefits; track $index) {
 							<li class="flex items-start gap-3 lg:gap-[0.68rem]">
-								<!-- El círculo es el MISMO color a baja opacidad; el tic va a color pleno, y va centrado con la PRIMERA línea. -->
 								<span class="mt-0.5 flex size-[1.12rem] shrink-0 items-center justify-center rounded-full bg-current/20">
 									<ng-icon class="text-[0.7rem]" name="heroCheck" aria-hidden="true" />
 								</span>
 
-								<span class="lg:text-[0.9rem]" [class]="plan.featured ? 'text-primary-contrast' : 'text-secondary-contrast'">{{
-									feature
-								}}</span>
+								<span class="text-secondary-contrast lg:text-[0.9rem]">{{ benefit }}</span>
 							</li>
 						}
 					</ul>
-
-					<a
-						class="mt-auto block rounded-full px-6 py-3.5 text-center font-medium transition-opacity hover:opacity-90 lg:py-[0.62rem]"
-						[class]="plan.featured ? 'bg-secondary text-primary' : 'bg-primary text-primary-contrast'"
-						href="https://app.moviapass.com/"
-						target="_blank"
-						>Suscribirme</a
-					>
-				</li>
+				</div>
 			}
-		</ul>
-
-		<!--
-			El plan corporativo va APARTE del grupo de planes individuales, y se distingue de
-			ellos por tres cosas a la vez: la pastilla «Para empresas», el borde lima en vez
-			del gris, y que ocupa el ancho entero en dos columnas en lugar de ser una tarjeta
-			más de la fila. Se entiende que es otra cosa sin tener que leer el nombre.
-		-->
-		<div
-			class="border-primary bg-secondary relative mt-16 rounded-2xl border p-7 lg:mt-[4.4rem] lg:grid lg:grid-cols-[38%_1fr] lg:gap-x-[6%] lg:px-[2.6rem] lg:pt-[2.4rem] lg:pb-[2.6rem]"
-		>
-			<span
-				class="bg-primary text-primary-contrast absolute -top-[0.85rem] left-7 rounded-full px-4 py-1 text-[0.7rem] font-semibold tracking-wider uppercase lg:left-[2.6rem]"
+		} @else {
+			<!--
+				Tarjetas de relleno mientras llegan los planes, con la misma rejilla y el mismo
+				alto aproximado que las de verdad para que la página no salte al cambiarlas.
+				Son lo que lleva el HTML prerenderizado: los planes solo se piden en el navegador.
+			-->
+			<ul
+				class="-mx-6 mt-14 flex gap-4 overflow-hidden px-6 pt-5 pb-4 lg:mx-0 lg:mt-[5.75rem] lg:grid lg:auto-cols-fr lg:grid-flow-col lg:gap-[1.9%] lg:px-0 lg:pt-0 lg:pb-0"
+				aria-hidden="true"
 			>
-				{{ corporateBadge }}
-			</span>
-
-			<div>
-				<h2 class="font-display text-secondary-contrast text-xl font-semibold lg:text-[1.07rem]">{{ corporatePlan.name }}</h2>
-
-				<p class="font-display text-secondary-contrast mt-2 flex items-baseline gap-2 text-4xl font-bold lg:mt-[0.3rem] lg:text-[3.24rem]">
-					{{ corporatePlan.price }}
-					<span class="text-muted-tint text-base font-normal lg:text-sm">{{ corporatePlan.period }}</span>
-				</p>
-
-				<p class="text-muted-tint mt-4 lg:mt-0 lg:text-[0.9rem]">{{ corporatePlan.description }}</p>
-
-				<a
-					class="bg-primary text-primary-contrast mt-8 block rounded-full px-6 py-3.5 text-center font-medium transition-opacity hover:opacity-90 lg:mt-[2.2rem] lg:w-fit lg:px-10 lg:py-[0.62rem]"
-					href="https://partner.moviapass.com/"
-					target="_blank"
-					>Ver Movia para Empresas</a
-				>
-			</div>
-
-			<ul class="text-primary mt-8 grid gap-4 lg:mt-0 lg:grid-cols-2 lg:gap-x-[8%] lg:gap-y-[0.6rem] lg:self-center">
-				@for (feature of corporatePlan.features; track feature) {
-					<li class="flex items-start gap-3 lg:gap-[0.68rem]">
-						<span class="mt-0.5 flex size-[1.12rem] shrink-0 items-center justify-center rounded-full bg-current/20">
-							<ng-icon class="text-[0.7rem]" name="heroCheck" aria-hidden="true" />
-						</span>
-
-						<span class="text-secondary-contrast lg:text-[0.9rem]">{{ feature }}</span>
+				@for (skeleton of skeletons; track skeleton) {
+					<li
+						class="border-secondary-tint bg-secondary flex h-[30rem] w-[94%] shrink-0 animate-pulse flex-col rounded-2xl border p-7 lg:w-auto"
+					>
+						<span class="bg-secondary-tint h-5 w-24 rounded-full"></span>
+						<span class="bg-secondary-tint mt-4 h-12 w-40 rounded-lg"></span>
+						<span class="bg-secondary-tint mt-6 h-4 w-full rounded-full"></span>
+						<span class="bg-secondary-tint mt-2 h-4 w-3/4 rounded-full"></span>
+						<span class="bg-secondary-tint mt-auto h-11 w-full rounded-full"></span>
 					</li>
 				}
 			</ul>
-		</div>
+		}
 
 		<div class="text-secondary-contrast mx-auto mt-16 max-w-[80%] text-center text-sm lg:mt-[8.35rem] lg:max-w-[94%] lg:text-[0.92rem]">
 			@for (paragraph of legalNote; track paragraph) {

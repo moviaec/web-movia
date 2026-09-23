@@ -1,8 +1,6 @@
 import { CONTACT_EMAIL, CONTACT_WHATSAPP } from '@core/constants/navigation.constants';
 import { SOCIAL_PROFILE_URLS } from '@core/constants/external-links.constants';
-import { CORPORATE_PLAN, PLANS } from '@core/constants/plans.constants';
 import { AREA_SERVED, DEFAULT_OG_IMAGE, LEGAL_NAME, SITE_LANG, SITE_LOGO, SITE_NAME } from '@core/constants/site.constants';
-import { Plan } from '@core/interfaces/plan.interface';
 import { JsonLdNode } from '@core/types/json-ld.type';
 
 import { environment } from '../../../environments/environment';
@@ -14,6 +12,9 @@ import { environment } from '../../../environments/environment';
  * the head by `SeoService`. Nothing is typed by hand into a template: a price written
  * twice is a price that one day says 39,99 on the page and 34,99 in the markup, and
  * Google penalises exactly that.
+ *
+ * The `Product` of `/plans` is NOT here: its prices come from the API, so it is built
+ * from that same response by `buildPlansProductSchema` (`core/utils/structured-data.utils.ts`).
  *
  * `FAQPage` is deliberately NOT here. Since August 2023 Google only shows that rich
  * result to health and government sites, so for this domain the markup would be valid
@@ -32,38 +33,6 @@ const TELEPHONE = `+${CONTACT_WHATSAPP.replace(/\D/g, '')}`;
  */
 function absolute(path: string): string {
 	return path === '/' ? environment.siteUrl : `${environment.siteUrl}${path}`;
-}
-
-/**
- * Turns the price as it is PRINTED into the number schema.org expects.
- *
- * The page writes `$39,99`, with the comma of the Spanish decimal; JSON-LD wants
- * `39.99`. Deriving it is the whole point: the two numbers cannot drift because there
- * is only one.
- *
- * @param price Price exactly as the card shows it.
- * @returns The same amount, as a decimal string.
- */
-function toAmount(price: string): string {
-	return price.replace(/[^\d,.]/g, '').replace(',', '.');
-}
-
-/**
- * One `Offer` per plan.
- *
- * @param plan Plan as the page paints it.
- * @returns The offer node.
- */
-function toOffer(plan: Plan): JsonLdNode {
-	return {
-		'@type': 'Offer',
-		name: plan.name,
-		description: plan.description,
-		price: toAmount(plan.price),
-		priceCurrency: 'USD',
-		availability: 'https://schema.org/InStock',
-		url: absolute('/plans')
-	};
 }
 
 /**
@@ -106,22 +75,4 @@ export const WEBSITE_SCHEMA: JsonLdNode = {
 	url: absolute('/'),
 	inLanguage: SITE_LANG,
 	publisher: { '@type': 'Organization', name: SITE_NAME, url: absolute('/') }
-};
-
-/**
- * The membership as a product, with one offer per plan.
- *
- * The four offers are the three individual plans plus the corporate one, in the same
- * order and with the same prices the page prints, because they come from the same
- * `PLANS` and `CORPORATE_PLAN`.
- */
-export const PLANS_PRODUCT_SCHEMA: JsonLdNode = {
-	'@context': 'https://schema.org',
-	'@type': 'Product',
-	name: `Membresía ${SITE_NAME}`,
-	description: 'Una suscripción mensual que da acceso a la red de gimnasios, estudios y centros de bienestar aliados de Movía en el Ecuador.',
-	brand: { '@type': 'Brand', name: SITE_NAME },
-	url: absolute('/plans'),
-	image: absolute(DEFAULT_OG_IMAGE),
-	offers: [...PLANS, CORPORATE_PLAN].map(toOffer)
 };
