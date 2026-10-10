@@ -18,8 +18,8 @@ Se adaptaron los documentos de MOOV Fitness Club (`/terminos` y `/privacidad` de
 - Un único componente del dominio, `features/legal/components/legal-article/`, pinta cualquier documento; las dos páginas solo eligen el contenido (regla 10).
 - Las dos rutas pasan a `indexable: true` y entran en el sitemap. `/legal/data-usage` sigue vacía y en `noindex`.
 
-## Pendiente
+## Decisiones cerradas con el usuario
 
-- **Revisión jurídica** de ambos textos antes de darlos por definitivos.
-- **Ciudad del domicilio** de la sociedad para la cláusula de jurisdicción (hoy dice «domicilio de MOVIAPASS SAS en el Ecuador»).
-- Confirmar con negocio las reglas de check-ins que el centro de ayuda ya marcaba como pendientes.
+- **Jurisdicción en Quito:** la sociedad tiene su domicilio allí; la cláusula de ley aplicable y la firma lo dicen así.
+- **Sin revisión jurídica previa:** el usuario da los textos por buenos tal cual.
+- **Fecha de vigencia y reglas de check-ins** confirmadas: octubre de 2026 y las reglas que ya publica el sitio.

@@ -47,8 +47,7 @@ const PRIVACY_POLICY_LINK = { label: 'Consultar las Políticas de privacidad', p
  *
  * Adaptado del modelo de MOOV Fitness Club al producto de Movía: check-ins y no
  * monedas, el formulario de contacto de este sitio y el beneficio corporativo, que
- * MOOV no tiene. PENDIENTE de revisión jurídica antes de publicar, igual que los
- * términos: es un texto de partida, no un dictamen.
+ * MOOV no tiene.
  */
 export const PRIVACY_POLICY: LegalDocumentContent = {
 	eyebrow: 'Documento legal',
@@ -65,7 +64,7 @@ export const PRIVACY_POLICY: LegalDocumentContent = {
 			title: 'Responsable del tratamiento',
 			clauses: [
 				{
-					text: `La Plataforma ${SITE_NAME} la opera ${LEGAL_NAME}, sociedad constituida en la República del Ecuador. Para cualquier consulta o gestión sobre privacidad puedes escribirnos a ${CONTACT_EMAIL}.`
+					text: `La Plataforma ${SITE_NAME} la opera desde Quito, Ecuador, ${LEGAL_NAME}. Para cualquier consulta o gestión sobre privacidad puedes escribirnos a ${CONTACT_EMAIL}.`
 				}
 			]
 		},
@@ -198,8 +197,6 @@ export const PRIVACY_POLICY: LegalDocumentContent = {
  * —que MOOV sí ofrece— y se añade la membresía corporativa. Las reglas de uso salen de
  * lo que ya promete el sitio (la letra pequeña de `/plans` y el centro de ayuda).
  *
- * PENDIENTE de revisión jurídica antes de publicar, y en particular la cláusula de
- * jurisdicción: falta la ciudad del domicilio de la sociedad, que el repo no conoce.
  */
 export const TERMS_OF_SERVICE: LegalDocumentContent = {
 	eyebrow: 'Contrato de membresía',
@@ -499,10 +496,10 @@ export const TERMS_OF_SERVICE: LegalDocumentContent = {
 					text: 'Estos Términos y cualquier controversia contractual o extracontractual se rigen por las leyes de la República del Ecuador.'
 				},
 				{
-					text: `Las controversias se someterán a los jueces competentes del domicilio de ${LEGAL_NAME} en el Ecuador, salvo que una norma imperativa disponga otra cosa.`
+					text: `Las controversias se someterán a los jueces competentes de Quito, Ecuador, salvo que una norma imperativa disponga otra cosa.`
 				}
 			]
 		}
 	],
-	signature: [LEGAL_NAME, 'República del Ecuador', 'Octubre de 2026']
+	signature: [LEGAL_NAME, 'Quito – Ecuador', 'Octubre de 2026']
 };
