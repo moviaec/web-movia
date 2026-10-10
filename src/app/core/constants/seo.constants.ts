@@ -65,26 +65,23 @@ export const ROUTE_SEO: Readonly<Record<string, RouteSeo>> = {
 		indexable: true
 	},
 	/*
-	 * Los tres documentos legales van en `noindex` porque HOY están vacíos: solo
-	 * tienen su `<h1>`. Una página indexable sin contenido es el caso de libro de
-	 * «contenido escaso», y además el formulario de contacto ya enlaza la política
-	 * de uso de datos como consentimiento del envío.
-	 *
-	 * En cuanto exista el texto de cada uno se pone `indexable: true` y entran solos
-	 * en el sitemap: no hay nada más que tocar. Su `description` describe el ALCANCE
-	 * del documento, no su contenido, y habrá que repasarla contra el texto real.
+	 * Términos y privacidad ya tienen su texto (`core/constants/legal.constants.ts`) y
+	 * son indexables. La política de uso de datos sigue en `noindex` porque HOY está
+	 * vacía: solo tiene su `<h1>`, y una página indexable sin contenido es el caso de
+	 * libro de «contenido escaso». En cuanto exista su texto se pone `indexable: true`
+	 * y entra sola en el sitemap.
 	 */
 	'/legal/terms': {
 		title: 'Términos y condiciones · Movía',
 		description:
 			'Condiciones de uso de la membresía de Movía: qué incluye cada plan, cómo se cobra, cómo se cancela y qué reglas rigen el acceso a los centros aliados.',
-		indexable: false
+		indexable: true
 	},
 	'/legal/privacy': {
 		title: 'Políticas de privacidad · Movía',
 		description:
 			'Qué datos personales recoge Movía, para qué los usa, con quién los comparte, cuánto tiempo los guarda y cómo ejercer tus derechos sobre esa información.',
-		indexable: false
+		indexable: true
 	},
 	'/legal/data-usage': {
 		title: 'Política de uso de datos · Movía',

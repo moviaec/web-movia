@@ -1,0 +1,70 @@
+<!-- CABECERA -->
+<section class="bg-secondary text-secondary-contrast" aria-labelledby="legal-article-title">
+	<div class="max-w-content mx-auto px-6 pt-40 pb-16 lg:px-8 lg:pt-45 lg:pb-20">
+		<p class="text-primary text-sm font-semibold tracking-widest uppercase">{{ content().eyebrow }}</p>
+		<h1 id="legal-article-title" class="font-display lg:text-headline mt-4 text-3xl font-bold">{{ content().title }}</h1>
+		<p class="text-muted-tint mt-6">{{ content().meta }}</p>
+	</div>
+</section>
+<!-- END CABECERA -->
+
+<!-- DOCUMENTO -->
+<div class="bg-surface">
+	<div class="max-w-content mx-auto px-6 py-16 lg:px-8 lg:py-20">
+		<div class="text-ink max-w-3xl">
+			@for (paragraph of content().intro; track $index) {
+				<p class="lg:text-body-lg mb-6 text-lg">{{ paragraph }}</p>
+			}
+
+			@for (section of content().sections; track section.id; let sectionNumber = $index) {
+				<section class="mt-12 first:mt-0" [attr.aria-labelledby]="'legal-' + section.id">
+					<h2 [id]="'legal-' + section.id" class="font-display text-ink text-2xl font-bold">
+						{{ sectionNumber + 1 }}. {{ section.title }}
+					</h2>
+
+					@for (clause of section.clauses; track $index; let clauseNumber = $index) {
+						<div class="mt-4">
+							<p class="text-muted leading-relaxed">
+								@if (content().numberedClauses) {
+									<span class="text-ink font-semibold">{{ sectionNumber + 1 }}.{{ clauseNumber + 1 }}</span>
+								}
+								{{ clause.text }}
+							</p>
+
+							@if (clause.items) {
+								<ul class="text-muted mt-3 list-disc space-y-2 pl-6 leading-relaxed">
+									@for (item of clause.items; track $index) {
+										<li>
+											@if (item.term) {
+												<strong class="text-ink font-semibold">{{ item.term }}:</strong>
+											}
+											{{ item.text }}
+										</li>
+									}
+								</ul>
+							}
+
+							@if (clause.link) {
+								<a
+									class="text-ink decoration-primary-shade hover:text-primary-shade mt-3 inline-block font-medium underline underline-offset-4 transition-colors"
+									[routerLink]="clause.link.path"
+								>
+									{{ clause.link.label }}
+								</a>
+							}
+						</div>
+					}
+				</section>
+			}
+
+			@if (content().signature.length) {
+				<div class="border-border text-ink mt-16 border-t pt-8">
+					@for (line of content().signature; track $index) {
+						<p class="first:font-display first:font-bold">{{ line }}</p>
+					}
+				</div>
+			}
+		</div>
+	</div>
+</div>
+<!-- END DOCUMENTO -->
